@@ -1,0 +1,174 @@
+---
+import '../components/GlassSurface/GlassSurface.css';
+
+const navLinks = [
+  { name: 'HOME', href: '#home', highlight: false },
+  { name: 'ABOUT', href: '#about', highlight: false },
+  { name: 'EVENTS', href: '#events', highlight: true },
+];
+---
+
+<nav class="navbar">
+  <div class="navbar-glass">
+    <div class="navbar-content">
+      <div class="navbar-logo">
+        <img src="/assets/logo.svg" alt="Logo" />
+      </div>
+      
+      <div class="navbar-links">
+        {navLinks.map(link => (
+          <a href={link.href} class={`nav-link ${link.highlight ? 'nav-link-highlight' : ''}`}>
+            {link.name}
+          </a>
+        ))}
+      </div>
+      
+      <a href="#register" class="nav-button">
+        <span>REGISTER NOW</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap');
+
+  .navbar {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1200px;
+    z-index: 1000;
+    font-family: 'Bruno Ace SC', sans-serif;
+  }
+
+  .navbar-glass {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50px;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow:
+      0 8px 32px 0 rgba(31, 38, 135, 0.2),
+      0 2px 16px 0 rgba(31, 38, 135, 0.1),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 32px;
+  }
+
+  .navbar-logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .navbar-logo img {
+    height: 48px;
+    width: auto;
+  }
+
+  .navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .nav-link {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+
+  .nav-link:hover {
+    color: #F1B5A2;
+    transform: translateY(-2px);
+  }
+
+  .nav-link-highlight {
+    background: rgba(241, 181, 162, 0.2);
+    border: 2px solid #F1B5A2;
+    box-shadow: 0 0 20px rgba(241, 181, 162, 0.4);
+  }
+
+  .nav-button {
+    background: linear-gradient(135deg, #F1B5A2 0%, #3C2A56 100%);
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 12px 32px;
+    border-radius: 30px;
+    font-size: 16px;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(241, 181, 162, 0.4);
+    flex-shrink: 0;
+  }
+
+  .nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(241, 181, 162, 0.6);
+    background: linear-gradient(135deg, #3C2A56 0%, #F1B5A2 100%);
+  }
+
+  @media (max-width: 768px) {
+    .navbar {
+      width: 95%;
+      top: 10px;
+    }
+
+    .navbar-glass {
+      padding: 8px 16px;
+      border-radius: 30px;
+    }
+
+    .navbar-content {
+      gap: 16px;
+    }
+
+    .navbar-logo img {
+      height: 36px;
+    }
+
+    .navbar-links {
+      gap: 20px;
+    }
+
+    .nav-link {
+      font-size: 14px;
+      padding: 6px 12px;
+    }
+
+    .nav-button {
+      padding: 8px 20px;
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .navbar-links {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,325 @@
+---
+import Navbar from './navbar.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glass Effect Demo</title>
+</head>
+<body>
+  <Navbar />
+  
+  <main>
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <h1>Welcome to Our Event</h1>
+        <p>Experience the future of design with glass morphism</p>
+      </div>
+    </section>
+
+    <section id="about" class="content-section">
+      <div class="container">
+        <h2>About Us</h2>
+        <p>We are dedicated to creating stunning visual experiences that push the boundaries of modern web design. Our glass morphism effects create depth and elegance in every interaction.</p>
+        <div class="card-grid">
+          <div class="glass-card">
+            <h3>Innovation</h3>
+            <p>Cutting-edge design techniques</p>
+          </div>
+          <div class="glass-card">
+            <h3>Creativity</h3>
+            <p>Unique visual experiences</p>
+          </div>
+          <div class="glass-card">
+            <h3>Excellence</h3>
+            <p>Quality in every detail</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="events" class="content-section alt">
+      <div class="container">
+        <h2>Upcoming Events</h2>
+        <div class="event-list">
+          <div class="glass-card event-card">
+            <h3>Tech Conference 2026</h3>
+            <p class="event-date">March 15, 2026</p>
+            <p>Join us for an exciting day of innovation and networking</p>
+          </div>
+          <div class="glass-card event-card">
+            <h3>Design Workshop</h3>
+            <p class="event-date">April 22, 2026</p>
+            <p>Learn the latest design trends and techniques</p>
+          </div>
+          <div class="glass-card event-card">
+            <h3>Developer Meetup</h3>
+            <p class="event-date">May 10, 2026</p>
+            <p>Connect with fellow developers and share knowledge</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="register" class="content-section">
+      <div class="container">
+        <h2>Register Now</h2>
+        <div class="glass-card register-card">
+          <h3>Don't Miss Out!</h3>
+          <p>Secure your spot at our upcoming events. Limited seats available.</p>
+          <button class="register-button">Get Started</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section alt">
+      <div class="container">
+        <h2>Why Choose Us</h2>
+        <p>We combine cutting-edge technology with beautiful design to create unforgettable experiences. Our events bring together the best minds in the industry.</p>
+        <div class="features">
+          <div class="glass-card">
+            <h4>Expert Speakers</h4>
+            <p>Learn from industry leaders</p>
+          </div>
+          <div class="glass-card">
+            <h4>Networking</h4>
+            <p>Connect with professionals</p>
+          </div>
+          <div class="glass-card">
+            <h4>Hands-on Workshops</h4>
+            <p>Practical learning experiences</p>
+          </div>
+          <div class="glass-card">
+            <h4>Certificates</h4>
+            <p>Recognition for participation</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2026 Glass Events. All rights reserved.</p>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Bruno Ace SC', sans-serif;
+    background: linear-gradient(135deg, #3C2A56 0%, #1a1428 50%, #3C2A56 100%);
+    color: #FFFFFF;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(241, 181, 162, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(241, 181, 162, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  main {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 20px 50px;
+  }
+
+  .hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F1B5A2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-content p {
+    font-size: 1.5rem;
+    color: #F1B5A2;
+  }
+
+  .content-section {
+    min-height: 100vh;
+    padding: 100px 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .content-section.alt {
+    background: rgba(241, 181, 162, 0.03);
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  h2 {
+    font-size: 3rem;
+    margin-bottom: 2rem;
+    color: #F1B5A2;
+    text-align: center;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #FFFFFF;
+  }
+
+  h4 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #F1B5A2;
+  }
+
+  p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);
+    -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);
+    border: 1px solid rgba(241, 181, 162, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow:
+      0 8px 32px 0 rgba(60, 42, 86, 0.3),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(241, 181, 162, 0.4);
+    box-shadow:
+      0 12px 40px 0 rgba(60, 42, 86, 0.4),
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .event-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .event-card {
+    padding: 2.5rem;
+  }
+
+  .event-date {
+    color: #F1B5A2;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .register-card {
+    text-align: center;
+    padding: 3rem;
+    max-width: 600px;
+    margin: 3rem auto 0;
+  }
+
+  .register-button {
+    background: linear-gradient(135deg, #F1B5A2 0%, #3C2A56 100%);
+    color: #FFFFFF;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 1rem 3rem;
+    font-size: 1.2rem;
+    font-family: 'Bruno Ace SC', sans-serif;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(241, 181, 162, 0.4);
+  }
+
+  .register-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(241, 181, 162, 0.6);
+    background: linear-gradient(135deg, #3C2A56 0%, #F1B5A2 100%);
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .footer {
+    background: rgba(60, 42, 86, 0.5);
+    padding: 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(241, 181, 162, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2.5rem;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+    }
+
+    .content-section {
+      padding: 80px 20px;
+    }
+
+    .card-grid,
+    .features {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
