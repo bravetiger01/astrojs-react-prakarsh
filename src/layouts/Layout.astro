@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		
+		<meta name="generator" content={Astro.generator} />
+		<title>Astro Basics</title>
+
+		<!-- Preload knight sprite for immediate display -->
+		<link rel="preload" href="/sprites/knight.avif" as="image" />
+
+		<!-- Inline critical loader CSS for instant visibility -->
+		<style>
+			.loader-wrapper {
+				position: fixed;
+				inset: 0;
+				background: black;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 9999;
+				opacity: 1;
+				transition: opacity 0.5s ease-out;
+			}
+
+			.loader-wrapper.fade-out {
+				opacity: 0;
+				pointer-events: none;
+			}
+
+			.loader-content {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 2rem;
+			}
+
+			.sprite-loader {
+				width: 32px;
+				height: 32px;
+				background-image: url("/sprites/knight.avif");
+				background-repeat: no-repeat;
+				image-rendering: pixelated;
+				transform: scale(3);
+				animation: idle 1s steps(8) infinite;
+			}
+
+			.progress-bar-container {
+				width: 300px;
+				height: 8px;
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 4px;
+				overflow: hidden;
+				border: 1px solid rgba(255, 255, 255, 0.2);
+			}
+
+			.progress-bar-fill {
+				height: 100%;
+				background: linear-gradient(90deg, #4caf50, #8bc34a);
+				transition: width 0.3s ease-out;
+				border-radius: 4px;
+			}
+
+			.progress-text {
+				color: white;
+				font-family: monospace;
+				font-size: 14px;
+				margin-top: -0.5rem;
+			}
+
+			@keyframes idle {
+				from {
+					background-position: 0 0;
+				}
+				to {
+					background-position: -256px 0;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Inline Loader HTML - shows immediately -->
+		<div id="loader-wrapper" class="loader-wrapper">
+			<div class="loader-content">
+				<div class="sprite-loader"></div>
+				<div class="progress-bar-container">
+					<div
+						id="progress-bar-fill"
+						class="progress-bar-fill"
+						style="width: 0%"
+					>
+					</div>
+				</div>
+				<div id="progress-text" class="progress-text">0%</div>
+			</div>
+		</div>
+
+		<!-- Inline script - starts progress animation immediately -->
+		<script is:inline>
+			// Simple reliable loader
+			var progress = 5; // Start with 5% immediately
+			var isHiding = false;
+			var progressBarFill = document.getElementById("progress-bar-fill");
+			var progressText = document.getElementById("progress-text");
+			var loaderWrapper = document.getElementById("loader-wrapper");
+
+			function updateProgress(value) {
+				var clampedValue = Math.min(value, 100);
+				if (progressBarFill && progressText) {
+					progressBarFill.style.width = clampedValue + "%";
+					progressText.textContent = Math.floor(clampedValue) + "%";
+				}
+			}
+
+			// Update to 5% immediately on first paint
+			updateProgress(progress);
+
+			// Simulated progress - reaches ~85% over time, then waits for window.load
+			// Calibrated for realistic pacing on slow networks (~34 seconds to reach 85%)
+			var progressInterval = setInterval(function () {
+				if (progress >= 85) {
+					clearInterval(progressInterval);
+					return;
+				}
+				// Small increments for smooth, realistic progress
+				progress += Math.random() * 0.2 + 0.15; // Random 0.15-0.35% per 100ms
+				updateProgress(Math.min(progress, 85));
+			}, 100);
+
+			// Listen for load complete event
+			function handleLoadComplete() {
+				if (isHiding) return;
+				isHiding = true;
+
+				// Clean up interval
+				clearInterval(progressInterval);
+
+				progress = 100;
+				updateProgress(100);
+
+				setTimeout(function () {
+					if (loaderWrapper) {
+						loaderWrapper.classList.add("fade-out");
+						// Remove from DOM after fade out
+						setTimeout(function () {
+							loaderWrapper.style.display = "none";
+						}, 500);
+					}
+				}, 300);
+			}
+
+			// When page resources finish loading, boost to 95% then complete
+			window.addEventListener("load", function () {
+				console.log("Window loaded, boosting progress to 95%...");
+				clearInterval(progressInterval);
+				progress = 95;
+				updateProgress(95);
+
+				// Wait 2 more seconds for components to fully hydrate before completing
+				setTimeout(function () {
+					console.log(
+						"Completing loader after component hydration delay...",
+					);
+					handleLoadComplete();
+				}, 2000);
+			});
+		</script>
+
+		<slot />
+	</body>
+</html>
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	.loader-wrapper {
+  position: fixed;
+  inset: 0;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.5s ease-out;
+}
+
+.loader-wrapper.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* For coing.png */
+/*.sprite-loader {*/
+  /*width: 160px;*/   /* visible size of ONE frame */
+  /*height: 32px;/*   /* height of sprite */
+
+  /* background-image: url("/sprites/coin.png");
+  background-repeat: no-repeat;
+
+  image-rendering: pixelated; */
+
+  /* scale if needed */
+  /* transform: scale(2);
+
+  animation: loadingText 1s steps(10) infinite; */
+/* }  */
+
+
+/* For knight.png */
+.sprite-loader {
+  width: 32px;
+  height: 32px;
+
+  background-image: url("/sprites/knight.avif");
+  background-repeat: no-repeat;
+
+  image-rendering: pixelated;
+
+  /* SCALE HERE */
+  transform: scale(3);
+
+  animation: idle 1s steps(8) infinite;
+
+
+}
+
+/* Progress Bar Container */
+.progress-bar-container {
+  width: 300px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Progress Bar Fill */
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #8BC34A);
+  transition: width 0.3s ease-out;
+  border-radius: 4px;
+}
+
+/* Progress Text */
+.progress-text {
+  color: white;
+  font-family: monospace;
+  font-size: 14px;
+  margin-top: -0.5rem;
+}
+
+/* IDLE animation (first row) */
+@keyframes idle {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -256px 0;
+  }
+}
+
+/* If using coin.png */
+
+/* @keyframes loadingText {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -1600px 0;
+  }
+} */
+
+
+
+</style>
