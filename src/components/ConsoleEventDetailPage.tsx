@@ -39,6 +39,16 @@ const formatTime = (value?: string) => {
 const ConsoleEventDetailPage = ({ eventId }: ConsoleEventDetailPageProps) => {
   const { event, loading, error } = useEventById(eventId);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-black mb-4">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
+
   if (
     error ||
     !event ||

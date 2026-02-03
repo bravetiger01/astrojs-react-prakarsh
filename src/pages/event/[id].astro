@@ -20,16 +20,19 @@ export function getStaticPaths() {
 
   return allLocalEvents.map((event) => ({
     params: { id: event.id },
-    props: { category: event.category },
+    props: { category: event.category, eventId: event.id },
   }));
 }
 
 const { id } = Astro.params;
-const { category } = Astro.props;
+const { category, eventId } = Astro.props;
+
+// Use the eventId from props, which is guaranteed to be correct
+const finalEventId = eventId || id;
 ---
 
 <Layout title="Event Details - Prakarsh '26">
-  {category === "esports" && <EsportsEventDetailPage client:load eventId={id} />}
-  {(category === "non-tech" || category === "workshops") && <ConsoleEventDetailPage client:load eventId={id} />}
-  {category === "tech" && <EventPage client:load eventId={id} />}
+  {category === "esports" && <EsportsEventDetailPage client:load eventId={finalEventId} />}
+  {(category === "non-tech" || category === "workshops") && <ConsoleEventDetailPage client:load eventId={finalEventId} />}
+  {category === "tech" && <EventPage client:load eventId={finalEventId} />}
 </Layout>

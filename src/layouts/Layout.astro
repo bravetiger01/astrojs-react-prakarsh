@@ -142,11 +142,20 @@ const { title = "Astro Basics" } = Astro.props;
 				Texture,
 				Rectangle,
 			} from "pixi.js";
+			import { prefetchAllEvents } from "../lib/event-cache";
 
 			// Only initialize if loader should be shown
 			const hasShownLoader = sessionStorage.getItem('loaderShown') === 'true';
 			
 			if (!hasShownLoader) {
+				// Start prefetching events immediately during loading screen
+				console.log("🚀 Starting event prefetch during loading screen...");
+				prefetchAllEvents().then(() => {
+					console.log("✅ Events prefetched successfully!");
+				}).catch((error) => {
+					console.error("❌ Error prefetching events:", error);
+				});
+
 				// Sprite sheet configuration - Production settings
 				const SPRITE_CONFIG = {
 					path: "/sprites/sprite_sheet.avif",
@@ -267,6 +276,15 @@ const { title = "Astro Basics" } = Astro.props;
 				} else {
 					initSpriteAnimation();
 				}
+			} else {
+				// Loader was skipped (direct visit to non-root page)
+				// Prefetch events in background without blocking
+				console.log("🔄 Prefetching events in background (direct visit)...");
+				prefetchAllEvents().then(() => {
+					console.log("✅ Background prefetch complete!");
+				}).catch((error) => {
+					console.error("❌ Background prefetch error:", error);
+				});
 			}
 		</script>
 

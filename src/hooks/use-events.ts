@@ -1,22 +1,10 @@
 import { useState, useEffect } from "react";
 import type { Event } from "@/data/event-types.ts";
 import {
-  fetchAllEvents,
-  fetchEventById,
-  fetchEventsByCategory,
-} from "@/lib/api";
-import { technicalEvents } from "@/data/technical_events";
-import { nonTechnicalEvents } from "@/data/non_technical";
-import { workshopEvents } from "@/data/workshops";
-import { esportsEvents } from "@/data/esports";
-
-// Combine all local events as fallback
-const allLocalEvents = [
-  ...technicalEvents,
-  ...nonTechnicalEvents,
-  ...workshopEvents,
-  ...esportsEvents,
-];
+  getCachedEvents,
+  getCachedEventById,
+  getCachedEventsByCategory,
+} from "@/lib/event-cache";
 
 export const useEvents = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -27,20 +15,11 @@ export const useEvents = () => {
     const loadEvents = async () => {
       try {
         setLoading(true);
-        // Try Supabase first
-        try {
-          const data = await fetchAllEvents();
-          setEvents(data);
-          setError(null);
-        } catch (supabaseError) {
-          console.warn("Supabase not responding, using local data:", supabaseError);
-          // Fallback to local data
-          setEvents(allLocalEvents);
-          setError(null);
-        }
+        const data = await getCachedEvents();
+        setEvents(data);
+        setError(null);
       } catch (err) {
         setError(err instanceof Error ? err : new Error("Failed to load events"));
-        setEvents(allLocalEvents); // Still show local data on error
       } finally {
         setLoading(false);
       }
@@ -54,7 +33,7 @@ export const useEvents = () => {
 
 export const useEventById = (id: string | undefined) => {
   const [event, setEvent] = useState<Event | null>(null);
-  const [loading, setLoading] = useState(false); // No loading for detail pages
+  const [loading, setLoading] = useState(true); // Start with loading true
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -65,25 +44,10 @@ export const useEventById = (id: string | undefined) => {
 
     const loadEvent = async () => {
       try {
-        // Try numeric ID for Supabase first
-        const numericId = parseInt(id, 10);
-        if (!isNaN(numericId)) {
-          try {
-            const data = await fetchEventById(numericId);
-            if (data) {
-              setEvent(data);
-              setError(null);
-              return;
-            }
-          } catch (supabaseError) {
-            console.warn("Supabase not responding, trying local data:", supabaseError);
-          }
-        }
-        
-        // Fallback to local data (string IDs)
-        const localEvent = allLocalEvents.find(e => e.id === id);
-        if (localEvent) {
-          setEvent(localEvent);
+        setLoading(true); // Set loading while fetching
+        const data = await getCachedEventById(id);
+        if (data) {
+          setEvent(data);
           setError(null);
         } else {
           setEvent(null);
@@ -92,6 +56,8 @@ export const useEventById = (id: string | undefined) => {
       } catch (err) {
         setError(err instanceof Error ? err : new Error("Failed to load event"));
         setEvent(null);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -110,23 +76,11 @@ export const useEventsByCategory = (category: string) => {
     const loadEvents = async () => {
       try {
         setLoading(true);
-        // Try Supabase first
-        try {
-          const data = await fetchEventsByCategory(category);
-          setEvents(data);
-          setError(null);
-        } catch (supabaseError) {
-          console.warn("Supabase not responding, using local data:", supabaseError);
-          // Fallback to local data
-          const localEvents = allLocalEvents.filter(e => e.category === category);
-          setEvents(localEvents);
-          setError(null);
-        }
+        const data = await getCachedEventsByCategory(category);
+        setEvents(data);
+        setError(null);
       } catch (err) {
         setError(err instanceof Error ? err : new Error("Failed to load events"));
-        // Still show local data on error
-        const localEvents = allLocalEvents.filter(e => e.category === category);
-        setEvents(localEvents);
       } finally {
         setLoading(false);
       }
@@ -137,3 +91,4 @@ export const useEventsByCategory = (category: string) => {
 
   return { events, loading, error };
 };
+
