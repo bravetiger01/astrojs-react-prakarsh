@@ -1,0 +1,314 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* DAYFLOW Light Mode - Pure Monochrome */
+    --background: 0 0% 100%;       /* White */
+    --foreground: 0 0% 0%;         /* Black */
+    --primary: 0 0% 0%;            /* Black */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 95%;         /* Light Gray */
+    --secondary-foreground: 0 0% 0%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
+    --accent: 0 0% 0%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 85% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 0%;             /* 100% Black Border */
+    --input: 0 0% 100%;
+    --ring: 0 0% 0%;
+    --radius: 0rem;                /* Zero border radius */
+    
+    /* Card */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 95%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 0%;
+    --sidebar-ring: 0 0% 0%;
+
+    /* Neon color palette - CRITICAL for TechEventCard */
+    --neon-cyan: 264 100% 50%;
+    --neon-blue: 260 97% 56%;
+    --neon-purple: 270 100% 53%;
+    --neon-pink: 326 100% 57%;
+    --neon-green: 326 100% 57%;
+    --neon-orange: 11 100% 57%;
+    --neon-red: 262 100% 79%;
+
+    /* Technical Event Card Color Scheme */
+    --tech-primary: 0 0% 100%;      /* #FFFFFF - White */
+    --tech-secondary: 13 79% 70%;   /* #F1B5A2 - Peachy Salmon */
+    --tech-accent: 266 38% 25%;     /* #3C2A56 - Dark Purple */
+  }
+
+  .dark {
+    /* DAYFLOW Dark Mode - Inverted Monochrome */
+    --background: 0 0% 0%;         /* Black */
+    --foreground: 0 0% 100%;       /* White */
+    --primary: 0 0% 100%;          /* White */
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;         /* Dark Gray */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 0 0% 100%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 85% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 100%;           /* 100% White Border */
+    --input: 0 0% 0%;
+    --ring: 0 0% 100%;
+    
+    /* Card */
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    
+    /* Popover */
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 0%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 0 0% 100%;
+    --sidebar-ring: 0 0% 100%;
+
+    /* Neon colors remain the same in dark mode */
+    --neon-cyan: 264 100% 50%;
+    --neon-blue: 260 97% 56%;
+    --neon-purple: 270 100% 53%;
+    --neon-pink: 326 100% 57%;
+    --neon-green: 326 100% 57%;
+    --neon-orange: 11 100% 57%;
+    --neon-red: 262 100% 79%;
+
+    /* Technical Event Card Color Scheme (same in dark mode) */
+    --tech-primary: 0 0% 100%;      /* #FFFFFF - White */
+    --tech-secondary: 13 79% 70%;   /* #F1B5A2 - Peachy Salmon */
+    --tech-accent: 266 38% 25%;     /* #3C2A56 - Dark Purple */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold uppercase tracking-tight;
+  }
+}
+
+@layer components {
+  /* DAYFLOW BRUTALIST PATTERNS */
+  
+  /* Brutalist Card Pattern */
+  .brutalist-card {
+    @apply bg-background border-2 border-foreground p-6;
+    box-shadow: 4px 4px 0 0 hsl(var(--foreground));
+  }
+
+  .dark .brutalist-card {
+    box-shadow: 4px 4px 0 0 hsl(var(--background));
+  }
+
+  /* Interactive Button Pattern */
+  .brutalist-button {
+    @apply bg-primary text-primary-foreground border-2 border-primary px-6 py-2 font-mono font-bold 
+           hover:-translate-x-1 hover:-translate-y-1 transition-all duration-150 ease-out
+           active:translate-x-0 active:translate-y-0 uppercase;
+    box-shadow: 2px 2px 0 0 hsl(var(--foreground));
+  }
+
+  .brutalist-button:hover {
+    box-shadow: 4px 4px 0 0 hsl(var(--foreground));
+  }
+
+  .brutalist-button:active {
+    box-shadow: none;
+  }
+
+  /* System Input Pattern */
+  .brutalist-input {
+    @apply bg-background border-2 border-foreground p-3 font-mono 
+           focus:outline-none focus:ring-2 focus:ring-foreground focus:ring-offset-2
+           placeholder:opacity-50 w-full;
+  }
+
+  /* Hard-Edge Grid */
+  .grid-pattern {
+    background-image: 
+      linear-gradient(hsl(var(--foreground) / 0.1) 2px, transparent 2px),
+      linear-gradient(90deg, hsl(var(--foreground) / 0.1) 2px, transparent 2px);
+    background-size: 40px 40px;
+  }
+
+  /* Home page perspective grid background */
+  .home-grid {
+    background-color: hsl(var(--background));
+  }
+
+  .grid-floor {
+    position: absolute;
+    inset: -30vh 0 0 0; /* push horizon upward */
+    background-image:
+      linear-gradient(hsl(var(--foreground) / 0.12) 1px, transparent 1px),
+      linear-gradient(90deg, hsl(var(--foreground) / 0.12) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(900px) rotateX(60deg);
+    transform-origin: top center;
+    opacity: 0.5;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 5%, black 25%, black 85%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 5%, black 25%, black 85%, transparent 100%);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* ============================================
+     NEON TEXT UTILITIES
+     Used for glowing text effects in cards
+     ============================================ */
+  .text-neon-cyan { 
+    color: hsl(var(--neon-cyan)); 
+    text-shadow: 0 0 10px hsl(var(--neon-cyan) / 0.5); 
+  }
+
+  .text-neon-blue { 
+    color: hsl(var(--neon-blue)); 
+    text-shadow: 0 0 10px hsl(var(--neon-blue) / 0.5); 
+  }
+
+  .text-neon-purple { 
+    color: hsl(var(--neon-purple)); 
+    text-shadow: 0 0 10px hsl(var(--neon-purple) / 0.5); 
+  }
+
+  .text-neon-pink { 
+    color: hsl(var(--neon-pink)); 
+    text-shadow: 0 0 10px hsl(var(--neon-pink) / 0.5); 
+  }
+
+  .text-neon-green { 
+    color: hsl(var(--neon-green)); 
+    text-shadow: 0 0 10px hsl(var(--neon-green) / 0.5); 
+  }
+
+  .text-neon-orange { 
+    color: hsl(var(--neon-orange)); 
+    text-shadow: 0 0 10px hsl(var(--neon-orange) / 0.5); 
+  }
+
+  .text-neon-red { 
+    color: hsl(var(--neon-red)); 
+    text-shadow: 0 0 10px hsl(var(--neon-red) / 0.5); 
+  }
+
+  /* ============================================
+     TECHNICAL EVENT CARD TEXT UTILITIES
+     Color scheme: #FFFFFF primary, #F1B5A2 secondary, #3C2A56 accent
+     ============================================ */
+  .text-tech-primary {
+    color: hsl(var(--tech-primary));
+    text-shadow: 0 0 10px hsl(var(--tech-primary) / 0.3);
+  }
+
+  .text-tech-secondary {
+    color: hsl(var(--tech-secondary));
+    text-shadow: 0 0 10px hsl(var(--tech-secondary) / 0.4);
+  }
+
+  .text-tech-accent {
+    color: hsl(var(--tech-accent));
+    text-shadow: 0 0 10px hsl(var(--tech-accent) / 0.3);
+  }
+
+  /* ============================================
+     NEON GLOW EFFECTS (Optional)
+     Can be used for additional glowing elements
+     ============================================ */
+  .glow-cyan {
+    box-shadow: 0 0 20px hsl(var(--neon-cyan) / 0.5), inset 0 0 20px hsl(var(--neon-cyan) / 0.1); 
+  }
+
+  .glow-blue { 
+    box-shadow: 0 0 20px hsl(var(--neon-blue) / 0.5), inset 0 0 20px hsl(var(--neon-blue) / 0.1); 
+  }
+
+  .glow-purple { 
+    box-shadow: 0 0 20px hsl(var(--neon-purple) / 0.5), inset 0 0 20px hsl(var(--neon-purple) / 0.1); 
+  }
+
+  .glow-pink { 
+    box-shadow: 0 0 20px hsl(var(--neon-pink) / 0.5), inset 0 0 20px hsl(var(--neon-pink) / 0.1); 
+  }
+
+  .glow-green { 
+    box-shadow: 0 0 20px hsl(var(--neon-green) / 0.5), inset 0 0 20px hsl(var(--neon-green) / 0.1); 
+  }
+
+  .glow-orange { 
+    box-shadow: 0 0 20px hsl(var(--neon-orange) / 0.5), inset 0 0 20px hsl(var(--neon-orange) / 0.1); 
+  }
+
+  .glow-red { 
+    box-shadow: 0 0 20px hsl(var(--neon-red) / 0.5), inset 0 0 20px hsl(var(--neon-red) / 0.1); 
+  }
+
+  /* ============================================
+     FONT DISPLAY UTILITY
+     Used for tracking-heavy decorative text
+     ============================================ */
+  .font-display {
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  /* ============================================
+     HEX GRID BACKGROUND PATTERN
+     Used in TechEventCard for decorative effect
+     ============================================ */
+  .hex-grid {
+    background-image: 
+      linear-gradient(30deg, hsl(var(--tech-accent) / 0.15) 12%, transparent 12.5%, transparent 87%, hsl(var(--tech-accent) / 0.15) 87.5%, hsl(var(--tech-accent) / 0.15)),
+      linear-gradient(150deg, hsl(var(--tech-secondary) / 0.18) 12%, transparent 12.5%, transparent 87%, hsl(var(--tech-secondary) / 0.18) 87.5%, hsl(var(--tech-secondary) / 0.18)),
+      linear-gradient(30deg, hsl(var(--tech-accent) / 0.12) 12%, transparent 12.5%, transparent 87%, hsl(var(--tech-accent) / 0.12) 87.5%, hsl(var(--tech-accent) / 0.12)),
+      linear-gradient(150deg, hsl(var(--tech-secondary) / 0.12) 12%, transparent 12.5%, transparent 87%, hsl(var(--tech-secondary) / 0.12) 87.5%, hsl(var(--tech-secondary) / 0.12)),
+      linear-gradient(60deg, hsl(var(--tech-primary) / 0.08) 25%, transparent 25.5%, transparent 75%, hsl(var(--tech-primary) / 0.08) 75%, hsl(var(--tech-primary) / 0.08)),
+      linear-gradient(60deg, hsl(var(--tech-primary) / 0.08) 25%, transparent 25.5%, transparent 75%, hsl(var(--tech-primary) / 0.08) 75%, hsl(var(--tech-primary) / 0.08));
+    background-size: 80px 140px;
+    background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+  }
+}

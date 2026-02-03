@@ -1,393 +1,591 @@
 ---
-
+import Navbar from "../pages/navbar.astro";
 ---
 
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Spritesheet Demo</title>
+        <style>
+            body {
+            }
+            .HomePage {
+                position: relative;
+                height: 300vh !important;
+                width: 100%;
+                overflow: hidden;
+            }
+            .HeroSection {
+                overflow: hidden;
+                background: linear-gradient(to bottom, #f1b5a2, #3c2a56);
+                position: relative;
+                height: 100vh;
+                width: 100%;
+                border: 4px solid red;
+            }
+            .sprite {
+                background-image: url("../assets/OPSpriteSheet.svg");
+                background-repeat: no-repeat;
+                display: inline-block;
+            }
 
-    body {
-        overflow: hidden;
-        background: #1a1a2e;
-        font-family: Arial, sans-serif;
-    }
+            .title {
+                position: absolute;
+                top: 0%;
+                left: 50%;
+                width: 2100px;
+                height: 425px;
+                background-position: 0px 0px;
+                transform: translateX(-50%) scale(0.5);
+                z-index: 80;
+            }
 
-    /* Base sprite class */
-    .sprite {
-        position: absolute;
-        background-image: url("/public/assets/FullSpriteSheet.svg");
-        background-repeat: no-repeat;
-        image-rendering: crisp-edges;
-    }
+            .baseClouds {
+                position: absolute;
+                bottom: 2%;
+                left: 50%;
+                opacity: 1;
+                position: absolute;
+                width: 1525px;
+                height: 425px;
+                background-position: -2100px 0px;
+                transform: translateX(-50%) scale(1.5);
+                z-index: 200;
+            }
+            .WindMillParent {
+                height: 600px;
+                aspect-ratio: 1;
+                position: absolute;
+                top: 20%;
+                left: 2%;
 
-    /* Title */
-    .title {
-        width: 2100px;
-        height: 425px;
-        background-position: 0 0;
-        top: 50px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 100;
-    }
+                transform: scale(0.8);
+                z-index: 100;
+            }
+            .rotatingWindMill {
+                position: absolute;
+                bottom: 35%;
+                left: 50%;
+                opacity: 1;
+                width: 470px;
+                height: 450px;
+                background-position: 0px -425px;
+                transform: translateX(-50%) scale(1);
+                z-index: 10;
+                animation: windmill-rotate 12s linear infinite;
+            }
+            @keyframes windmill-rotate {
+                from {
+                    transform: translateX(-50%) scaleX(-1) scale(1) rotate(0deg);
+                }
+                to {
+                    transform: translateX(-50%) scaleX(-1) scale(1)
+                        rotate(-360deg);
+                }
+            }
 
-    /* Base Clouds */
-    .base-clouds {
-        width: 1525px;
-        height: 425px;
-        background-position: -2100px 0;
-        top: 20%;
-        left: 10%;
-        z-index: 5;
-        animation: float 20s ease-in-out infinite;
-    }
+            .staticWindMill {
+                position: absolute;
+                bottom: -40%;
+                left: 50%;
+                opacity: 1;
+                width: 699px;
+                height: 949px;
+                background-position: -831px -875px;
+                transform: translateX(-50%) scale(0.5);
+                z-index: 20;
+            }
+            .WaterMillParent {
+                height: 600px;
+                aspect-ratio: 1;
+                position: absolute;
+                top: 25%;
+                right: -5%;
 
-    /* Rotating Windmill */
-    .rotating-windmill {
-        width: 470px;
-        height: 450px;
-        background-position: 0 -425px;
-        bottom: 100px;
-        right: 15%;
-        z-index: 50;
-        animation: spin 8s linear infinite;
-    }
+                transform: scale(0.8);
+                z-index: 80;
+            }
+            .rotatingWaterMill1 {
+                position: absolute;
+                top: 25%;
+                left: -20%;
+                opacity: 1;
+                width: 699px;
+                height: 450px;
+                background-position: -831px -425px;
+                transform: scale(0.95);
+                animation: watermill-rotate2 12s linear infinite;
+            }
+            @keyframes watermill-rotate2 {
+                from {
+                    transform: scale(0.95) rotate(0deg);
+                }
+                to {
+                    transform: scale(0.95) rotate(-360deg);
+                }
+            }
+            .rotatingWaterMill2 {
+                position: absolute;
+                top: 25%;
+                left: -2%;
+                opacity: 1;
+                width: 570px;
+                height: 450px;
+                background-position: -1530px -425px;
+                transform: scale(0.7);
+                animation: watermill-rotate 12s linear infinite;
+            }
 
-    /* Rotating Water Mill 1 */
-    .rotating-watermill1 {
-        width: 699px;
-        height: 450px;
-        background-position: -831px -425px;
-        bottom: 120px;
-        left: 20%;
-        z-index: 45;
-        animation: spin 10s linear infinite;
-    }
+            @keyframes watermill-rotate {
+                from {
+                    transform: scale(0.7) rotate(0deg);
+                }
+                to {
+                    transform: scale(0.7) rotate(-360deg);
+                }
+            }
+            .staticWaterMill {
+                position: absolute;
+                top: -30%;
+                left: -10%;
+                opacity: 1;
+                width: 831px;
+                height: 949px;
+                background-position: 0px -875px;
+                transform: scale(0.7);
+            }
 
-    /* Rotating Water Mill 2 */
-    .rotating-watermill2 {
-        width: 570px;
-        height: 450px;
-        background-position: -1530px -425px;
-        bottom: 80px;
-        left: 50%;
-        z-index: 45;
-        animation: spin 12s linear infinite reverse;
-    }
+            .titleCloud1 {
+                position: absolute;
+                top: -40%;
+                right: 0;
+                opacity: 1;
+                width: 470px;
+                height: 739px;
+                background-position: 0px -2050px;
+                transform: scale(0.5);
+                z-index: 80;
+            }
+            .titleCloud2 {
+                position: absolute;
+                top: 0;
+                left: 0;
+                opacity: 0;
+                width: 1269px;
+                height: 739px;
+                background-position: -831px -2050px;
+                transform: scale(0.5);
+            }
+            .stars {
+                position: absolute;
+                top: -50%;
+                left: -25%;
+                opacity: 1;
+                width: 1952px;
+                height: 970px;
+                background-position: -2100px -425px;
+                transform: scale(1.2);
+                z-index: 80;
+            }
+            .geometricCircleGrid {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                opacity: 1;
+                width: 1952px;
+                height: 1394px;
+                background-position: -2100px -1395px;
+                transform: translateX(-50%);
+                z-index: 30;
+            }
+            .babbageMachine {
+                position: absolute;
+                bottom: -25%;
+                left: 50%;
+                opacity: 1;
+                width: 1269px;
+                height: 739px;
+                background-position: -831px -2050px;
+                transform: translateX(-50%) scale(0.4);
+                z-index: 100;
+            }
+            .hourGlassLeftParent {
+                position: absolute;
+                height: 100%;
+                width: 30%;
+                top: 0;
+                left: 1.5%;
+                opacity: 1;
+                z-index: 1000;
+                /* border: 4px solid blue; */
+            }
+            .hourGlassLeftPillar {
+                position: absolute;
+                top: 50%;
+                left: -12%;
+                opacity: 1;
+                width: 470px;
+                height: 1366px;
+                z-index: 1000;
+                background-position: 0px -2789px;
+                transform: translateY(-50%) scale(1.8);
+            }
+            @media (min-height: 725px) and (min-width: 1111px) {
+                .hourGlassLeftPillar {
+                    position: absolute;
+                    top: 50%;
+                    left: -8%;
+                    opacity: 1;
+                    width: 470px;
+                    height: 1366px;
+                    z-index: 1000;
+                    background-position: 0px -2789px;
+                    transform: translateY(-50%) scale(2.3);
+                }
+            }
 
-    /* Static Water Mill */
-    .static-watermill {
-        width: 831px;
-        height: 949px;
-        background-position: 0 -875px;
-        bottom: 50px;
-        left: 5%;
-        z-index: 60;
-    }
+            @media (min-height: 880px) and (min-width: 1111px) {
+                .hourGlassLeftPillar {
+                    position: absolute;
+                    top: 50%;
+                    left: 0%;
+                    opacity: 1;
+                    width: 470px;
+                    height: 1366px;
+                    z-index: 1000;
+                    background-position: 0px -2789px;
+                    transform: translateY(-50%) scale(2.6);
+                }
+            }
+            .hourGlassRightParent {
+                position: absolute;
+                height: 100%;
+                width: 30%;
+                top: 0;
+                right: -1%;
+                opacity: 1;
+                z-index: 1000;
+                /* background-color: blue; */
+                opacity: 1;
+            }
 
-    /* Static Wind Mill */
-    .static-windmill {
-        width: 699px;
-        height: 949px;
-        background-position: -831px -875px;
-        bottom: 50px;
-        right: 10%;
-        z-index: 60;
-    }
+            .hourGlassRightPillar {
+                position: absolute;
+                top: 50%;
+                right: -25%;
+                opacity: 1;
+                width: 470px;
+                height: 1366px;
+                z-index: 1000;
+                background-position: -470px -2790px;
+                transform: translateY(-50%) scale(1.8);
+                opacity: 1;
+            }
+            @media (min-height: 725px) and (min-width: 1111px) {
+                .hourGlassRightPillar {
+                    position: absolute;
+                    top: 50%;
+                    right: -20%;
+                    opacity: 1;
+                    width: 470px;
+                    height: 1366px;
+                    z-index: 1000;
+                    background-position: -470px -2789px;
+                    transform: translateY(-50%) scale(2.3);
+                }
+            }
+            @media (min-height: 880px) and (min-width: 1111px) {
+                .hourGlassRightPillar {
+                    position: absolute;
+                    top: 50%;
+                    right: -15%;
+                    opacity: 1;
+                    width: 470px;
+                    height: 1366px;
+                    z-index: 1000;
+                    background-position: -470px -2789px;
+                    transform: translateY(-50%) scale(2.6);
+                }
+            }
 
-    /* Title Cloud 1 */
-    .title-cloud1 {
-        width: 470px;
-        height: 739px;
-        background-position: 0 -2050px;
-        top: 10%;
-        left: 5%;
-        z-index: 8;
-        animation: float 15s ease-in-out infinite;
-    }
+            .hourGlassTopParent {
+                position: absolute;
+                height: 100px;
+                width: 100%;
+                top: 0;
+                left: 50%;
+                opacity: 1;
+                z-index: 900;
+                /* background-color: blue; */
+                transform: translateX(-50%);
+            }
+            .hourGlassBaseParent {
+                position: absolute;
+                height: 100px;
+                width: 100%;
+                bottom: 10%;
+                left: 50%;
+                opacity: 1;
+                z-index: 900;
+                /* background-color: blue; */
+                transform: translateX(-50%);
+            }
+            .hourGlassTop {
+                position: absolute;
+                top: -400%;
+                left: 50%;
+                opacity: 1;
+                width: 1525px;
+                height: 655px;
+                z-index: 900;
+                background-position: -2100px -3501px;
+                transform: translateX(-50%) scale(1.8);
+            }
 
-    /* Title Cloud 2 */
-    .title-cloud2 {
-        width: 1269px;
-        height: 739px;
-        background-position: -831px -2050px;
-        top: 15%;
-        right: 5%;
-        z-index: 8;
-        animation: float 18s ease-in-out infinite 2s;
-    }
+            .hourGlassBase {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                opacity: 1;
+                width: 1525px;
+                height: 710px;
+                background-position: -2100px -2790px;
+                transform: translateX(-50%) scale(1.8);
+            }
+            .FutureParent {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                z-index: 290;
+                border: 4px solid rgb(0, 0, 0);
+                background: linear-gradient(to bottom, #700074, #000021);
+            }
+            .bgFutureBuild {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                opacity: 1;
+                width: 570px;
+                height: 515px;
+                z-index: 300;
+                background-position: -1530px -875px;
+                transform: translateX(-50%) scale(2);
+            }
+            .bgFutureBuild2 {
+                position: absolute;
+                bottom: 15%;
+                left: 65%;
+                opacity: 1;
+                width: 1028px;
+                height: 520px;
+                z-index: 400;
+                background-position: -4052px -875px;
+                transform: translateX(-50%) scale(1.8);
+            }
+            .foreGroundRoad {
+                position: absolute;
+                bottom: 20%;
+                left: 54%;
+                opacity: 1;
+                width: 1028px;
+                height: 425px;
+                z-index: 500;
+                background-position: -4052px 0px;
+                transform: translateX(-50%) scale(1.8);
+            }
+            .BridgeAndTrainParent {
+                position: absolute;
+                bottom: 20%;
+                height: 40%;
+                width: 100%;
+                /* border:4px solid yellow; */
+                z-index: 470;
+            }
+            .train {
+                position: absolute;
+                top: 48%;
+                left: 0;
+                opacity: 1;
+                width: 1028px;
+                height: 71px;
+                z-index: 440;
+                background-position: -4052px -1853px;
+                transform: translateX(10%);
+                animation: moveTrain 6s linear infinite;
+            }
+            @keyframes moveTrain {
+                0% {
+                    transform: translateX(100vw);
+                }
+                40% {
+                    transform: translateX(-100vw);
+                }
+                100%{
+                    transform: translateX(-100vw);
+                }
+            }
+            .bridge {
+                position: absolute;
+                bottom: 0%;
+                left: 50%;
+                opacity: 1;
+                width: 1028px;
+                height: 126px;
+                z-index: 450;
+                background-position: -4052px -1924px;
+                transform: translateX(-50%) scale(2.5);
+            }
+            .MiddleSection{
+                position: absolute;
+                height: 100vh;
+                width: 100%;
+                border:4px solid rgb(26, 110, 34);
+                z-index: 200;
 
-    /* Stars */
-    .stars {
-        width: 1952px;
-        height: 970px;
-        background-position: -2100px -425px;
-        top: 0;
-        left: 0;
-        z-index: 1;
-        animation: twinkle 3s ease-in-out infinite;
-    }
+            }
+            .purpleClouds1 {
+                position: absolute;
+                bottom: -55%;
+                left: 50%;
+                opacity: 1;
+                width: 1028px;
+                height: 740px;
+                z-index: 220;
+                background-position: -4052px -2050px;
+                transform: translateX(-50%) scale(2);
+            }
+            .purpleClouds2 {
+                position: absolute;
+                bottom: -30%;
+                left: 50%;
+                opacity: 1;
+                width: 1028px;
+                height: 710px;
+                z-index: 200;
+                background-position: -4052px -2798px;
+                transform: translateX(-50%) scale(1.6);
+            }
+            .girlFall{
+                position: absolute;
+                bottom: -10%;
+                left: 55%;
+                opacity: 1;
+                width: 570px;
+                height: 710px;
+                z-index: 200;
+                background-position: -1530px -2790px;
+                transform: translateX(-50%) scale(.5);
+            }
+            .guyFall{
+                                position: absolute;
+                top: 2%;
+                left: 45%;
+                opacity: 1;
+                width: 530px;
+                height: 560px;
+                z-index: 200;
+                background-position: -1530px -3501px;
+                transform: translateX(-50%) scale(.4);
 
-    /* Geometric Circle Grid */
-    .geometric-circle {
-        width: 1952px;
-        height: 1394px;
-        background-position: -2100px -1395px;
-        bottom: 0;
-        right: 0;
-        z-index: 2;
-        opacity: 0.6;
-    }
+            }
+            /* .purpleClouds3 {
+                position: absolute;
+                bottom: 0%;
+                left: 50%;
+                opacity: 0;
+                width: 1029px;
+                height: 655px;
+                z-index:210;
+                background-position: -4052px -3500px;
+                transform: translateX(-50%) scale(1.5);
+            } */
 
-    /* Babbage Machine */
-    .babbage-machine {
-        width: 1269px;
-        height: 739px;
-        background-position: -831px -2050px;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 40;
-    }
+            .peachClouds1 {
+                position: absolute;
+                top: -40%;
+                left: 50%;
+                opacity: 1;
+                width: 1029px;
+                height: 450px;
+                z-index: 720;
+                background-position: -4054px -435px;
+                transform: translate(-50%,50%) scale(1.8);
+            }
+            .peachClouds2 {
+                position: absolute;
+                top: -35%;
+                left: 65%;
+                 z-index: 710;
+                opacity: 1;
+                width: 1029px;
+                height: 429px;
+                background-position: -4052px -1395px;
+                transform: translate(-50%,50%) scale(2);
+            }
 
-    /* Hour Glass Left Pillar */
-    .hourglass-left {
-        width: 470px;
-        height: 1366px;
-        background-position: 0 -2790px;
-        bottom: 0;
-        left: 25%;
-        z-index: 70;
-    }
+            body {
+                margin: 0;
+                padding: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <Navbar />
+        <div class="HomePage">
+            <div class="HeroSection">
+                <div class="sprite title"></div>
+                <div class="sprite baseClouds"></div>
+                <div class="WindMillParent">
+                    <div class="sprite staticWindMill"></div>
+                    <div class="sprite rotatingWindMill"></div>
+                </div>
+                <div class="WaterMillParent">
+                    <div class="sprite rotatingWaterMill1"></div>
+                    <div class="sprite rotatingWaterMill2"></div>
+                    <div class="sprite staticWaterMill"></div>
+                </div>
 
-    /* Hour Glass Right Pillar */
-    .hourglass-right {
-        width: 361px;
-        height: 1366px;
-        background-position: -470px -2790px;
-        bottom: 0;
-        right: 25%;
-        z-index: 70;
-    }
+                <div class="sprite titleCloud1"></div>
+                <div class="sprite titleCloud2"></div>
+                <div class="sprite stars"></div>
+                <div class="sprite geometricCircleGrid"></div>
+                <div class="sprite babbageMachine"></div>
+            </div>
+            <div class="hourGlassLeftParent">
+                <div class="sprite hourGlassLeftPillar"></div>
+            </div>
+            <div class="hourGlassRightParent">
+                <div class="sprite hourGlassRightPillar"></div>
+            </div>
+            <div class="hourGlassTopParent">
+                <div class="sprite hourGlassTop"></div>
+            </div>
+            <div class="hourGlassBaseParent">
+                <div class="sprite hourGlassBase"></div>
+            </div>
+            <div class="MiddleSection">
+                <div class="sprite purpleClouds1"></div>
+                <div class="sprite purpleClouds2"></div>
+                <!-- <div class="sprite purpleClouds3"></div> -->
+                 <div class="sprite girlFall"></div>
+                 <div class="sprite guyFall"></div>
+                <div class="sprite peachClouds1"></div>
+                <div class="sprite peachClouds2"></div>
+            </div>
 
-    /* Hour Glass Base */
-    .hourglass-base {
-        width: 1525px;
-        height: 710px;
-        background-position: -2100px -2790px;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 65;
-    }
-
-    /* Hour Glass Top */
-    .hourglass-top {
-        width: 1525px;
-        height: 655px;
-        background-position: -2100px -3501px;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 65;
-    }
-
-    /* BG Future Build */
-    .bg-future1 {
-        width: 570px;
-        height: 515px;
-        background-position: -1530px -875px;
-        bottom: 20%;
-        left: 15%;
-        z-index: 10;
-    }
-
-    /* BG Future Build 2 */
-    .bg-future2 {
-        width: 1028px;
-        height: 520px;
-        background-position: -4052px -875px;
-        bottom: 25%;
-        right: 20%;
-        z-index: 10;
-    }
-
-    /* Foreground Road */
-    .foreground-road {
-        width: 1028px;
-        height: 425px;
-        background-position: -4052px 0;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 80;
-    }
-
-    /* Train */
-    .train {
-        width: 1028px;
-        height: 71px;
-        background-position: -4052px -1853px;
-        bottom: 15%;
-        left: -1028px;
-        z-index: 75;
-        animation: trainMove 15s linear infinite;
-    }
-
-    /* Bridge */
-    .bridge {
-        width: 1028px;
-        height: 126px;
-        background-position: -4052px -1924px;
-        bottom: 12%;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 55;
-    }
-
-    /* Purple Clouds */
-    .purple-cloud1 {
-        width: 1028px;
-        height: 740px;
-        background-position: -4052px -2050px;
-        top: 30%;
-        left: 10%;
-        z-index: 6;
-        animation: float 25s ease-in-out infinite;
-    }
-
-    .purple-cloud2 {
-        width: 1028px;
-        height: 710px;
-        background-position: -4052px -2790px;
-        top: 35%;
-        right: 8%;
-        z-index: 6;
-        animation: float 22s ease-in-out infinite 3s;
-    }
-
-    .purple-cloud3 {
-        width: 104px;
-        height: 1581px;
-        background-position: -4052px -3500px;
-        top: 10%;
-        left: 2%;
-        z-index: 7;
-        animation: float 30s ease-in-out infinite 1s;
-    }
-
-    /* Peach Clouds */
-    .peach-cloud1 {
-        width: 104px;
-        height: 450px;
-        background-position: -4052px -425px;
-        top: 20%;
-        right: 5%;
-        z-index: 9;
-        animation: float 20s ease-in-out infinite 4s;
-    }
-
-    .peach-cloud2 {
-        width: 104px;
-        height: 429px;
-        background-position: -4052px -1395px;
-        top: 40%;
-        right: 15%;
-        z-index: 9;
-        animation: float 18s ease-in-out infinite 2s;
-    }
-
-    /* Animations */
-    @keyframes float {
-        0%,
-        100% {
-            transform: translateY(0);
-        }
-        50% {
-            transform: translateY(-20px);
-        }
-    }
-
-    @keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-
-    @keyframes twinkle {
-        0%,
-        100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0.5;
-        }
-    }
-
-    @keyframes trainMove {
-        from {
-            left: -1028px;
-        }
-        to {
-            left: 100%;
-        }
-    }
-
-    /* Responsive scaling */
-    @media (max-width: 1024px) {
-        .sprite {
-            transform: scale(0.8);
-            transform-origin: center;
-        }
-    }
-</style>
-
-<!-- Background Layer -->
-<div class="sprite stars"></div>
-<div class="sprite geometric-circle"></div>
-
-<!-- Clouds Layer -->
-<div class="sprite purple-cloud1"></div>
-<div class="sprite purple-cloud2"></div>
-<div class="sprite purple-cloud3"></div>
-<div class="sprite base-clouds"></div>
-<div class="sprite title-cloud1"></div>
-<div class="sprite title-cloud2"></div>
-<div class="sprite peach-cloud1"></div>
-<div class="sprite peach-cloud2"></div>
-
-<!-- Buildings Layer -->
-<div class="sprite bg-future1"></div>
-<div class="sprite bg-future2"></div>
-
-<!-- Middle Layer -->
-<div class="sprite babbage-machine"></div>
-<div class="sprite rotating-watermill1"></div>
-<div class="sprite rotating-watermill2"></div>
-<div class="sprite rotating-windmill"></div>
-
-<!-- Structures Layer -->
-<div class="sprite bridge"></div>
-<div class="sprite static-watermill"></div>
-<div class="sprite static-windmill"></div>
-
-<!-- Hourglass Layer -->
-<div class="sprite hourglass-base"></div>
-<div class="sprite hourglass-top"></div>
-<div class="sprite hourglass-left"></div>
-<div class="sprite hourglass-right"></div>
-
-<!-- Train Layer -->
-<div class="sprite train"></div>
-
-<!-- Foreground Layer -->
-<div class="sprite foreground-road"></div>
-
-<!-- Title Layer -->
-<div class="sprite title"></div>
+            <div class="FutureParent">
+                <div class="sprite bgFutureBuild"></div>
+                <div class="sprite bgFutureBuild2"></div>
+                <div class="sprite foreGroundRoad"></div>
+                <div class="BridgeAndTrainParent">
+                    <div class="sprite train"></div>
+                    <div class="sprite bridge"></div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
