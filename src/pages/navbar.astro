@@ -1,5 +1,5 @@
 ---
-import '../components/GlassSurface/GlassSurface.css';
+import GlassSurface from '../components/GlassSurface/GlassSurface';
 
 const navLinks = [
   { name: 'HOME', href: '#home', highlight: false },
@@ -9,24 +9,37 @@ const navLinks = [
 ---
 
 <nav class="navbar">
-  <div class="navbar-glass">
-    <div class="navbar-content">
-      <div class="navbar-logo">
-        <img src="/assets/logo.svg" alt="Logo" />
+  <div class="navbar-border-wrapper">
+    <GlassSurface 
+      client:load
+      width="100%"
+      height="auto"
+      borderRadius={50}
+      blur={12}
+      opacity={0.9}
+      backgroundOpacity={0.05}
+      saturation={1.8}
+      brightness={50}
+      className="navbar-glass"
+    >
+      <div class="navbar-content">
+        <div class="navbar-logo">
+          <img src="/assets/logo.svg" alt="Logo" />
+        </div>
+        
+        <div class="navbar-links">
+          {navLinks.map(link => (
+            <a href={link.href} class={`nav-link ${link.highlight ? 'nav-link-highlight' : ''}`}>
+              {link.name}
+            </a>
+          ))}
+        </div>
+        
+        <a href="#register" class="nav-button">
+          <span>REGISTER NOW</span>
+        </a>
       </div>
-      
-      <div class="navbar-links">
-        {navLinks.map(link => (
-          <a href={link.href} class={`nav-link ${link.highlight ? 'nav-link-highlight' : ''}`}>
-            {link.name}
-          </a>
-        ))}
-      </div>
-      
-      <a href="#register" class="nav-button">
-        <span>REGISTER NOW</span>
-      </a>
-    </div>
+    </GlassSurface>
   </div>
 </nav>
 
@@ -44,23 +57,22 @@ const navLinks = [
     font-family: 'Bruno Ace SC', sans-serif;
   }
 
-  .navbar-glass {
+  .navbar-border-wrapper {
     position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    border-radius: 50px;
-    padding: 12px 24px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);
-    -webkit-backdrop-filter: blur(12px) saturate(1.8) brightness(1.2);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow:
-      0 8px 32px 0 rgba(31, 38, 135, 0.2),
-      0 2px 16px 0 rgba(31, 38, 135, 0.1),
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.2),
-      inset 0 -1px 0 0 rgba(255, 255, 255, 0.1);
+    padding: 2px;
+    border-radius: 52px;
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.3) 0%, 
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.3) 100%
+    );
+    box-shadow: 
+      0 0 20px rgba(255, 255, 255, 0.1),
+      0 0 40px rgba(0, 0, 0, 0.2);
+  }
+
+  .navbar-glass {
+    padding: 20px 40px;
   }
 
   .navbar-content {
@@ -68,68 +80,72 @@ const navLinks = [
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    gap: 32px;
+    gap: 60px;
   }
 
   .navbar-logo {
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    padding: 8px 0;
   }
 
   .navbar-logo img {
-    height: 48px;
+    height: 40px;
     width: auto;
   }
 
   .navbar-links {
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 48px;
     flex: 1;
     justify-content: center;
   }
 
   .nav-link {
-    color: white;
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-    font-size: 18px;
-    letter-spacing: 1px;
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
     transition: all 0.3s ease;
     position: relative;
-    padding: 8px 16px;
+    padding: 8px 0;
     border-radius: 8px;
   }
 
   .nav-link:hover {
     color: #F1B5A2;
-    transform: translateY(-2px);
   }
 
   .nav-link-highlight {
-    background: rgba(241, 181, 162, 0.2);
-    border: 2px solid #F1B5A2;
-    box-shadow: 0 0 20px rgba(241, 181, 162, 0.4);
+    color: #F1B5A2;
+    font-weight: 600;
   }
 
   .nav-button {
-    background: linear-gradient(135deg, #F1B5A2 0%, #3C2A56 100%);
-    color: #FFFFFF;
+    background: linear-gradient(135deg, #F1B5A2 0%, #E89B88 100%);
+    color: #000000;
     text-decoration: none;
-    padding: 12px 32px;
+    padding: 14px 32px;
     border-radius: 30px;
-    font-size: 16px;
-    letter-spacing: 1px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     transition: all 0.3s ease;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 4px 15px rgba(241, 181, 162, 0.4);
+    border: none;
+    box-shadow: 0 4px 20px rgba(241, 181, 162, 0.5);
     flex-shrink: 0;
+    position: relative;
+    z-index: 10;
+    isolation: isolate;
   }
 
   .nav-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(241, 181, 162, 0.6);
-    background: linear-gradient(135deg, #3C2A56 0%, #F1B5A2 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 25px rgba(241, 181, 162, 0.7);
+    background: linear-gradient(135deg, #E89B88 0%, #F1B5A2 100%);
   }
 
   @media (max-width: 768px) {
@@ -138,31 +154,34 @@ const navLinks = [
       top: 10px;
     }
 
+    .navbar-border-wrapper {
+      border-radius: 32px;
+    }
+
     .navbar-glass {
-      padding: 8px 16px;
-      border-radius: 30px;
+      padding: 12px 20px;
     }
 
     .navbar-content {
-      gap: 16px;
+      gap: 20px;
     }
 
     .navbar-logo img {
-      height: 36px;
+      height: 32px;
     }
 
     .navbar-links {
-      gap: 20px;
+      gap: 24px;
     }
 
     .nav-link {
       font-size: 14px;
-      padding: 6px 12px;
+      padding: 6px 0;
     }
 
     .nav-button {
-      padding: 8px 20px;
-      font-size: 14px;
+      padding: 10px 20px;
+      font-size: 13px;
     }
   }
 
