@@ -25,7 +25,7 @@ export interface Event {
     singles?: RuleCategory;
     doubles?: RuleCategory;
   };
-  posterImage?: string;
+  posterImage?: string | any; // ImageMetadata from Astro or string URL
   date?: string;
   time?: string;
   location?: string;

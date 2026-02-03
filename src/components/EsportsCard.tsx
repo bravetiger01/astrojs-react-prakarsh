@@ -8,7 +8,7 @@ interface EsportsCardProps {
   prizePool: string;
   teamSize: string;
   date: string;
-  posterImage: string;
+  posterImage: string | { src: string }; // Accept both string and ImageMetadata
   accentColor: string;
   className?: string;
 }
@@ -24,6 +24,9 @@ const EsportsCard = ({
   className,
 }: EsportsCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
+
+  // Extract src from ImageMetadata if needed
+  const imageSrc = typeof posterImage === 'string' ? posterImage : posterImage.src;
 
   return (
     <div
@@ -42,7 +45,7 @@ const EsportsCard = ({
     >
       {/* Background Image */}
       <img
-        src={posterImage}
+        src={imageSrc}
         alt="Game poster"
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700"
         style={{
