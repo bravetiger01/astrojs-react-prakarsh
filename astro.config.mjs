@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 
@@ -12,16 +11,5 @@ export default defineConfig({
       applyBaseStyles: false,
     }),
   ],
-  output: 'server',
-  adapter: vercel({
-    webAnalytics: {
-      enabled: false
-    },
-    edgeMiddleware: false
-  }),
-  vite: {
-    ssr: {
-      noExternal: ['@supabase/supabase-js']
-    }
-  }
+  output: 'static',
 });
