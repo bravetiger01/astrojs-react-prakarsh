@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import type { Event } from "@/data/events";
 
 interface EventCardProps {
@@ -22,7 +21,7 @@ const EventCard = ({ event, index }: EventCardProps) => {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
     >
-      <Link to={detailPath}>
+      <a href={detailPath}>
         <motion.div
           whileHover={{ x: -4, y: -4 }}
           whileTap={{ x: 0, y: 0 }}
@@ -74,7 +73,7 @@ const EventCard = ({ event, index }: EventCardProps) => {
             </div>
           </div>
         </motion.div>
-      </Link>
+      </a>
     </motion.div>
   );
 };

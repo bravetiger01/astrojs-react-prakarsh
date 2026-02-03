@@ -1,24 +1,15 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import TechEventCard from "../components/cards/TechEventCardNew";
-import ParticleField from "../components/cards/ParticleField";
+import CassetteCard from "./CassetteCard";
+import ParticleField from "./ParticleField";
 
 import { useEventsByCategory } from "@/hooks/use-events";
 
 const TechnicalEventsPage = () => {
   const { events: technicalEvents, loading } = useEventsByCategory("tech");
-  const neonColors = [
-    "cyan",
-    "blue",
-    "purple",
-    "pink",
-    "orange",
-    "red",
-  ] as const;
 
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen bg-white">
       <ParticleField />
 
       <main className="relative z-10">
@@ -38,13 +29,13 @@ const TechnicalEventsPage = () => {
               transition={{ duration: 0.3 }}
               className="mb-12"
             >
-              <Link
-                to="/"
+              <a
+                href="/"
                 className="inline-flex items-center gap-2 text-sm font-mono uppercase tracking-wider hover:gap-4 transition-all"
               >
                 <ArrowLeft size={18} />
                 Back to Home
-              </Link>
+              </a>
             </motion.div>
 
             {/* Page Header */}
@@ -88,7 +79,7 @@ const TechnicalEventsPage = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative auto-rows-fr"
               >
                 {technicalEvents.map((event, index) => (
                   <motion.div
@@ -97,12 +88,10 @@ const TechnicalEventsPage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
-                    <TechEventCard
-                      event={{
-                        ...event,
-                        neonColor: neonColors[index % neonColors.length],
-                      }}
+                    <CassetteCard
+                      event={event}
                       index={index}
+                      totalEvents={technicalEvents.length}
                     />
                   </motion.div>
                 ))}

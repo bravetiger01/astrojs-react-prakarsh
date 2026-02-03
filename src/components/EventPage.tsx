@@ -7,11 +7,12 @@ interface EventPageProps {
   eventId?: string;
 }
 
-// Neutral styling (neonColor removed from data)
-const defaultNeonClass = "text-foreground";
-const defaultGradientClass = "from-white/10 via-white/5 to-transparent";
-const defaultGlowClass = "shadow-[0_0_40px_rgba(255,255,255,0.08)]";
-const defaultBorderColor = "hsl(0, 0%, 70%)";
+// Cassette card color scheme
+const COLORS = {
+  white: "#FFFFFF",
+  peach: "#F1B5A2",
+  accent: "#3C2A56",
+} as const;
 
 const EventPage = ({ eventId }: EventPageProps) => {
   const { event, loading, error } = useEventById(eventId);
@@ -33,6 +34,16 @@ const EventPage = ({ eventId }: EventPageProps) => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="font-display text-4xl font-bold mb-4">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
+
   if (error || !event) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -49,17 +60,12 @@ const EventPage = ({ eventId }: EventPageProps) => {
     );
   }
 
-  const borderColor = defaultBorderColor;
-
   return (
-    <div className="min-h-screen relative">
+    <div
+      className="min-h-screen relative"
+      style={{ backgroundColor: "#F5F5F5" }}
+    >
       <ParticleField />
-
-      {/* Background decorations */}
-      <div className="absolute inset-0 hex-grid opacity-20" />
-      <div
-        className={`absolute top-0 left-0 right-0 h-[60vh] bg-gradient-to-b ${defaultGradientClass}`}
-      />
 
       {/* Back button */}
       <motion.div
@@ -70,14 +76,16 @@ const EventPage = ({ eventId }: EventPageProps) => {
       >
         <a
           href={getBackLink()}
-          className="flex items-center gap-2 px-5 py-2.5 bg-background/80 backdrop-blur-xl border border-border text-foreground hover:text-primary hover:border-primary/50 transition-all"
+          className="flex items-center gap-2 px-5 py-2.5 font-display tracking-wider text-sm hover:gap-4 transition-all"
           style={{
-            clipPath:
-              "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)",
+            backgroundColor: COLORS.white,
+            color: COLORS.accent,
+            border: `2px solid ${COLORS.peach}`,
+            boxShadow: `0 0 20px ${COLORS.peach}40`,
           }}
         >
           <ArrowLeft size={18} />
-          <span className="text-sm font-display tracking-wider">BACK</span>
+          BACK
         </a>
       </motion.div>
 
@@ -92,32 +100,43 @@ const EventPage = ({ eventId }: EventPageProps) => {
               transition={{ duration: 0.6 }}
               className="text-left"
             >
+              {/* Badge */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="inline-flex items-center gap-3 px-5 py-2.5 mb-6 border border-primary/30 bg-primary/5 backdrop-blur-sm"
+                className="inline-flex items-center gap-3 px-5 py-2.5 mb-6 font-display tracking-widest uppercase text-sm font-medium"
                 style={{
-                  clipPath:
-                    "polygon(10px 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0 50%)",
+                  backgroundColor: COLORS.peach,
+                  color: COLORS.accent,
+                  border: `2px solid ${COLORS.peach}`,
+                  boxShadow: `0 0 20px ${COLORS.peach}50`,
                 }}
               >
-                <span className="w-2 h-2 rounded-full bg-neon-green animate-pulse" />
-                <span className="text-sm font-display font-medium text-primary tracking-widest uppercase">
-                  Prakarsh '26
-                </span>
-                <span className="w-2 h-2 rounded-full bg-neon-green animate-pulse" />
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: COLORS.accent }}
+                />
+                Prakarsh '26
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: COLORS.accent }}
+                />
               </motion.div>
 
               {/* Event name */}
               <h1
-                className={`font-display text-5xl md:text-7xl font-black mb-6 ${defaultNeonClass}`}
+                className="font-display text-5xl md:text-7xl font-black mb-6 leading-tight"
+                style={{ color: COLORS.accent }}
               >
                 {event.name}
               </h1>
 
               {/* Tagline */}
-              <p className="text-xl md:text-2xl text-foreground/80 font-medium mb-10 max-w-xl">
+              <p
+                className="text-xl md:text-2xl font-medium mb-10 max-w-xl"
+                style={{ color: COLORS.accent }}
+              >
                 {event.tagline}
               </p>
 
@@ -128,11 +147,9 @@ const EventPage = ({ eventId }: EventPageProps) => {
                     key={keyword}
                     className="px-4 py-2 text-sm font-display font-medium tracking-wider"
                     style={{
-                      border: `1px solid ${borderColor}`,
-                      color: borderColor,
-                      backgroundColor: `${borderColor}10`,
-                      clipPath:
-                        "polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)",
+                      border: `1.5px solid ${COLORS.peach}`,
+                      color: COLORS.accent,
+                      backgroundColor: `${COLORS.peach}20`,
                     }}
                   >
                     {keyword}
@@ -148,35 +165,36 @@ const EventPage = ({ eventId }: EventPageProps) => {
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className={`relative p-8 md:p-12 bg-background/80 backdrop-blur-xl border ${defaultGlowClass}`}
+                className="relative p-8 md:p-12"
                 style={{
-                  borderColor: `${borderColor}50`,
-                  clipPath:
-                    "polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px)",
+                  backgroundColor: COLORS.accent,
+                  border: `2px solid ${COLORS.peach}`,
+                  boxShadow: `0 0 40px -15px ${COLORS.peach}50, 0 0 0 1px ${COLORS.peach}`,
                 }}
               >
-                {/* Corner decorations */}
+                {/* Corner notches */}
                 <div
-                  className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2"
-                  style={{ borderColor }}
+                  className="absolute top-0 left-0 w-4 h-4"
+                  style={{
+                    background: `linear-gradient(135deg, ${COLORS.accent} 50%, transparent 50%)`,
+                    boxShadow: `inset -1px -1px 0 ${COLORS.peach}`,
+                  }}
                 />
                 <div
-                  className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2"
-                  style={{ borderColor }}
-                />
-                <div
-                  className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2"
-                  style={{ borderColor }}
-                />
-                <div
-                  className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2"
-                  style={{ borderColor }}
+                  className="absolute bottom-0 right-0 w-4 h-4"
+                  style={{
+                    background: `linear-gradient(-45deg, ${COLORS.accent} 50%, transparent 50%)`,
+                    boxShadow: `inset 1px 1px 0 ${COLORS.peach}`,
+                  }}
                 />
 
-                <h2 className="font-display text-2xl font-bold mb-6 text-foreground flex items-center gap-3">
+                <h2
+                  className="font-display text-2xl font-bold mb-6 flex items-center gap-3"
+                  style={{ color: COLORS.white }}
+                >
                   <div
                     className="w-2 h-6"
-                    style={{ backgroundColor: borderColor }}
+                    style={{ backgroundColor: COLORS.peach }}
                   />
                   About the Event
                 </h2>
@@ -184,7 +202,8 @@ const EventPage = ({ eventId }: EventPageProps) => {
                   {event.description.map((paragraph, index) => (
                     <p
                       key={index}
-                      className="text-foreground/80 leading-relaxed text-lg"
+                      className="leading-relaxed text-lg"
+                      style={{ color: COLORS.white }}
                     >
                       {paragraph}
                     </p>
@@ -202,7 +221,10 @@ const EventPage = ({ eventId }: EventPageProps) => {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="mt-16"
             >
-              <h2 className="font-display text-3xl md:text-4xl font-bold mb-8 text-center text-foreground">
+              <h2
+                className="font-display text-3xl md:text-4xl font-bold mb-8 text-center"
+                style={{ color: COLORS.accent }}
+              >
                 Game Rules
               </h2>
 
@@ -213,34 +235,32 @@ const EventPage = ({ eventId }: EventPageProps) => {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.6 }}
-                    className={`relative p-8 bg-background/80 backdrop-blur-xl border ${defaultGlowClass}`}
+                    className="relative p-8"
                     style={{
-                      borderColor: `${borderColor}50`,
-                      clipPath:
-                        "polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px)",
+                      backgroundColor: COLORS.accent,
+                      border: `2px solid ${COLORS.peach}`,
+                      boxShadow: `0 0 40px -15px ${COLORS.peach}50, 0 0 0 1px ${COLORS.peach}`,
                     }}
                   >
-                    {/* Corner decorations */}
+                    {/* Corner notches */}
                     <div
-                      className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2"
-                      style={{ borderColor }}
+                      className="absolute top-0 left-0 w-4 h-4"
+                      style={{
+                        background: `linear-gradient(135deg, ${COLORS.accent} 50%, transparent 50%)`,
+                        boxShadow: `inset -1px -1px 0 ${COLORS.peach}`,
+                      }}
                     />
                     <div
-                      className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2"
-                      style={{ borderColor }}
-                    />
-                    <div
-                      className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2"
-                      style={{ borderColor }}
-                    />
-                    <div
-                      className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2"
-                      style={{ borderColor }}
+                      className="absolute bottom-0 right-0 w-4 h-4"
+                      style={{
+                        background: `linear-gradient(-45deg, ${COLORS.accent} 50%, transparent 50%)`,
+                        boxShadow: `inset 1px 1px 0 ${COLORS.peach}`,
+                      }}
                     />
 
                     <h3
                       className="font-display text-xl font-bold mb-6 text-center"
-                      style={{ color: borderColor }}
+                      style={{ color: COLORS.peach }}
                     >
                       {event.rules.singles.title}
                     </h3>
@@ -253,13 +273,16 @@ const EventPage = ({ eventId }: EventPageProps) => {
                               <span
                                 className="font-display font-bold text-lg flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full"
                                 style={{
-                                  backgroundColor: `${borderColor}20`,
-                                  color: borderColor,
+                                  backgroundColor: `${COLORS.peach}40`,
+                                  color: COLORS.peach,
                                 }}
                               >
                                 {section.number}
                               </span>
-                              <h4 className="font-display font-semibold text-lg text-foreground">
+                              <h4
+                                className="font-display font-semibold text-lg"
+                                style={{ color: COLORS.white }}
+                              >
                                 {section.title}
                               </h4>
                             </div>
@@ -268,7 +291,10 @@ const EventPage = ({ eventId }: EventPageProps) => {
                               {section.items.map((item, itemIdx) => (
                                 <div key={itemIdx} className="space-y-2">
                                   {item.subtitle && (
-                                    <p className="font-medium text-foreground/90">
+                                    <p
+                                      className="font-medium"
+                                      style={{ color: `${COLORS.white}90` }}
+                                    >
                                       {item.subtitle}
                                     </p>
                                   )}
@@ -276,12 +302,13 @@ const EventPage = ({ eventId }: EventPageProps) => {
                                     {item.points.map((point, pointIdx) => (
                                       <li
                                         key={pointIdx}
-                                        className="flex items-start gap-2 text-foreground/70 text-sm"
+                                        className="flex items-start gap-2 text-sm"
+                                        style={{ color: `${COLORS.white}70` }}
                                       >
                                         <span
                                           className="w-1.5 h-1.5 mt-1.5 flex-shrink-0 rounded-full"
                                           style={{
-                                            backgroundColor: borderColor,
+                                            backgroundColor: COLORS.peach,
                                           }}
                                         />
                                         <span>{point}</span>
@@ -304,34 +331,32 @@ const EventPage = ({ eventId }: EventPageProps) => {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.5, delay: 0.6 }}
-                    className={`relative p-8 bg-background/80 backdrop-blur-xl border ${defaultGlowClass}`}
+                    className="relative p-8"
                     style={{
-                      borderColor: `${borderColor}50`,
-                      clipPath:
-                        "polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px)",
+                      backgroundColor: COLORS.accent,
+                      border: `2px solid ${COLORS.peach}`,
+                      boxShadow: `0 0 40px -15px ${COLORS.peach}50, 0 0 0 1px ${COLORS.peach}`,
                     }}
                   >
-                    {/* Corner decorations */}
+                    {/* Corner notches */}
                     <div
-                      className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2"
-                      style={{ borderColor }}
+                      className="absolute top-0 left-0 w-4 h-4"
+                      style={{
+                        background: `linear-gradient(135deg, ${COLORS.accent} 50%, transparent 50%)`,
+                        boxShadow: `inset -1px -1px 0 ${COLORS.peach}`,
+                      }}
                     />
                     <div
-                      className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2"
-                      style={{ borderColor }}
-                    />
-                    <div
-                      className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2"
-                      style={{ borderColor }}
-                    />
-                    <div
-                      className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2"
-                      style={{ borderColor }}
+                      className="absolute bottom-0 right-0 w-4 h-4"
+                      style={{
+                        background: `linear-gradient(-45deg, ${COLORS.accent} 50%, transparent 50%)`,
+                        boxShadow: `inset 1px 1px 0 ${COLORS.peach}`,
+                      }}
                     />
 
                     <h3
                       className="font-display text-xl font-bold mb-6 text-center"
-                      style={{ color: borderColor }}
+                      style={{ color: COLORS.peach }}
                     >
                       {event.rules.doubles.title}
                     </h3>
@@ -344,13 +369,16 @@ const EventPage = ({ eventId }: EventPageProps) => {
                               <span
                                 className="font-display font-bold text-lg flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full"
                                 style={{
-                                  backgroundColor: `${borderColor}20`,
-                                  color: borderColor,
+                                  backgroundColor: `${COLORS.peach}40`,
+                                  color: COLORS.peach,
                                 }}
                               >
                                 {section.number}
                               </span>
-                              <h4 className="font-display font-semibold text-lg text-foreground">
+                              <h4
+                                className="font-display font-semibold text-lg"
+                                style={{ color: COLORS.white }}
+                              >
                                 {section.title}
                               </h4>
                             </div>
@@ -359,7 +387,10 @@ const EventPage = ({ eventId }: EventPageProps) => {
                               {section.items.map((item, itemIdx) => (
                                 <div key={itemIdx} className="space-y-2">
                                   {item.subtitle && (
-                                    <p className="font-medium text-foreground/90">
+                                    <p
+                                      className="font-medium"
+                                      style={{ color: `${COLORS.white}90` }}
+                                    >
                                       {item.subtitle}
                                     </p>
                                   )}
@@ -367,12 +398,13 @@ const EventPage = ({ eventId }: EventPageProps) => {
                                     {item.points.map((point, pointIdx) => (
                                       <li
                                         key={pointIdx}
-                                        className="flex items-start gap-2 text-foreground/70 text-sm"
+                                        className="flex items-start gap-2 text-sm"
+                                        style={{ color: `${COLORS.white}70` }}
                                       >
                                         <span
                                           className="w-1.5 h-1.5 mt-1.5 flex-shrink-0 rounded-full"
                                           style={{
-                                            backgroundColor: borderColor,
+                                            backgroundColor: COLORS.peach,
                                           }}
                                         />
                                         <span>{point}</span>

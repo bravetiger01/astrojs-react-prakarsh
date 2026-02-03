@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 
 import type { Event } from "@/data/event-types";
 import InteractiveTilt from "./InteractiveTilt";
@@ -55,7 +54,7 @@ export default function TechEventCard({ event, index }: EventIdCardProps) {
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
     >
-      <Link to={`/event/${event.id}`} className="block h-full">
+      <a href={`/event/${event.id}`} className="block h-full">
         <InteractiveTilt accentVar={accentVar} className="group h-full">
           <motion.div
             whileTap={{ scale: 0.985 }}
@@ -259,7 +258,7 @@ export default function TechEventCard({ event, index }: EventIdCardProps) {
             </div>
           </motion.div>
         </InteractiveTilt>
-      </Link>
+      </a>
     </motion.div>
   );
 }
