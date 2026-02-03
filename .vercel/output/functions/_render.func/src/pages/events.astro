@@ -1,9 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import UnifiedEventsPage from "../components/UnifiedEventsPage";
-// import { technicalEvents } from "../data/technical_events";
+import { technicalEvents } from "../data/technical_events";
 import { nonTechnicalEvents } from "../data/non_technical";
 import { workshopEvents } from "../data/workshops";
+import { esportsEvents } from "../data/esports";
 ---
 
 <Layout title="Events - Prakarsh '26">
@@ -12,5 +13,6 @@ import { workshopEvents } from "../data/workshops";
     technicalEvents={technicalEvents}
     nonTechnicalEvents={nonTechnicalEvents}
     workshopEvents={workshopEvents}
+    esportsEvents={esportsEvents}
   />
 </Layout>

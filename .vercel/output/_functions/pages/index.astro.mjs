@@ -3,7 +3,7 @@ import 'piccolore';
 import { $ as $$Navbar } from '../chunks/navbar_IhL5JWfG.mjs';
 /* empty css                                 */
 import 'clsx';
-import { $ as $$Layout } from '../chunks/Layout_FC8zWwR5.mjs';
+import { $ as $$Layout } from '../chunks/Layout_BWQ-0IDI.mjs';
 export { renderers } from '../renderers.mjs';
 
 const $$Desktop = createComponent(($$result, $$props, $$slots) => {
