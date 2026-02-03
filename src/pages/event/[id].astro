@@ -4,59 +4,28 @@ import EventPage from "../../components/EventPage";
 import ConsoleEventDetailPage from "../../components/ConsoleEventDetailPage";
 import EsportsEventDetailPage from "../../components/EsportsEventDetailPage";
 
-// Import local event data as fallback
+// For static build, we need to generate paths for all events
 import { technicalEvents } from "../../data/technical_events";
 import { nonTechnicalEvents } from "../../data/non_technical";
 import { workshopEvents } from "../../data/workshops";
 import { esportsEvents } from "../../data/esports";
 
-export const prerender = false;
+export function getStaticPaths() {
+  const allLocalEvents = [
+    ...technicalEvents,
+    ...nonTechnicalEvents,
+    ...workshopEvents,
+    ...esportsEvents,
+  ];
+
+  return allLocalEvents.map((event) => ({
+    params: { id: event.id },
+    props: { category: event.category },
+  }));
+}
 
 const { id } = Astro.params;
-
-// Combine all local events
-const allLocalEvents = [
-  ...technicalEvents,
-  ...nonTechnicalEvents,
-  ...workshopEvents,
-  ...esportsEvents,
-];
-
-// Determine category - try Supabase first, fallback to local
-let category = "tech"; // Default to tech
-
-// Try numeric ID for Supabase
-const numericId = parseInt(id || "", 10);
-if (!isNaN(numericId)) {
-  try {
-    const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-    const supabaseKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-    
-    if (supabaseUrl && supabaseKey) {
-      const response = await fetch(`${supabaseUrl}/rest/v1/events?id=eq.${numericId}`, {
-        headers: {
-          'apikey': supabaseKey,
-          'Authorization': `Bearer ${supabaseKey}`
-        }
-      });
-      
-      if (response.ok) {
-        const events = await response.json();
-        if (events && events.length > 0) {
-          category = events[0].category || "tech";
-        }
-      }
-    }
-  } catch (error) {
-    console.warn("Supabase not responding, using local data fallback");
-  }
-}
-
-// Fallback to local data if Supabase didn't work
-if (!numericId || isNaN(numericId)) {
-  const localEvent = allLocalEvents.find(e => e.id === id);
-  category = localEvent?.category || "tech";
-}
+const { category } = Astro.props;
 ---
 
 <Layout title="Event Details - Prakarsh '26">
