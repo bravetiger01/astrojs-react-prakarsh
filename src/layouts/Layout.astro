@@ -73,50 +73,64 @@ const { title = "Astro Basics" } = Astro.props;
 
 		<!-- Inline script - starts progress animation immediately -->
 		<script is:inline>
-			// Simple reliable loader
-			var isHiding = false;
-			var loaderWrapper = document.getElementById("loader-wrapper");
+			// Check if loader has already been shown in this session
+			var hasShownLoader = sessionStorage.getItem('loaderShown') === 'true';
+			
+			if (hasShownLoader) {
+				// Hide loader immediately if already shown
+				var loaderWrapper = document.getElementById("loader-wrapper");
+				if (loaderWrapper) {
+					loaderWrapper.style.display = "none";
+				}
+			} else {
+				// Show loader for first time visit
+				var isHiding = false;
+				var loaderWrapper = document.getElementById("loader-wrapper");
 
-			// Listen for load complete event
-			function handleLoadComplete() {
-				if (isHiding) return;
-				isHiding = true;
+				// Listen for load complete event
+				function handleLoadComplete() {
+					if (isHiding) return;
+					isHiding = true;
 
-				setTimeout(function () {
-					if (loaderWrapper) {
-						loaderWrapper.classList.add("fade-out");
-						setTimeout(function () {
-							loaderWrapper.style.display = "none";
-						}, 500);
-					}
-				}, 300);
-			}
+					// Mark loader as shown in session
+					sessionStorage.setItem('loaderShown', 'true');
 
-			// Track when the page started loading
-			var pageStartTime = Date.now();
-			var minimumLoadTime = 6000; // 5 seconds minimum
+					setTimeout(function () {
+						if (loaderWrapper) {
+							loaderWrapper.classList.add("fade-out");
+							setTimeout(function () {
+								loaderWrapper.style.display = "none";
+							}, 500);
+						}
+					}, 300);
+				}
 
-			// When page resources finish loading
-			window.addEventListener("load", function () {
-				var elapsedTime = Date.now() - pageStartTime;
-				var remainingTime = Math.max(0, minimumLoadTime - elapsedTime);
+				// Track when the page started loading
+				var pageStartTime = Date.now();
+				var minimumLoadTime = 5000; // 5 seconds minimum
 
-				console.log(
-					"Window loaded after " +
-						elapsedTime +
-						"ms, waiting " +
-						remainingTime +
-						"ms more...",
-				);
+				// When page resources finish loading
+				window.addEventListener("load", function () {
+					var elapsedTime = Date.now() - pageStartTime;
+					var remainingTime = Math.max(0, minimumLoadTime - elapsedTime);
 
-				// Wait for remaining time to reach 5 seconds total
-				setTimeout(function () {
 					console.log(
-						"Minimum 5 seconds elapsed, completing loader...",
+						"Window loaded after " +
+							elapsedTime +
+							"ms, waiting " +
+							remainingTime +
+							"ms more...",
 					);
-					handleLoadComplete();
-				}, remainingTime);
-			});
+
+					// Wait for remaining time to reach 5 seconds total
+					setTimeout(function () {
+						console.log(
+							"Minimum 5 seconds elapsed, completing loader...",
+						);
+						handleLoadComplete();
+					}, remainingTime);
+				});
+			}
 		</script>
 
 		<!-- PixiJS Sprite Animation -->
@@ -129,80 +143,84 @@ const { title = "Astro Basics" } = Astro.props;
 				Rectangle,
 			} from "pixi.js";
 
-			// Sprite sheet configuration - Production settings
-			const SPRITE_CONFIG = {
-				path: "/sprites/sprite_sheet.avif",
-				width: 7500,
-				height: 11000,
-				columns: 15,
-				rows: 22,
-				frameWidth: 7500 / 15, // ~733.33px
-				frameHeight: 11000 / 22, // ~340.91px
-				fps: 60, // 60 FPS for smooth animation
-				scale: 0.6, // Larger scale to show complete frames
-			};
+			// Only initialize if loader should be shown
+			const hasShownLoader = sessionStorage.getItem('loaderShown') === 'true';
+			
+			if (!hasShownLoader) {
+				// Sprite sheet configuration - Production settings
+				const SPRITE_CONFIG = {
+					path: "/sprites/sprite_sheet.avif",
+					width: 7500,
+					height: 11000,
+					columns: 15,
+					rows: 22,
+					frameWidth: 7500 / 15, // ~733.33px
+					frameHeight: 11000 / 22, // ~340.91px
+					fps: 60, // 60 FPS for smooth animation
+					scale: 0.6, // Larger scale to show complete frames
+				};
 
-			async function initSpriteAnimation() {
-				const canvasElement = document.getElementById("sprite-canvas");
-				if (!canvasElement) return;
+				async function initSpriteAnimation() {
+					const canvasElement = document.getElementById("sprite-canvas");
+					if (!canvasElement) return;
 
-				// Create PixiJS application with production-level settings
-				const app = new Application();
-				await app.init({
-					canvas: canvasElement as HTMLCanvasElement,
-					width: SPRITE_CONFIG.frameWidth * SPRITE_CONFIG.scale,
-					height: SPRITE_CONFIG.frameHeight * SPRITE_CONFIG.scale,
-					backgroundColor: 0x000000,
-					backgroundAlpha: 0,
-					antialias: false, // Crisp pixel art rendering
-					resolution: window.devicePixelRatio || 1,
-					autoDensity: true,
-					autoStart: true, // Start rendering immediately
-				});
-
-				// Lock to 60 FPS for production-level smoothness
-				app.ticker.maxFPS = 60;
-
-				try {
-					// Load sprite sheet with caching
-					Assets.add({
-						alias: "spritesheet",
-						src: SPRITE_CONFIG.path,
+					// Create PixiJS application with production-level settings
+					const app = new Application();
+					await app.init({
+						canvas: canvasElement as HTMLCanvasElement,
+						width: SPRITE_CONFIG.frameWidth * SPRITE_CONFIG.scale,
+						height: SPRITE_CONFIG.frameHeight * SPRITE_CONFIG.scale,
+						backgroundColor: 0x000000,
+						backgroundAlpha: 0,
+						antialias: false, // Crisp pixel art rendering
+						resolution: window.devicePixelRatio || 1,
+						autoDensity: true,
+						autoStart: true, // Start rendering immediately
 					});
-					const texture = await Assets.load("spritesheet");
 
-					// Create all frames (row by row)
-					const frames: Texture[] = [];
-					for (let row = 0; row < SPRITE_CONFIG.rows; row++) {
-						for (let col = 0; col < SPRITE_CONFIG.columns; col++) {
-							const frame = new Texture({
-								source: texture.source,
-								frame: new Rectangle(
-									col * SPRITE_CONFIG.frameWidth,
-									row * SPRITE_CONFIG.frameHeight,
-									SPRITE_CONFIG.frameWidth,
-									SPRITE_CONFIG.frameHeight,
-								),
-							});
-							frames.push(frame);
+					// Lock to 60 FPS for production-level smoothness
+					app.ticker.maxFPS = 60;
+
+					try {
+						// Load sprite sheet with caching
+						Assets.add({
+							alias: "spritesheet",
+							src: SPRITE_CONFIG.path,
+						});
+						const texture = await Assets.load("spritesheet");
+
+						// Create all frames (row by row)
+						const frames: Texture[] = [];
+						for (let row = 0; row < SPRITE_CONFIG.rows; row++) {
+							for (let col = 0; col < SPRITE_CONFIG.columns; col++) {
+								const frame = new Texture({
+									source: texture.source,
+									frame: new Rectangle(
+										col * SPRITE_CONFIG.frameWidth,
+										row * SPRITE_CONFIG.frameHeight,
+										SPRITE_CONFIG.frameWidth,
+										SPRITE_CONFIG.frameHeight,
+									),
+								});
+								frames.push(frame);
+							}
 						}
-					}
 
-					// Create sprite to display current frame with proper centering
-					const sprite = new Sprite(frames[0]);
-					sprite.anchor.set(0.5, 0.5); // Center anchor point
-					sprite.scale.set(SPRITE_CONFIG.scale);
+						// Create sprite to display current frame with proper centering
+						const sprite = new Sprite(frames[0]);
+						sprite.anchor.set(0.5, 0.5); // Center anchor point
+						sprite.scale.set(SPRITE_CONFIG.scale);
 
-					// Position sprite at center of canvas
-					sprite.x = app.screen.width / 2;
-					sprite.y = app.screen.height / 2;
+						// Position sprite at center of canvas
+						sprite.x = app.screen.width / 2;
+						sprite.y = app.screen.height / 2;
 
-					app.stage.addChild(sprite);
+						app.stage.addChild(sprite);
 
-					// Animation state
-					let currentFrame = 0;
-					let frameTime = 0;
-					const frameDelay = 1000 / SPRITE_CONFIG.fps; // milliseconds per frame
+						// Animation state
+						let currentFrame = 0;
+						let frameTime = 0;
+						const frameDelay = 1000 / SPRITE_CONFIG.fps; // milliseconds per frame
 
 					// Smooth animation loop using PixiJS ticker
 					app.ticker.add((ticker) => {
@@ -230,24 +248,25 @@ const { title = "Astro Basics" } = Astro.props;
 							}
 						}, 3000); // Destroy after loader fades out
 					});
-				} catch (error) {
-					console.error("Failed to load sprite animation:", error);
-					// Fallback spinner
-					const fallbackDiv = document.createElement("div");
-					fallbackDiv.style.cssText =
-						"width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite;";
-					canvasElement.parentElement?.appendChild(fallbackDiv);
+					} catch (error) {
+						console.error("Failed to load sprite animation:", error);
+						// Fallback spinner
+						const fallbackDiv = document.createElement("div");
+						fallbackDiv.style.cssText =
+							"width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite;";
+						canvasElement.parentElement?.appendChild(fallbackDiv);
+					}
 				}
-			}
 
-			// Initialize when DOM is ready
-			if (document.readyState === "loading") {
-				document.addEventListener(
-					"DOMContentLoaded",
-					initSpriteAnimation,
-				);
-			} else {
-				initSpriteAnimation();
+				// Initialize when DOM is ready
+				if (document.readyState === "loading") {
+					document.addEventListener(
+						"DOMContentLoaded",
+						initSpriteAnimation,
+					);
+				} else {
+					initSpriteAnimation();
+				}
 			}
 		</script>
 

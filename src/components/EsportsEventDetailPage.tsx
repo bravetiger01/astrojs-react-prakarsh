@@ -86,7 +86,12 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
     event.esports?.requirements && event.esports.requirements.length > 0
       ? event.esports.requirements
       : ["Requirements to be announced"];
-  const posterImage = event.esports?.posterImage || event.posterImage;
+  const posterImageRaw = event.esports?.posterImage || event.posterImage;
+  
+  // Extract src from ImageMetadata if needed
+  const posterImage = posterImageRaw 
+    ? (typeof posterImageRaw === 'string' ? posterImageRaw : posterImageRaw.src)
+    : undefined;
 
   return (
     <div

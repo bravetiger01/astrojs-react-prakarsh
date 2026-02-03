@@ -1,11 +1,12 @@
 import type { Event } from "./event-types.ts";
+import type { ImageMetadata } from "astro";
 import freeFirePoster from "../assets/freefire-poster.png";
 import valorantPoster from "../assets/valorant-poster.png";
 import bgmiPoster from "../assets/bgmi-poster.png";
 
-export interface EsportsEvent extends Event {
+export interface EsportsEvent extends Omit<Event, 'posterImage'> {
   category: "esports";
-  posterImage: string;
+  posterImage: ImageMetadata | string; // Required for esports events
 }
 
 export const esportsEvents: EsportsEvent[] = [
