@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { ConsoleCard } from "@/export-cards";
 import ParticleField from "@/components/ParticleField";
@@ -31,13 +30,13 @@ const WorkshopsPage = () => {
               transition={{ duration: 0.3 }}
               className="mb-12"
             >
-              <Link
-                to="/"
+              <a
+                href="/"
                 className="inline-flex items-center gap-2 text-sm font-mono uppercase tracking-wider hover:gap-4 transition-all"
               >
                 <ArrowLeft size={18} />
                 Back to Home
-              </Link>
+              </a>
             </motion.div>
 
             {/* Page Header */}

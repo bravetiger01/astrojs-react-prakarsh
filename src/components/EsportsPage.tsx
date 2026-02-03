@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { EsportsCard } from "@/export-cards";
 import ParticleField from "@/components/ParticleField";
@@ -40,13 +39,13 @@ const EsportsPage = () => {
               transition={{ duration: 0.3 }}
               className="mb-8 sm:mb-12"
             >
-              <Link
-                to="/"
+              <a
+                href="/"
                 className="inline-flex items-center gap-2 text-xs sm:text-sm font-mono uppercase tracking-wider hover:gap-4 transition-all"
               >
                 <ArrowLeft size={16} className="sm:w-[18px] sm:h-[18px]" />
                 Back to Home
-              </Link>
+              </a>
             </motion.div>
 
             {/* Page Header */}
