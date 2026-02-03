@@ -1,0 +1,16 @@
+---
+import Layout from "../layouts/Layout.astro";
+import UnifiedEventsPage from "../components/UnifiedEventsPage";
+// import { technicalEvents } from "../data/technical_events";
+import { nonTechnicalEvents } from "../data/non_technical";
+import { workshopEvents } from "../data/workshops";
+---
+
+<Layout title="Events - Prakarsh '26">
+  <UnifiedEventsPage 
+    client:load
+    technicalEvents={technicalEvents}
+    nonTechnicalEvents={nonTechnicalEvents}
+    workshopEvents={workshopEvents}
+  />
+</Layout>
