@@ -20,7 +20,19 @@ export default function UnifiedEventsPage({
   workshopEvents,
   esportsEvents = [],
 }: UnifiedEventsPageProps) {
-  const [activeTab, setActiveTab] = useState<"all" | "tech" | "non-tech" | "workshops" | "esports">("all");
+  // Read category from URL parameter
+  const getInitialTab = () => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const category = params.get('category');
+      if (category === 'tech' || category === 'non-tech' || category === 'workshops' || category === 'esports') {
+        return category;
+      }
+    }
+    return 'all';
+  };
+
+  const [activeTab, setActiveTab] = useState<"all" | "tech" | "non-tech" | "workshops" | "esports">(getInitialTab());
 
   // Category descriptions
   const categoryDescriptions = {
