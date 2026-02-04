@@ -1,8 +1,7 @@
 ---
-
 export const prerender = true;
 
-import Layout from "../../layouts/Layout.astro";
+import PageLayout from "../../layouts/PageLayout.astro";
 import EventPage from "../../components/EventPage";
 import ConsoleEventDetailPage from "../../components/ConsoleEventDetailPage";
 import EsportsEventDetailPage from "../../components/EsportsEventDetailPage";
@@ -34,8 +33,16 @@ const { category, eventId } = Astro.props;
 const finalEventId = eventId || id;
 ---
 
-<Layout title="Event Details - Prakarsh '26">
-  {category === "esports" && <EsportsEventDetailPage client:load eventId={finalEventId} />}
-  {(category === "non-tech" || category === "workshops") && <ConsoleEventDetailPage client:load eventId={finalEventId} />}
+<PageLayout title="Event Details - Prakarsh '26" showDesktopNav={false}>
+  {
+    category === "esports" && (
+      <EsportsEventDetailPage client:load eventId={finalEventId} />
+    )
+  }
+  {
+    (category === "non-tech" || category === "workshops") && (
+      <ConsoleEventDetailPage client:load eventId={finalEventId} />
+    )
+  }
   {category === "tech" && <EventPage client:load eventId={finalEventId} />}
-</Layout>
+</PageLayout>
