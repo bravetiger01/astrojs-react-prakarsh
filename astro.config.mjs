@@ -14,4 +14,12 @@ export default defineConfig({
   ],
   output: "server",
   adapter: vercel(),
+  vite: {
+    server: {
+      allowedHosts: [
+        'terminal-cache-truth-heel.trycloudflare.com'
+      ]
+    }
+  }
 });
+
