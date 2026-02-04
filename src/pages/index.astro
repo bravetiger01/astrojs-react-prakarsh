@@ -26,3 +26,15 @@ console.log("🔍 [SERVER] index.astro - isMobile:", isMobile);
     </Layout>
   )
 }
+
+<!-- Optional: client-side correction for edge cases -->
+<script>
+  const isDesktopClient = window.matchMedia(
+    "(min-width: 1024px) and (pointer: fine)",
+  ).matches;
+
+  document.documentElement.dataset.device = isDesktopClient
+    ? "desktop"
+    : "mobile";
+    
+</script>
