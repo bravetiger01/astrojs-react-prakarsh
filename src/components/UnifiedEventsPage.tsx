@@ -22,6 +22,15 @@ export default function UnifiedEventsPage({
 }: UnifiedEventsPageProps) {
   const [activeTab, setActiveTab] = useState<"all" | "tech" | "non-tech" | "workshops" | "esports">("all");
 
+  // Category descriptions
+  const categoryDescriptions = {
+    all: "Explore all technical events, non-technical challenges, workshops, and esports tournaments at Prakarsh '26",
+    tech: "Dive into technical events designed to test your logic, creativity, and problem-solving skills. Compete in coding battles, hardware challenges, design sprints, and innovation-driven competitions built for curious and competitive minds.",
+    "non-tech": "Step into non-technical events where creativity, strategy, communication, and fun take center stage. Participate in engaging challenges, team activities, and crowd-favorite events that prove you don't need code to compete.",
+    workshops: "Learn directly from industry experts through hands-on workshops focused on practical skills, emerging technologies, and real-world applications. Perfect for gaining knowledge beyond the classroom.",
+    esports: "Enter the arena and compete in adrenaline-packed esports tournaments. Show off your gaming skills, teamwork, and strategy in high-stakes matches against the best players at Prakarsh '26.",
+  };
+
   const allEvents = [
     ...technicalEvents.map(e => ({ ...e, displayCategory: "tech" as const })),
     ...nonTechnicalEvents.map(e => ({ ...e, displayCategory: "non-tech" as const })),
@@ -96,7 +105,7 @@ export default function UnifiedEventsPage({
               </div>
 
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-8">
-                Explore all technical events, non-technical challenges, workshops, and esports tournaments at Prakarsh '26
+                {categoryDescriptions[activeTab]}
               </p>
 
               {/* Filter Tabs */}
