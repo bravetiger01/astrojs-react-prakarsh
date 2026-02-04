@@ -1,4 +1,4 @@
-import type { Event } from "./event-types.ts";
+import type { Event } from "./event-types.js";
 
 export interface NonTechnicalEvent extends Event {
   category: "non-tech";

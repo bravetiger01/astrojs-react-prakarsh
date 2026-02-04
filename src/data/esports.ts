@@ -1,4 +1,4 @@
-import type { Event } from "./event-types.ts";
+import type { Event } from "./event-types.js";
 import type { ImageMetadata } from "astro";
 import freeFirePoster from "../assets/freefire-poster.png";
 import valorantPoster from "../assets/valorant-poster.png";
