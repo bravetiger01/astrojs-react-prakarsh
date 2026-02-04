@@ -1,21 +1,28 @@
 ---
 // Mobile component - loads optimized-styles.css only for mobile view
-
+import MobileNav from "./MobileNav.astro";
 ---
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Basic:wght@100..400&display=swap" rel="stylesheet">
+
+<MobileNav />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Basic:wght@100..400&display=swap"
+  rel="stylesheet"
+/>
 <style>
   /* Import mobile-specific styles */
   @import "../styles/optimized-styles.css";
 </style>
 
 <div class="HomePage">
+   <div class="holobutton"><button class="button">TECH EVENTS</button></div>
+   <div class="holobutton2"><button class="button">NON TECH EVENTS</button></div>
   <div class="HeroSection">
     <div class="sprite title">
       <p class="tagLine">The Next Iteration</p>
     </div>
-    
+
     <div class="sprite baseClouds"></div>
     <div class="sprite baseClouds2"></div>
     <div class="WindMillParent">
@@ -49,7 +56,10 @@
     <div class="sprite hourGlassBase"></div>
   </div>
   <div class="MiddleSection">
-    <p class="dialogue">Sometimes you let go, free-falling inside evolution's events...</p>
+    <p class="dialogue">
+      Sometimes you let go... <br/>
+       free-falling inside evolution's events...
+    </p>
     <div class="sprite MobileHourGlassLeftMiddle"></div>
     <div class="sprite MobileHourGlassRightMiddle"></div>
 
@@ -64,19 +74,8 @@
     <div class="sprite upShine"></div>
     <div class="sprite downShine"></div>
   </div>
+ 
   <div class="FutureParent">
-<div class="container">
-  <div class="radio-wrapper">
-    <input class="input" name="btn" id="value-1" type="radio" />
-    <div class="btn">
-      <span aria-hidden="">_</span>Cyber
-      <span class="btn__glitch" aria-hidden="">_TECH EVENT</span>
-      <label class="number">r1</label>
-    </div>
-  </div>
-</div>
-
-
     <div class="sprite bgFutureBuild"></div>
     <div class="sprite bgFutureBuild2"></div>
     <div class="sprite foreGroundRoad"></div>

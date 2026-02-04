@@ -437,6 +437,17 @@ body {
   font-style: normal;
 
 }
+@media (max-width:477px) {
+
+  .dialogue{
+    
+    top:43%;
+ text-align: center;
+  font-size: 20px;
+
+
+}
+}
    .purpleClouds1 {
   position: absolute;
   bottom: -55%;
@@ -512,135 +523,72 @@ body {
 /* ============================================
    FUTURE SECTION ELEMENTS
    ============================================ */
+   .holobutton{
+    bottom:30%;
+        position: absolute;
+    left: 20%;
+    z-index: 3000;
+   }
+      .holobutton2{
+    bottom:20%;
+        position: absolute;
+    right:  40%;
+    z-index: 3000;
+   }
+   .button {  
+    position: absolute;
+    left: 20%;
+    z-index: 300;
+  /* in scss with just one variable i can change opacity with rgba(variable, opacity) but in css it's not possible so i have used three seperate variables */
+  /* with hue-rotate color can be changed */
+  --main-color: rgb(110, 110, 255);
+  --main-bg-color: rgba(6, 35, 122, 0.36);
+  --pattern-color: rgba(143, 169, 255, 0.089);
 
-.container {
-  display: flex;
-}
+  /* change this rotation value */
+  filter: hue-rotate(0deg);
 
-.radio-wrapper {
-  position: absolute;
-  height: 10%;
-  width: 20%;
-  margin: 3px;
-  left: 30%;
-  z-index: 10000;
-}
-
-.input {
-  
- 
-  position: absolute;
-  inset: 0;
   cursor: pointer;
-  z-index: 10;
-  opacity: 0;
-}
-
-.btn {
-  --primary: #c69aff;
-  --shadow-primary: #000;
-  --shadow-secondary: hsl(246, 90%, 28%);
-  --clip: polygon(
-    11% 0,
-    95% 0,
-    100% 25%,
-    90% 90%,
-    95% 90%,
-    85% 90%,
-    85% 100%,
-    7% 100%,
-    0 80%
-  );
-  --border: 5px;
-  --shimmy-distance: 5;
-
-  --clip-one: polygon(0 2%,100% 2%,100% 95%,8% 95%,0 70%);
-  --clip-two: polygon(0 78%,100% 78%,100% 100%,8% 100%,0 78%);
-  --clip-three: polygon(0 44%,100% 44%,100% 54%,8% 54%,0 54%);
-  --clip-end: polygon(0 0,100% 0,100% 0,8% 0,0 0);
-  --clip-six: polygon(0 40%,100% 40%,100% 85%,8% 85%,0 70%);
-  --clip-seven: polygon(0 63%,100% 63%,100% 80%,8% 80%,0 70%);
-
-  position: relative;
-  width: 100%;
-  height: 100%;
-  line-height: 38px;
-  text-align: center;
-  font-size: 9px;
-  font-weight: 900;
-  letter-spacing: 3px;
-  color: black;
   text-transform: uppercase;
-  transition: background 0.2s;
-}
-
-.input:hover + .btn {
-  --primary: #11073f;
-}
-
-.btn::before,
-.btn::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  clip-path: var(--clip);
-  z-index: -1;
-}
-
-.btn::before {
-  background: var(--shadow-primary);
-  transform: translate(var(--border), 0);
-}
-
-.btn::after {
-  background: var(--primary);
-}
-
-.btn__glitch {
-  position: absolute;
-  inset: calc(var(--border) * -1);
-  background: var(--shadow-primary);
-  text-shadow: 2px 2px var(--shadow-primary),
-               -2px -2px var(--shadow-secondary);
-  clip-path: var(--clip);
-  animation: glitch 2s infinite;
-  display: none;
-}
-
-.input:hover + .btn .btn__glitch,
-.input:checked + .btn .btn__glitch {
-  display: block;
-}
-
-.btn__glitch::before {
-  content: "";
-  position: absolute;
-  inset: var(--border);
-  background: var(--primary);
-  clip-path: var(--clip);
-  z-index: -1;
-}
-
-@keyframes glitch {
-  0% { clip-path: var(--clip-one); }
-  10% { clip-path: var(--clip-two); transform: translate(-5%, 0); }
-  20% { clip-path: var(--clip-three); transform: translate(5%, 0); }
-  40% { clip-path: var(--clip-six); }
-  60% { clip-path: var(--clip-seven); }
-  100% { clip-path: var(--clip-end); }
-}
-
-.number {
-  position: absolute;
-  top: 0;
-  left: 81%;
-  width: 15px;
-  height: 6px;
-  font-size: 5.5px;
+  letter-spacing: 0.5rem;
+  background: radial-gradient(
+      circle,
+      var(--main-bg-color) 0%,
+      rgba(0, 0, 0, 0) 95%
+    ),
+    linear-gradient(var(--pattern-color) 1px, transparent 1px),
+    linear-gradient(to right, var(--pattern-color) 1px, transparent 1px);
+  background-size:
+    cover,
+    15px 15px,
+    15px 15px;
+  background-position:
+    center center,
+    center center,
+    center center;
+  border-image: radial-gradient(
+      circle,
+      var(--main-color) 0%,
+      rgba(0, 0, 0, 0) 100%
+    )
+    1;
+  border-width: 1px 0 1px 0;
+  color: var(--main-color);
+  padding: 2rem 5rem;
   font-weight: 700;
-  background: var(--shadow-primary);
-  color: #323232;
-  line-height: 6px;
+  font-size: 1.5rem;
+  transition: background-size 0.2s ease-in-out;
+}
+
+.button:hover {
+  border:4px solid rgba(0, 255, 255, 0.459);
+  background-size:
+    cover,
+    10px 10px,
+    10px 10px;
+}
+.button:active {
+  filter: hue-rotate(250deg);
 }
 
 .bgFutureBuild {
@@ -751,6 +699,65 @@ body {
 
 /* Small Screens Base */
 @media (max-width: 477px) {
+  @media (max-height:850px) {
+    .dialogue{
+    top:42%;
+    font-size: 15px;
+  }
+  }
+  
+  .holobutton{
+    left:10%;
+    transform: scale(.8);
+  }
+  .holobutton2{
+    right: 50%;
+    transform: scale(.8);
+  }
+  .button {  
+    position: absolute;
+    left: 20%;
+    z-index: 300;
+  /* in scss with just one variable i can change opacity with rgba(variable, opacity) but in css it's not possible so i have used three seperate variables */
+  /* with hue-rotate color can be changed */
+  --main-color: rgb(1, 1, 15);
+  --main-bg-color: rgba(175, 195, 255, 0.623);
+  --pattern-color: rgba(69, 107, 233, 0.089);
+
+  /* change this rotation value */
+  filter: hue-rotate(0deg);
+
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5rem;
+  background: radial-gradient(
+      circle,
+      var(--main-bg-color) 0%,
+      rgba(0, 0, 0, 0) 95%
+    ),
+    linear-gradient(var(--pattern-color) 1px, transparent 1px),
+    linear-gradient(to right, var(--pattern-color) 1px, transparent 1px);
+  background-size:
+    cover,
+    15px 15px,
+    15px 15px;
+  background-position:
+    center center,
+    center center,
+    center center;
+  border-image: radial-gradient(
+      circle,
+      var(--main-color) 0%,
+      rgba(0, 0, 0, 0) 100%
+    )
+    1;
+  border-width: 1px 0 1px 0;
+  color: var(--main-color);
+  padding: 2rem 5rem;
+  font-weight: 700;
+  font-size: 1.5rem;
+  transition: background-size 0.2s ease-in-out;
+}
   .titleCloud2 {
     left: -20%;
     top: -28%;
@@ -1018,6 +1025,9 @@ body {
 
 /* Mobile - Short Height Adjustments */
 @media (max-height: 730px) {
+  .dialogue{
+    top:0%;
+  }
   .titleCloud2 {
     left: -20%;
     top: -38%;
