@@ -73,17 +73,43 @@ const { title = "Astro Basics" } = Astro.props;
 
 		<!-- Inline script - starts progress animation immediately -->
 		<script is:inline>
-			// Check if loader has already been shown in this session
-			var hasShownLoader = sessionStorage.getItem('loaderShown') === 'true';
-			
-			if (hasShownLoader) {
-				// Hide loader immediately if already shown
+			// Configuration
+			var EXPIRY_TIME = 60 * 60 * 1000; // 1 Hour
+			var LOCK_KEY = "loaderLastShown";
+
+			// Logic to determine if loader should show
+			function shouldShowLoader() {
+				// 1. Only show on root path
+				if (
+					window.location.pathname !== "/" &&
+					window.location.pathname !== ""
+				) {
+					return false;
+				}
+
+				// 2. Check session storage for expiration
+				var lastShown = sessionStorage.getItem(LOCK_KEY);
+				var now = Date.now();
+
+				if (lastShown && now - parseInt(lastShown) < EXPIRY_TIME) {
+					return false; // Still within cooldown
+				}
+
+				return true; // Show loader
+			}
+
+			var showLoader = shouldShowLoader();
+
+			if (!showLoader) {
+				// Hide loader immediately
 				var loaderWrapper = document.getElementById("loader-wrapper");
 				if (loaderWrapper) {
 					loaderWrapper.style.display = "none";
 				}
 			} else {
-				// Show loader for first time visit
+				// Show loader and set timestamp
+				sessionStorage.setItem(LOCK_KEY, Date.now().toString());
+
 				var isHiding = false;
 				var loaderWrapper = document.getElementById("loader-wrapper");
 
@@ -91,9 +117,6 @@ const { title = "Astro Basics" } = Astro.props;
 				function handleLoadComplete() {
 					if (isHiding) return;
 					isHiding = true;
-
-					// Mark loader as shown in session
-					sessionStorage.setItem('loaderShown', 'true');
 
 					setTimeout(function () {
 						if (loaderWrapper) {
@@ -107,12 +130,15 @@ const { title = "Astro Basics" } = Astro.props;
 
 				// Track when the page started loading
 				var pageStartTime = Date.now();
-				var minimumLoadTime = 5000; // 5 seconds minimum
+				var minimumLoadTime = 5800; // 5 seconds minimum
 
 				// When page resources finish loading
 				window.addEventListener("load", function () {
 					var elapsedTime = Date.now() - pageStartTime;
-					var remainingTime = Math.max(0, minimumLoadTime - elapsedTime);
+					var remainingTime = Math.max(
+						0,
+						minimumLoadTime - elapsedTime,
+					);
 
 					console.log(
 						"Window loaded after " +
@@ -144,17 +170,77 @@ const { title = "Astro Basics" } = Astro.props;
 			} from "pixi.js";
 			import { prefetchAllEvents } from "../lib/event-cache";
 
-			// Only initialize if loader should be shown
-			const hasShownLoader = sessionStorage.getItem('loaderShown') === 'true';
-			
-			if (!hasShownLoader) {
+			// Mirror the inline logic to sync state
+			const EXPIRY_TIME = 60 * 60 * 1000; // 1 Hour
+			const LOCK_KEY = "loaderLastShown";
+			const path = window.location.pathname;
+
+			// We can check sessionStorage here, but since inline script already updated it if it ran,
+			// we need to be careful. However, we primarily need to know if we *should have* shown it.
+			// The inline script sets the key *immediately* if it shows.
+			// So if the key was just set a few ms ago, we show.
+			// But simpler: just check if the loader DOM is visible?
+			// No, that might be racy. Let's re-evaluate the "should show" condition similarly,
+			// but relying on the fact that if it *did* show, the key is now set to NOW.
+
+			// Actually, easiest way: Check if the wrapper is display: none.
+			// But inline script might run after this module script? No, inline runs first usually?
+			// To be safe, let's just stick to the pure logic.
+			// Check if we satisfy the condition "Is Root".
+			// And checking storage is tricky because inline script just updated it.
+			// Let's rely on a data attribute or class on the body? Or just re-calc.
+
+			// If we just updated session storage, the diff (now - lastShown) will be ~0.
+			// If we didn't update it, it will be > EXPIRY or null.
+
+			// Let's refine the logic:
+			// If not root -> Skip.
+			// If root:
+			//    Get timestamp.
+			//    If timestamp is very recent ( < 5000ms), it means inline script just set it -> SHOW.
+			//    If timestamp is old -> It means inline script decided NOT to show (wait, inline logic updates it ONLY if showing).
+			//    So if inline script decided NOT to show, it wouldn't have updated the timestamp.
+			//    So the timestamp would be OLD.
+			//    Wait, if logic is: "If valid cookie -> Don't Show".
+			//    Then inline script sees valid cookie -> Hides -> Does NOT update cookie.
+			//    Module script sees valid cookie -> Skips.
+			//
+			//    If NO valid cookie (or expired) -> Inline script sees expired -> Shows -> Updates Cookie to NOW.
+			//    Module script sees Cookie is NOW -> Shows.
+
+			const lastShown = sessionStorage.getItem(LOCK_KEY);
+			const now = Date.now();
+			const isRoot = path === "/" || path === "";
+			const isRecent = lastShown && now - parseInt(lastShown) < 5000; // Updated within last 5 seconds
+
+			// If it's root AND the lock was just updated, it means the loader is active.
+			// OR if it's the very first time ever? (Lock updated).
+
+			// What if user refreshes immediately?
+			// Inline: Cookie is recent -> Hides.
+			// Module: Cookie is recent -> But is it *TOO* recent?
+			// If cookie is 2 seconds old, Inline HIDES (because < 1 hour).
+			// Module sees 2 seconds old.
+			// We need to distinguish "Just set by THIS page load" vs "Set by PREVIOUS page load 2s ago".
+
+			// Better approach: Inline script sets a global flag on `window`.
+			const shouldShow =
+				(window as any).getComputedStyle(
+					document.getElementById("loader-wrapper")!,
+				).display !== "none";
+
+			if (shouldShow) {
 				// Start prefetching events immediately during loading screen
-				console.log("🚀 Starting event prefetch during loading screen...");
-				prefetchAllEvents().then(() => {
-					console.log("✅ Events prefetched successfully!");
-				}).catch((error) => {
-					console.error("❌ Error prefetching events:", error);
-				});
+				console.log(
+					"🚀 Starting event prefetch during loading screen...",
+				);
+				prefetchAllEvents()
+					.then(() => {
+						console.log("✅ Events prefetched successfully!");
+					})
+					.catch((error) => {
+						console.error("❌ Error prefetching events:", error);
+					});
 
 				// Sprite sheet configuration - Production settings
 				const SPRITE_CONFIG = {
@@ -170,7 +256,8 @@ const { title = "Astro Basics" } = Astro.props;
 				};
 
 				async function initSpriteAnimation() {
-					const canvasElement = document.getElementById("sprite-canvas");
+					const canvasElement =
+						document.getElementById("sprite-canvas");
 					if (!canvasElement) return;
 
 					// Create PixiJS application with production-level settings
@@ -201,7 +288,11 @@ const { title = "Astro Basics" } = Astro.props;
 						// Create all frames (row by row)
 						const frames: Texture[] = [];
 						for (let row = 0; row < SPRITE_CONFIG.rows; row++) {
-							for (let col = 0; col < SPRITE_CONFIG.columns; col++) {
+							for (
+								let col = 0;
+								col < SPRITE_CONFIG.columns;
+								col++
+							) {
 								const frame = new Texture({
 									source: texture.source,
 									frame: new Rectangle(
@@ -231,34 +322,38 @@ const { title = "Astro Basics" } = Astro.props;
 						let frameTime = 0;
 						const frameDelay = 1000 / SPRITE_CONFIG.fps; // milliseconds per frame
 
-					// Smooth animation loop using PixiJS ticker
-					app.ticker.add((ticker) => {
-						frameTime += ticker.deltaMS;
+						// Smooth animation loop using PixiJS ticker
+						app.ticker.add((ticker) => {
+							frameTime += ticker.deltaMS;
 
-						// Update frame when enough time has passed
-						if (frameTime >= frameDelay) {
-							frameTime -= frameDelay;
+							// Update frame when enough time has passed
+							if (frameTime >= frameDelay) {
+								frameTime -= frameDelay;
 
-							// Move to next frame
-							currentFrame = (currentFrame + 1) % frames.length;
-							sprite.texture = frames[currentFrame];
-						}
-					});
-
-					// Cleanup function to destroy PixiJS app when loader is hidden
-					window.addEventListener("load", () => {
-						setTimeout(() => {
-							if (app) {
-								app.ticker.stop();
-								app.destroy(true, {
-									children: true,
-									texture: false,
-								});
+								// Move to next frame
+								currentFrame =
+									(currentFrame + 1) % frames.length;
+								sprite.texture = frames[currentFrame];
 							}
-						}, 3000); // Destroy after loader fades out
-					});
+						});
+
+						// Cleanup function to destroy PixiJS app when loader is hidden
+						window.addEventListener("load", () => {
+							setTimeout(() => {
+								if (app) {
+									app.ticker.stop();
+									app.destroy(true, {
+										children: true,
+										texture: false,
+									});
+								}
+							}, 3000); // Destroy after loader fades out
+						});
 					} catch (error) {
-						console.error("Failed to load sprite animation:", error);
+						console.error(
+							"Failed to load sprite animation:",
+							error,
+						);
 						// Fallback spinner
 						const fallbackDiv = document.createElement("div");
 						fallbackDiv.style.cssText =
@@ -279,12 +374,16 @@ const { title = "Astro Basics" } = Astro.props;
 			} else {
 				// Loader was skipped (direct visit to non-root page)
 				// Prefetch events in background without blocking
-				console.log("🔄 Prefetching events in background (direct visit)...");
-				prefetchAllEvents().then(() => {
-					console.log("✅ Background prefetch complete!");
-				}).catch((error) => {
-					console.error("❌ Background prefetch error:", error);
-				});
+				console.log(
+					"🔄 Prefetching events in background (direct visit)...",
+				);
+				prefetchAllEvents()
+					.then(() => {
+						console.log("✅ Background prefetch complete!");
+					})
+					.catch((error) => {
+						console.error("❌ Background prefetch error:", error);
+					});
 			}
 		</script>
 
