@@ -24,10 +24,10 @@ const EsportsPage = () => {
 
       <main className="relative z-10">
         {/* Corner decorations */}
-        <div className="absolute top-20 sm:top-32 left-4 sm:left-8 w-12 sm:w-20 h-12 sm:h-20 border-l-2 border-t-2 border-primary/30 pointer-events-none" />
+        {/* <div className="absolute top-20 sm:top-32 left-4 sm:left-8 w-12 sm:w-20 h-12 sm:h-20 border-l-2 border-t-2 border-primary/30 pointer-events-none" />
         <div className="absolute top-20 sm:top-32 right-4 sm:right-8 w-12 sm:w-20 h-12 sm:h-20 border-r-2 border-t-2 border-accent/30 pointer-events-none" />
         <div className="absolute bottom-4 sm:bottom-8 left-4 sm:left-8 w-12 sm:w-20 h-12 sm:h-20 border-l-2 border-b-2 border-accent/30 pointer-events-none" />
-        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 w-12 sm:w-20 h-12 sm:h-20 border-r-2 border-b-2 border-primary/30 pointer-events-none" />
+        <div className="absolute bottom-4 sm:bottom-8 right-4 sm:right-8 w-12 sm:w-20 h-12 sm:h-20 border-r-2 border-b-2 border-primary/30 pointer-events-none" /> */}
 
         {/* Page content */}
         <div className="pt-16 sm:pt-24 md:pt-32 pb-8 sm:pb-12 md:pb-16 px-4 sm:px-6">
