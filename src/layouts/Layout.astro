@@ -34,7 +34,7 @@ const { title = "Astro Basics" } = Astro.props;
 				pointer-events: none;
 			}
 
-			#sprite-canvas {
+		
 			#sprite-canvas {
 				image-rendering: pixelated;
 				image-rendering: crisp-edges;
@@ -196,8 +196,11 @@ const { title = "Astro Basics" } = Astro.props;
 					console.error("Failed to initialize PixiJS:", err);
 				});
 			}
+			
 		</script>
 
 		<slot />
+
+</body>
 	</body>
 </html>

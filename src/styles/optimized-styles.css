@@ -84,6 +84,14 @@ body {
   transform: translateX(-50%) scale(0.3);
   z-index: 80;
 }
+.tagLine{
+  color: #ffffff;
+  bottom:-10%;
+  right: 0;
+  position: absolute;
+  font-size: 120px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
 .baseClouds {
   position: absolute;
@@ -415,7 +423,21 @@ body {
 /* ============================================
    MIDDLE SECTION ELEMENTS
    ============================================ */
-.purpleClouds1 {
+.dialogue{
+  position: absolute;
+  z-index: 1000;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 30px;
+  color: peachpuff;
+  text-shadow:0 0 2px rgb(53, 47, 42) !important;
+
+  font-family: "Playwrite NZ Basic", cursive;
+  font-optical-sizing: auto;
+  font-style: normal;
+
+}
+   .purpleClouds1 {
   position: absolute;
   bottom: -55%;
   left: 50%;
@@ -490,6 +512,137 @@ body {
 /* ============================================
    FUTURE SECTION ELEMENTS
    ============================================ */
+
+.container {
+  display: flex;
+}
+
+.radio-wrapper {
+  position: absolute;
+  height: 10%;
+  width: 20%;
+  margin: 3px;
+  left: 30%;
+  z-index: 10000;
+}
+
+.input {
+  
+ 
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0;
+}
+
+.btn {
+  --primary: #c69aff;
+  --shadow-primary: #000;
+  --shadow-secondary: hsl(246, 90%, 28%);
+  --clip: polygon(
+    11% 0,
+    95% 0,
+    100% 25%,
+    90% 90%,
+    95% 90%,
+    85% 90%,
+    85% 100%,
+    7% 100%,
+    0 80%
+  );
+  --border: 5px;
+  --shimmy-distance: 5;
+
+  --clip-one: polygon(0 2%,100% 2%,100% 95%,8% 95%,0 70%);
+  --clip-two: polygon(0 78%,100% 78%,100% 100%,8% 100%,0 78%);
+  --clip-three: polygon(0 44%,100% 44%,100% 54%,8% 54%,0 54%);
+  --clip-end: polygon(0 0,100% 0,100% 0,8% 0,0 0);
+  --clip-six: polygon(0 40%,100% 40%,100% 85%,8% 85%,0 70%);
+  --clip-seven: polygon(0 63%,100% 63%,100% 80%,8% 80%,0 70%);
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  line-height: 38px;
+  text-align: center;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: black;
+  text-transform: uppercase;
+  transition: background 0.2s;
+}
+
+.input:hover + .btn {
+  --primary: #11073f;
+}
+
+.btn::before,
+.btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: var(--clip);
+  z-index: -1;
+}
+
+.btn::before {
+  background: var(--shadow-primary);
+  transform: translate(var(--border), 0);
+}
+
+.btn::after {
+  background: var(--primary);
+}
+
+.btn__glitch {
+  position: absolute;
+  inset: calc(var(--border) * -1);
+  background: var(--shadow-primary);
+  text-shadow: 2px 2px var(--shadow-primary),
+               -2px -2px var(--shadow-secondary);
+  clip-path: var(--clip);
+  animation: glitch 2s infinite;
+  display: none;
+}
+
+.input:hover + .btn .btn__glitch,
+.input:checked + .btn .btn__glitch {
+  display: block;
+}
+
+.btn__glitch::before {
+  content: "";
+  position: absolute;
+  inset: var(--border);
+  background: var(--primary);
+  clip-path: var(--clip);
+  z-index: -1;
+}
+
+@keyframes glitch {
+  0% { clip-path: var(--clip-one); }
+  10% { clip-path: var(--clip-two); transform: translate(-5%, 0); }
+  20% { clip-path: var(--clip-three); transform: translate(5%, 0); }
+  40% { clip-path: var(--clip-six); }
+  60% { clip-path: var(--clip-seven); }
+  100% { clip-path: var(--clip-end); }
+}
+
+.number {
+  position: absolute;
+  top: 0;
+  left: 81%;
+  width: 15px;
+  height: 6px;
+  font-size: 5.5px;
+  font-weight: 700;
+  background: var(--shadow-primary);
+  color: #323232;
+  line-height: 6px;
+}
+
 .bgFutureBuild {
   position: absolute;
   top: 0;
