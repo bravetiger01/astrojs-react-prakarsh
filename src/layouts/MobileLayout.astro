@@ -1,0 +1,151 @@
+---
+import "../styles/index.css";
+const { title = "Astro Basics" } = Astro.props;
+
+// Server-side log
+console.log("📱 [SERVER] MobileLayout.astro is rendering");
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>{title}</title>
+
+        <link
+            rel="preload"
+            href="/sprites/sprite_sheet.avif"
+            as="image"
+            fetchpriority="high"
+        />
+
+        <style>
+            .loader-wrapper {
+                position: fixed;
+                inset: 0;
+                background: black;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 9999;
+                transition: opacity 0.5s ease;
+            }
+
+            .loader-wrapper.fade-out {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            /* CSS Sprite Sheet Animation */
+            .sprite-animation {
+                width: 200px;
+                height: 200px;
+                background-image: url("/sprites/sprite_sheet.avif");
+                background-size: 3000px 4400px; /* 7500*0.4 x 11000*0.4 */
+                background-position: 0 0;
+                background-repeat: no-repeat;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="loader-wrapper" class="loader-wrapper">
+            <div id="sprite-animation" class="sprite-animation"></div>
+        </div>
+
+        <!-- MOBILE LOADER CONTROL + SPRITE ANIMATION -->
+        <script is:inline>
+            const EXPIRY_TIME = 60 * 60 * 1000;
+            const LOCK_KEY = "loaderLastShown";
+
+            function shouldShowLoader() {
+                if (location.pathname !== "/") return false;
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get("force-loader") === "true") return true;
+                const last = sessionStorage.getItem(LOCK_KEY);
+                return !last || Date.now() - +last > EXPIRY_TIME;
+            }
+
+            const showLoader = shouldShowLoader();
+            const loader = document.getElementById("loader-wrapper");
+            const spriteEl = document.getElementById("sprite-animation");
+
+            if (!showLoader) {
+                if (loader) loader.style.display = "none";
+            } else {
+                sessionStorage.setItem(LOCK_KEY, Date.now());
+
+                // Sprite config
+                const COLS = 15;
+                const ROWS = 22;
+                const FRAME_W = 200; // 500 * 0.4
+                const FRAME_H = 200; // 500 * 0.4
+                const TOTAL_FRAMES = COLS * ROWS; // 330
+                const DURATION_MS = 6000; // 6 seconds for full animation
+                const FRAME_DURATION = DURATION_MS / TOTAL_FRAMES; // ~18ms per frame
+
+                let frame = 0;
+                let startTime = null;
+
+                function animate(timestamp) {
+                    if (!startTime) startTime = timestamp;
+
+                    const elapsed = timestamp - startTime;
+                    const targetFrame = Math.min(
+                        Math.floor(elapsed / FRAME_DURATION),
+                        TOTAL_FRAMES - 1,
+                    );
+
+                    if (targetFrame !== frame) {
+                        frame = targetFrame;
+                        const col = frame % COLS;
+                        const row = Math.floor(frame / COLS);
+
+                        if (spriteEl) {
+                            spriteEl.style.backgroundPosition = `${-col * FRAME_W}px ${-row * FRAME_H}px`;
+                        }
+                    }
+
+                    if (frame < TOTAL_FRAMES - 1) {
+                        requestAnimationFrame(animate);
+                    }
+                }
+
+                // Wait for sprite sheet image to load
+                const img = new Image();
+                img.onload = function () {
+                    console.log("✅ Sprite sheet loaded, starting animation");
+                    requestAnimationFrame(animate);
+                };
+                img.onerror = function () {
+                    console.error("❌ Failed to load sprite sheet");
+                };
+                img.src = "/sprites/sprite_sheet.avif";
+
+                // Fade out after animation
+                window.addEventListener("load", () => {
+                    setTimeout(() => {
+                        if (loader) {
+                            loader.classList.add("fade-out");
+                            setTimeout(() => {
+                                loader.style.display = "none";
+                            }, 500);
+                        }
+                    }, 6500);
+                });
+            }
+        </script>
+
+        <!-- PREFETCH DATA -->
+        <script>
+            import { prefetchAllEvents } from "../lib/event-cache";
+            const loader = document.getElementById("loader-wrapper");
+            if (loader && getComputedStyle(loader).display !== "none") {
+                prefetchAllEvents().catch(() => {});
+            }
+        </script>
+
+        <slot />
+    </body>
+</html>

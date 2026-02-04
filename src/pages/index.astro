@@ -1,7 +1,8 @@
 ---
-import Desktop from "../components/Desktop-copy.astro";
+import Desktop from "../components/desktop-fixed.astro";
 import Mobile from "../components/Mobile.astro";
 import Layout from "../layouts/Layout.astro";
+import MobileLayout from "../layouts/MobileLayout.astro";
 
 /* Read headers (works on Vercel SSR) */
 const ua = Astro.request.headers.get("user-agent") ?? "";
@@ -10,18 +11,35 @@ const ua = Astro.request.headers.get("user-agent") ?? "";
 const isMobile =
   /Android|iPhone|iPod/i.test(ua) ||
   (/iPad/i.test(ua) && !/Macintosh/i.test(ua));
+
+// Server-side logs to show which layout is selected
+console.log("🔍 [SERVER] index.astro - User-Agent:", ua.substring(0, 80));
+console.log("🔍 [SERVER] index.astro - isMobile detected:", isMobile);
+console.log(
+  "🔍 [SERVER] index.astro - Using layout:",
+  isMobile ? "MobileLayout" : "Layout (Desktop)",
+);
 ---
 
-<Layout>
-  {isMobile ? <Mobile /> : <Desktop />}
-</Layout>
+{
+  isMobile ? (
+    <MobileLayout>
+      <Mobile />
+    </MobileLayout>
+  ) : (
+    <Layout>
+      <Desktop />
+    </Layout>
+  )
+}
 
 <!-- Optional: client-side correction for edge cases -->
 <script>
   const isDesktopClient = window.matchMedia(
-    "(min-width: 1024px) and (pointer: fine)"
+    "(min-width: 1024px) and (pointer: fine)",
   ).matches;
 
-  document.documentElement.dataset.device =
-    isDesktopClient ? "desktop" : "mobile";
+  document.documentElement.dataset.device = isDesktopClient
+    ? "desktop"
+    : "mobile";
 </script>

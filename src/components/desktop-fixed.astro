@@ -1,6 +1,7 @@
 ---
-import Navbar from "@/pages/navbar.astro"
+import Navbar from "@/pages/navbar.astro";
 ---
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -22,7 +23,6 @@ import Navbar from "@/pages/navbar.astro"
                 position: relative;
                 height: 100vh;
                 width: 100%;
-                border: 4px solid red;
             }
             .sprite {
                 background-image: url("../assets/OPSpriteSheet.svg");
@@ -44,7 +44,7 @@ import Navbar from "@/pages/navbar.astro"
                 height: 425px;
                 background-position: 0px 0px;
                 transform: translateX(-50%) scale(0.3);
-                z-index: 80;
+                z-index: 30;
             }
 
             .baseClouds {
@@ -84,7 +84,7 @@ import Navbar from "@/pages/navbar.astro"
                 height: 450px;
                 background-position: 0px -425px;
                 transform: translateX(-50%) scale(1);
-                z-index: 100;
+                z-index: 0;
                 animation: windmill-rotate 12s linear infinite;
             }
             @keyframes windmill-rotate {
@@ -654,7 +654,7 @@ import Navbar from "@/pages/navbar.astro"
         </div>
 
         <script>
-            const layers = document.querySelectorAll(
+            const layers = document.querySelectorAll<HTMLElement>(
                 ".HeroSection .parallax, .FutureParent .parallax",
             );
 
@@ -669,7 +669,7 @@ import Navbar from "@/pages/navbar.astro"
                 currentX += (targetX - currentX) * 0.08;
 
                 layers.forEach((layer) => {
-                    const depth = parseFloat(layer.dataset.depth) || 0.2;
+                    const depth = parseFloat(layer.dataset.depth || "0.2");
 
                     const strength = layer.closest(".FutureParent") ? 60 : 90;
 
@@ -682,57 +682,57 @@ import Navbar from "@/pages/navbar.astro"
             }
 
             animate();
-            const girl = document.querySelector(".girlFall");
-            const guy = document.querySelector(".guyFall");
-            const peachClouds = document.querySelector(".peachClouds1");
-            const purpleClouds = document.querySelector(".purpleClouds2");
+            
+            const girl = document.querySelector<HTMLElement>(".girlFall");
+            const guy = document.querySelector<HTMLElement>(".guyFall");
+            const peachClouds = document.querySelector<HTMLElement>(".peachClouds1");
+            const purpleClouds = document.querySelector<HTMLElement>(".purpleClouds2");
 
-            let startFalling = false;
-            let progress = 0;
-            let peachScrollY = 0;
+            if (girl && guy && peachClouds && purpleClouds) {
+                let startFalling = false;
+                let progress = 0;
 
-            // Start when peach clouds enter viewport
-            const observer = new IntersectionObserver(
-                ([entry]) => {
-                    if (entry.isIntersecting) {
-                        startFalling = true;
-                        peachScrollY = window.scrollY;
-                        observer.disconnect();
+                // Start when peach clouds enter viewport
+                const observer = new IntersectionObserver(
+                    ([entry]) => {
+                        if (entry.isIntersecting) {
+                            startFalling = true;
+                            observer.disconnect();
+                        }
+                    },
+                    { threshold: 0.2 },
+                );
+
+                observer.observe(peachClouds);
+
+                function animateFall() {
+                    if (startFalling && girl && guy && peachClouds && purpleClouds) {
+                        const peachTop =
+                            peachClouds.getBoundingClientRect().top +
+                            window.scrollY;
+
+                        const purpleTop =
+                            purpleClouds.getBoundingClientRect().top +
+                            window.scrollY;
+
+                        const totalDistance = purpleTop - peachTop;
+                        const currentDistance = window.scrollY - peachTop;
+
+                        let targetProgress = currentDistance / totalDistance;
+                        targetProgress = Math.min(Math.max(targetProgress, 0), 1);
+
+                        // Smooth easing
+                        progress += (targetProgress - progress) * 0.09;
+
+                        girl.style.transform = `translate(-50%, ${progress * 40}vh) scale(0.5)`;
+                        guy.style.transform = `translate(-50%, ${progress * 50}vh) scale(0.4)`;
                     }
-                },
-                { threshold: 0.2 },
-            );
 
-            observer.observe(peachClouds);
-
-            function animateFall() {
-                if (startFalling) {
-                    const peachTop =
-                        peachClouds.getBoundingClientRect().top +
-                        window.scrollY;
-
-                    const purpleTop =
-                        purpleClouds.getBoundingClientRect().top +
-                        window.scrollY;
-
-                    const totalDistance = purpleTop - peachTop;
-                    const currentDistance = window.scrollY - peachTop;
-
-                    let targetProgress = currentDistance / totalDistance;
-                    targetProgress = Math.min(Math.max(targetProgress, 0), 1);
-
-                    // Smooth easing
-                    progress += (targetProgress - progress) * 0.09;
-
-                    girl.style.transform = `translate(-50%, ${progress * 40}vh) scale(0.5)`;
-
-                    guy.style.transform = `translate(-50%, ${progress * 50}vh) scale(0.4)`;
+                    requestAnimationFrame(animateFall);
                 }
 
-                requestAnimationFrame(animateFall);
+                animateFall();
             }
-
-            animateFall();
         </script>
     </body>
 </html>

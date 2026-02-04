@@ -42,6 +42,7 @@ const navLinks = [
       if (!t) {
         console.log("No loader transition - showing navbar immediately");
         gsap.set(navbar, { opacity: 1 });
+        setupScroll();
         return;
       }
 
@@ -115,6 +116,7 @@ const navLinks = [
     } else if (!loaderWrapper || window.getComputedStyle(loaderWrapper).display === "none") {
       // No loader at all, show navbar
       gsap.set(navbar, { opacity: 1 });
+      setupScroll();
     }
 
     function setupScroll() {
