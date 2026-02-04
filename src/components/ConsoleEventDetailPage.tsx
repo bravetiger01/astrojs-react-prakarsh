@@ -119,36 +119,8 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventDetailPageProps) => {
           }}
         />
 
-        {/* Corner accents */}
-        <div
-          className="absolute top-0 left-0 w-32 h-32"
-          style={{
-            borderTop: `4px solid ${primaryColor}`,
-            borderLeft: `4px solid ${primaryColor}`,
-          }}
-        />
-        <div
-          className="absolute top-0 right-0 w-32 h-32"
-          style={{
-            borderTop: `4px solid ${primaryColor}`,
-            borderRight: `4px solid ${primaryColor}`,
-          }}
-        />
-
-        {/* Cable connector */}
-        <div className="absolute top-4 left-16 flex flex-col items-center">
-          <div
-            className="w-4 h-4 rounded-full"
-            style={{ backgroundColor: primaryColor }}
-          />
-          <div
-            className="w-1.5 h-8"
-            style={{ backgroundColor: primaryColor }}
-          />
-        </div>
-
         {/* Back button */}
-        <div className="container relative z-10">
+        <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <a
             href={backLink}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:gap-3 mb-8"
@@ -162,7 +134,7 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventDetailPageProps) => {
           </a>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
+            <div className="max-w-2xl">
               <div
                 className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-mono uppercase tracking-[0.2em]"
                 style={{
@@ -175,7 +147,7 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventDetailPageProps) => {
               </div>
 
               <h1
-                className="text-7xl md:text-9xl font-black tracking-tighter mb-2"
+                className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-4 leading-none"
                 style={{ color: primaryColor }}
               >
                 {title}
@@ -184,7 +156,7 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventDetailPageProps) => {
               {edition && (
                 <div className="flex items-baseline gap-3 mb-6">
                   <span
-                    className="text-5xl font-black"
+                    className="text-4xl md:text-5xl font-black"
                     style={{ color: primaryColor }}
                   >
                     {edition}
@@ -199,7 +171,7 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventDetailPageProps) => {
               )}
 
               <p
-                className="text-sm font-mono leading-relaxed max-w-md"
+                className="text-sm md:text-base font-mono leading-relaxed"
                 style={{ color: primaryColor, opacity: 0.7 }}
               >
                 {fullDescription}
@@ -250,7 +222,7 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventDetailPageProps) => {
 
       {/* Main Content - Dark Section */}
       <div style={{ backgroundColor: primaryColor }}>
-        <div className="container py-16">
+        <div className="container mx-auto px-6 max-w-7xl py-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Left Column */}
             <div className="lg:col-span-2 space-y-12">

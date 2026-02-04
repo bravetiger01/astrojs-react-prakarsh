@@ -57,21 +57,13 @@ export default function UnifiedEventsPage({
       )}
 
       <main className="relative z-10">
-        {/* Corner decorations */}
-        {/* <div className="absolute top-32 left-8 w-20 h-20 border-l-2 border-t-2 border-primary/30 pointer-events-none" />
-        <div className="absolute top-32 right-8 w-20 h-20 border-r-2 border-t-2 border-accent/30 pointer-events-none" />
-        <div className="absolute bottom-8 left-8 w-20 h-20 border-l-2 border-b-2 border-accent/30 pointer-events-none" />
-        <div className="absolute bottom-8 right-8 w-20 h-20 border-r-2 border-b-2 border-primary/30 pointer-events-none" /> */}
-
-        {/* Page content */}
-        <div className="pt-32 pb-16 px-6">
+        {/* Back Button - At top */}
+        <div className="pt-8 px-6">
           <div className="max-w-7xl mx-auto">
-            {/* Back Button */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
-              className="mb-12"
             >
               <a
                 href="/"
@@ -80,7 +72,12 @@ export default function UnifiedEventsPage({
                 ← Back to Home
               </a>
             </motion.div>
+          </div>
+        </div>
 
+        {/* Page content */}
+        <div className="pt-8 pb-16 px-6">
+          <div className="max-w-7xl mx-auto">
             {/* Page Header */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
