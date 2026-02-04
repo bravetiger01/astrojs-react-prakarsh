@@ -1,6 +1,6 @@
 ---
 // Mobile component - loads optimized-styles.css only for mobile view
-// MobileNav is now handled by the layout, not here
+import MobileNav from "./MobileNav.astro";
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,6 +13,9 @@
   /* Import mobile-specific styles */
   @import "../styles/optimized-styles.css";
 </style>
+
+<!-- MobileNav rendered OUTSIDE HomePage to avoid z-index stacking issues -->
+<MobileNav />
 
 <div class="HomePage">
    <a href="/events?category=tech" class="holobutton"><button class="button">TECH EVENTS</button></a>
