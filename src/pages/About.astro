@@ -1,0 +1,264 @@
+---
+// About.astro
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>About Us | Prakarsh 2026</title>
+    </head>
+    <body>
+        <div class="college-bg"></div>
+
+        <div class="page-wrapper">
+            <div class="lamination">
+            <main class="document">
+                <div class="document-body">
+                    <header>
+                        <span class="cert-title">REF: PRK-2026-V1 // CLASS: PUBLIC DOMAIN</span>
+                        <h1>Memorandum of Innovation</h1>
+                        <div class="ornament"></div>
+                    </header>
+
+                    <article class="text-content">
+                        <p>
+                            <strong>THIS COMPACT</strong> is executed for <strong>PRAKARSH 2026</strong>, 
+                            under the aegis of ISTE, between The Central Committee (SVIT) 
+                            (hereinafter "The Architects") and The Participant (hereinafter "The Visionary").
+                        </p>
+                        
+                        <p>THE PARTIES HEREBY AGREE TO THE FOLLOWING:</p>
+
+                        <p><strong>ARTICLE I: THE MISSION</strong></p>
+                        <p>
+                            The Architects covenant to provide a national-level platform driven by 
+                            the motto "Ignite Minds and Showcase Skills." The objective 
+                            is to bridge the gap between theoretical knowledge and practical 
+                            application, empowering The Visionary to venture into the unknown.
+                        </p>
+
+                        <p><strong>ARTICLE II: THE DUAL MANDATE (Techfest & Talkfest)</strong></p>
+                        <p>The event shall operate as a dynamic two-day nexus offering:</p>
+                        <ul>
+                            <li>
+                                <strong>Technical Excellence:</strong> A landscape of 
+                                workshops, robotics, and prototyping to foster hands-on engineering skills.
+                            </li>
+                            <li>
+                                <strong>Holistic Growth:</strong> A blend of elocution, 
+                                cultural initiatives, and social awareness to ensure the development 
+                                of a well-rounded individual.
+                            </li>
+                        </ul>
+
+                        <p><strong>ARTICLE III: THE ATMOSPHERE CLAUSE</strong></p>
+                        <p>
+                            It is agreed that the campus shall be transformed into a hub of Inspiration, 
+                            Confidence, and Entertainment. The Architects guarantee an 
+                            environment where intellect meets motivation, drawing participants 
+                            from diverse regions to interact, compete, and innovate.
+                        </p>
+                    </article>
+
+                    <footer>
+                        <p class="witness-text">IN WITNESS WHEREOF, we pledge to make Prakarsh 2026 a resounding success.</p>
+                        <div class="signature">Prakarsh25</div>
+                        <p>(Signed) The Architects</p>
+                        <div class="signature-line"></div>
+                    </footer>
+                </div>
+                <div class="logo"></div>
+            </main>
+            </div>
+        </div>
+    </body>
+</html>
+
+<style>
+    /* Reset & Core */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        margin: 0;
+        background-color: #000;
+        font-family: 'Times New Roman', Times, serif; /* Traditional document feel */
+    }
+    .logo{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 75%;
+        opacity: .1;
+        aspect-ratio: 3/2.72;
+        background-image: url('../assets/logo.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: 1;
+        transform: translate(-50%,-50%) scale(1.1);
+    }
+    /* 16:9 Fixed Background */
+    .college-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-image: url('../assets/svitCollege1.avif');
+        background-size: cover;
+        background-position: center;
+        filter: blur(2px) brightness(0.5);
+        z-index: -1;
+        transform: scale(1.1);
+    }
+
+    /* Scroll Wrapper */
+    .page-wrapper {
+
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 40px 15px; /* Padding for mobile edges */
+    }
+
+    /* The Document Component */
+    .document {
+        background: #fdfdfd;
+        width: 100%;
+        max-width: 800px;
+        /* Logic: 3:4 ratio min-height, but allow growth if text overflows */
+        min-height: calc(800px * 4 / 3); 
+        box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+    .lamination{
+        border-radius: 20px;
+        width: 100%;
+        max-width: 800px;
+        border:50px solid  rgba(255, 255, 255, 0.171);
+    }
+    @media (max-width:477px) {
+    .lamination{
+ 
+        border:10px solid rgba(255, 255, 255, 0.171);
+    }
+    }
+
+    .document-body {
+        padding: 10% 8%;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        
+    }
+
+    /* Typography & Design Elements */
+    header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .cert-title {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #666;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        font-size: clamp(1.8rem, 5vw, 2.5rem);
+        color: #1a1a1a;
+        margin: 5px 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .ornament {
+        width: 100px;
+        height: 3px;
+        background: #c5a059; /* Gold accent */
+        margin: 20px auto;
+    }
+
+    .text-content p {
+        font-size: clamp(1rem, 3vw, 1.15rem);
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        color: #222;
+        text-align: justify;
+    }
+
+    /* New List Styling for Article II */
+    .text-content ul {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+    }
+
+    .text-content li {
+        font-size: clamp(1rem, 3vw, 1.15rem);
+        line-height: 1.6;
+        margin-bottom: 0.8rem;
+        color: #222;
+        padding-left: 0.5rem;
+    }
+
+    footer {
+        margin-top: auto;
+        padding-top: 50px;
+        text-align: right;
+    }
+
+    .witness-text {
+        text-align: center; 
+        font-style: italic; 
+        margin-bottom: 40px; 
+        font-size: 0.9rem;
+    }
+
+    /* REPLACED SEAL WITH SIGNATURE STYLING */
+    .signature {
+        font-family: 'Brush Script MT', 'Segoe Script', cursive; /* Handwritten font stack */
+        font-size: 2.5rem;
+        color: #1a1a1a; /* Dark ink color */
+        margin-left: auto; /* Push to right */
+        width: fit-content;
+        margin-bottom: -15px; /* Overlap the line slightly for realism */
+        margin-right: 10px;
+        transform: rotate(-10deg); /* Slight angle for authentic look */
+        opacity: 0.9;
+    }
+
+    .signature-line {
+        width: 200px;
+        height: 1px;
+        background: #000;
+        margin-left: auto;
+        margin-top: 8px;
+    }
+
+    /* Responsive Override for Small Screens */
+    @media (max-width: 800px) {
+        .document {
+            min-height: auto;
+            aspect-ratio: auto; 
+        }
+        
+        .page-wrapper {
+            padding: 20px 10px;
+        }
+
+        .document-body {
+            padding: 40px 25px;
+        }
+    }
+</style>

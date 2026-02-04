@@ -3,7 +3,7 @@ import GlassSurface from "../components/GlassSurface/GlassSurface";
 
 const navLinks = [
   { name: "HOME", href: "/" },
-  { name: "ABOUT", href: "#about" },
+  { name: "ABOUT", href: "/About" },
   { name: "EVENTS", href: "/events" },
 ];
 ---
@@ -22,118 +22,21 @@ const navLinks = [
       </div>
     </div>
   </GlassSurface>
+<nav id="navbar" class="navbar">
+  <GlassSurface client:load width="100%" borderRadius={50}>
+    <div class="content">
+      <div class="img">
+        <img id="logo" src="/assets/logo.svg" alt="Logo" />
+      </div>
+      <div class="navlinks">
+        <div class="links">
+        {navLinks.map((l) => <a href={l.href}>{l.name}</a>)}
+      </div>
+      <a href="https://konfhub.com/svit" target="_blank" class="register-btn">REGISTER NOW</a>
+      </div>
+    </div>
+  </GlassSurface>
 </nav>
-
-<script>
-  import { gsap } from "gsap";
-  import { ScrollTrigger } from "gsap/ScrollTrigger";
-  gsap.registerPlugin(ScrollTrigger);
-
-  const logo = document.getElementById("logo");
-  const navbar = document.getElementById("navbar");
-  const loaderWrapper = document.getElementById("loader-wrapper");
-  const canvas = document.getElementById("sprite-canvas");
-
-  if (!logo || !navbar) {
-    console.error("Logo or navbar not found");
-  } else {
-    function run() {
-      const t = (window as any).__loaderTransition;
-      if (!t) {
-        console.log("No loader transition - showing navbar immediately");
-        gsap.set(navbar, { opacity: 1 });
-        return;
-      }
-
-      console.log("🎬 Starting transition animation");
-      console.log("Transition data:", t);
-
-      // Show navbar temporarily to measure logo position
-      gsap.set(navbar, { opacity: 1, visibility: "visible" });
-
-      requestAnimationFrame(() => {
-        if (!logo || !canvas) return;
-        
-        // Get the logo's actual position on screen
-        const final = logo.getBoundingClientRect();
-        const finalX = final.left + final.width / 2;
-        const finalY = final.top + final.height / 2;
-
-        console.log("📦 Logo rect:", final);
-        console.log("📍 Canvas start:", t.x, t.y, "size:", t.width, "x", t.height);
-        console.log("📍 Logo target:", finalX, finalY);
-        console.log("📐 Scale factor:", final.height / t.height);
-
-        // Hide navbar again
-        gsap.set(navbar, { opacity: 0, visibility: "hidden" });
-
-        // Set canvas to fixed position at its current location FIRST
-        gsap.set(canvas, {
-          position: "fixed",
-          left: t.x,
-          top: t.y,
-          x: "-50%",
-          y: "-50%",
-          zIndex: 10000,
-        });
-
-        // Animate the canvas to the navbar logo position
-        const tl = gsap.timeline({
-          onComplete() {
-            // Hide canvas and loader
-            if (loaderWrapper) {
-              loaderWrapper.classList.add("fade-out");
-              setTimeout(() => {
-                if (loaderWrapper) loaderWrapper.style.display = "none";
-              }, 500);
-            }
-            
-            // Show navbar
-            gsap.set(navbar, { opacity: 1, visibility: "visible" });
-            setupScroll();
-            console.log("✨ Animation complete!");
-          },
-        });
-
-        // Animate canvas - use logo height for proper scaling
-        tl.to(canvas, {
-          left: finalX,
-          top: finalY,
-          scale: final.height / t.height,
-          duration: 1.2,
-          ease: "power3.out",
-        });
-      });
-    }
-
-    // Listen for loader complete event
-    window.addEventListener("loader:complete", run);
-    
-    // If loader already completed (or skipped), run immediately
-    if ((window as any).__loaderTransition !== undefined) {
-      run();
-    } else if (!loaderWrapper || window.getComputedStyle(loaderWrapper).display === "none") {
-      // No loader at all, show navbar
-      gsap.set(navbar, { opacity: 1 });
-    }
-
-    function setupScroll() {
-      if (!logo) return;
-      ScrollTrigger.create({
-        start: "top top",
-        end: "+=300",
-        scrub: true,
-        onUpdate: (s) =>
-          gsap.to(logo, { 
-            scale: gsap.utils.interpolate(1.15, 1, s.progress),
-            duration: 0.1,
-            overwrite: "auto"
-          }),
-      });
-      console.log("📜 Scroll animation setup");
-    }
-  }
-</script>
 
 <style>
   .navbar {
@@ -143,7 +46,6 @@ const navLinks = [
     transform: translateX(-50%);
     width: 90%;
     max-width: 1200px;
-    opacity: 0;
     z-index: 1200;
   }
 

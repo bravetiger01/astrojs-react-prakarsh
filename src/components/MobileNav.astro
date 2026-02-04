@@ -1,0 +1,279 @@
+---
+// Mobile Navigation with Hamburger Menu
+const navLinks = [
+  { name: "HOME", href: "/" },
+  { name: "ABOUT", href: "/About" },
+  { name: "EVENTS", href: "/events" },
+];
+---
+
+<!-- Hamburger Button -->
+<button class="mobile-hamburger" id="hamburger-btn" aria-label="Toggle menu">
+  <span class="line"></span>
+  <span class="line"></span>
+  <span class="line"></span>
+</button>
+
+<!-- Overlay -->
+<div class="mobile-nav-overlay" id="nav-overlay"></div>
+
+<!-- Mobile Navigation Popup -->
+<div class="mobile-nav-popup" id="nav-popup">
+  <div class="mobile-nav-header">
+    <div class="mobile-logo">
+      <img src="/assets/logo.svg" alt="Logo" />
+    </div>
+  </div>
+  
+  <div class="mobile-nav-content">
+    <div class="mobile-nav-links">
+      {navLinks.map((link) => (
+        <a href={link.href} class="nav-item">{link.name}</a>
+      ))}
+    </div>
+    
+    <div class="mobile-tickets-section">
+      <a href="https://konfhub.com/svit" target="_blank" rel="noopener noreferrer">
+        <button class="mobile-tickets-button">REGISTER NOW</button>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navOverlay = document.getElementById('nav-overlay');
+    const navPopup = document.getElementById('nav-popup');
+
+    function toggleMenu() {
+      const isOpen = hamburgerBtn?.classList.contains('active');
+      
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    }
+
+    function openMenu() {
+      if (hamburgerBtn) hamburgerBtn.classList.add('active');
+      if (navOverlay) navOverlay.classList.add('active');
+      if (navPopup) navPopup.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      if (hamburgerBtn) hamburgerBtn.classList.remove('active');
+      if (navOverlay) navOverlay.classList.remove('active');
+      if (navPopup) navPopup.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    if (hamburgerBtn) {
+      hamburgerBtn.addEventListener('click', toggleMenu);
+    }
+    
+    if (navOverlay) {
+      navOverlay.addEventListener('click', closeMenu);
+    }
+
+    // Close menu when clicking on nav links
+    const navLinks = document.querySelectorAll('.nav-item');
+    navLinks.forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+  });
+</script>
+
+<style>
+  /* Hamburger Button */
+  .mobile-hamburger {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    width: 48px;
+    height: 48px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    padding: 12px;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-hamburger:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .mobile-hamburger .line {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background-color: white;
+    border-radius: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-origin: center;
+  }
+
+  .mobile-hamburger.active .line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+
+  .mobile-hamburger.active .line:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+
+  .mobile-hamburger.active .line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+
+  /* Overlay */
+  .mobile-nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 1050;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Mobile Navigation Popup */
+  .mobile-nav-popup {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    max-width: 85vw;
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(60, 42, 86, 0.98), rgba(42, 30, 61, 0.98));
+    backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(241, 181, 162, 0.2);
+    z-index: 1060;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+  }
+
+  .mobile-nav-popup.active {
+    right: 0;
+  }
+
+  /* Mobile Navigation Header */
+  .mobile-nav-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(241, 181, 162, 0.2);
+  }
+
+  .mobile-logo img {
+    height: 40px;
+    width: auto;
+  }
+
+  /* Mobile Navigation Content */
+  .mobile-nav-content {
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 100px);
+  }
+
+  .mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    flex: 1;
+  }
+
+  .mobile-nav-links a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    transition: all 0.3s ease;
+  }
+
+  .nav-item {
+    display: block;
+    padding: 1.2rem 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(241, 181, 162, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .nav-item:hover {
+    background: rgba(241, 181, 162, 0.1);
+    color: #F1B5A2;
+    padding-left: 1.5rem;
+  }
+
+  .nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 2px;
+    background: #F1B5A2;
+    transition: width 0.3s ease;
+  }
+
+  .nav-item:hover::before {
+    width: 4px;
+  }
+
+  /* Mobile Tickets Section */
+  .mobile-tickets-section {
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(241, 181, 162, 0.2);
+  }
+
+  .mobile-tickets-section a {
+    text-decoration: none;
+  }
+
+  .mobile-tickets-button {
+    width: 100%;
+    background: linear-gradient(135deg, #F1B5A2 0%, #E89B88 100%);
+    color: #3C2A56;
+    border: none;
+    padding: 1.2rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(241, 181, 162, 0.3);
+  }
+
+  .mobile-tickets-button:hover {
+    background: linear-gradient(135deg, #E89B88 0%, #F1B5A2 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(241, 181, 162, 0.5);
+  }
+</style>

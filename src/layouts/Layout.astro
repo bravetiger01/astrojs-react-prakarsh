@@ -35,18 +35,23 @@ const { title = "Astro Basics" } = Astro.props;
 			}
 
 			#sprite-canvas {
+			#sprite-canvas {
 				image-rendering: pixelated;
+				image-rendering: crisp-edges;
+				transform-origin: center center;
 				image-rendering: crisp-edges;
 				transform-origin: center center;
 			}
 		</style>
 	</head>
 
+
 	<body>
 		<div id="loader-wrapper" class="loader-wrapper">
 			<canvas id="sprite-canvas"></canvas>
 		</div>
 
+		<!-- LOADER CONTROL + EVENT DISPATCH -->
 		<!-- LOADER CONTROL + EVENT DISPATCH -->
 		<script is:inline>
 			const EXPIRY_TIME = 60 * 60 * 1000;
@@ -82,7 +87,7 @@ const { title = "Astro Basics" } = Astro.props;
 						window.dispatchEvent(new Event("loader:complete"));
 
 						// Don't fade loader yet - let the animation happen first
-					}, 3000); // Reduced to 2000ms - animation completes in ~1.8s at 180 FPS
+					}, 6000); // Reduced to 2000ms - animation completes in ~1.8s at 180 FPS
 				});
 			}
 		</script>
@@ -109,7 +114,7 @@ const { title = "Astro Basics" } = Astro.props;
 					rows: 22,
 					w: 7500 / 15,
 					h: 11000 / 22,
-					fps: 180, // Increased to 180 FPS - 330 frames will complete in ~1.8 seconds
+					fps: 120, // Increased to 180 FPS - 330 frames will complete in ~1.8 seconds
 					scale: 0.6,
 				};
 
@@ -163,7 +168,7 @@ const { title = "Astro Basics" } = Astro.props;
 					let acc = 0;
 					const delay = 1000 / SPRITE.fps;
 
-					const speedMultiplier = 1.0001; // 🔥 increase this to go faster (2, 3, 4...)
+					const speedMultiplier = 1; // 🔥 increase this to go faster (2, 3, 4...)
 
 					app.ticker.add((t) => {
 						acc += t.deltaMS;
