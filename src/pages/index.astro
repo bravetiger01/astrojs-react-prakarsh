@@ -1,5 +1,4 @@
 ---
-import Desktop from "../components/desktop-fixed.astro";
 import Mobile from "../components/Mobile.astro";
 import Layout from "../layouts/Layout.astro";
 import MobileLayout from "../layouts/MobileLayout.astro";
@@ -12,13 +11,8 @@ const isMobile =
   /Android|iPhone|iPod/i.test(ua) ||
   (/iPad/i.test(ua) && !/Macintosh/i.test(ua));
 
-// Server-side logs to show which layout is selected
-console.log("🔍 [SERVER] index.astro - User-Agent:", ua.substring(0, 80));
-console.log("🔍 [SERVER] index.astro - isMobile detected:", isMobile);
-console.log(
-  "🔍 [SERVER] index.astro - Using layout:",
-  isMobile ? "MobileLayout" : "Layout (Desktop)",
-);
+// Server-side logs
+console.log("🔍 [SERVER] index.astro - isMobile:", isMobile);
 ---
 
 {

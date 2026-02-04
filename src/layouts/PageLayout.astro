@@ -1,0 +1,23 @@
+---
+/**
+ * PageLayout - General layout for non-home pages (About, Events, etc)
+ * Uses ResponsiveNav - hamburger on mobile, glass navbar on desktop
+ */
+import "../styles/index.css";
+import ResponsiveNav from "../components/ResponsiveNav.astro";
+const { title = "Prakarsh 2026", showDesktopNav = true } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+        <title>{title}</title>
+    </head>
+
+    <body>
+        <ResponsiveNav showDesktopNav={showDesktopNav} />
+        <slot />
+    </body>
+</html>

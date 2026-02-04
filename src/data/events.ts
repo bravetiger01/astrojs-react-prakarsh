@@ -1,10 +1,10 @@
-import type { Event } from "./event-types.ts";
-import { technicalEvents } from "./technical_events.ts";
-import { nonTechnicalEvents } from "./non_technical.ts";
-import { esportsEvents } from "./esports.ts";
-import { workshopEvents } from "./workshops.ts";
+import type { Event } from "./event-types.js";
+import { technicalEvents } from "./technical_events.js";
+import { nonTechnicalEvents } from "./non_technical.js";
+import { esportsEvents } from "./esports.js";
+import { workshopEvents } from "./workshops.js";
 
-export type { Event } from "./event-types.ts";
+export type { Event } from "./event-types.js";
 
 export const events: Event[] = [
   ...technicalEvents,

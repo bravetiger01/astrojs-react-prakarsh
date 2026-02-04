@@ -58,7 +58,7 @@ export default function UnifiedEventsPage({
 
       <main className="relative z-10">
         {/* Back Button - At top */}
-        <div className="pt-8 px-6">
+        {/* <div className="pt-8 px-6">
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -73,7 +73,7 @@ export default function UnifiedEventsPage({
               </a>
             </motion.div>
           </div>
-        </div>
+        </div> */}
 
         {/* Page content */}
         <div className="pt-8 pb-16 px-6">
@@ -85,7 +85,7 @@ export default function UnifiedEventsPage({
               transition={{ duration: 0.6 }}
               className="text-center mb-12"
             >
-              <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black mb-6 text-neon-cyan">
+              <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black mb-6 text-neon-cyan py-20">
                 All Events
               </h1>
 

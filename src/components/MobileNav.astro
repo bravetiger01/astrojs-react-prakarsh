@@ -1,5 +1,5 @@
 ---
-// Mobile Navigation with Hamburger Menu
+// Mobile Navigation with Hamburger Menu (mobile only)
 const navLinks = [
   { name: "HOME", href: "/" },
   { name: "ABOUT", href: "/About" },
@@ -24,16 +24,24 @@ const navLinks = [
       <img src="/assets/logo.svg" alt="Logo" />
     </div>
   </div>
-  
+
   <div class="mobile-nav-content">
     <div class="mobile-nav-links">
-      {navLinks.map((link) => (
-        <a href={link.href} class="nav-item">{link.name}</a>
-      ))}
+      {
+        navLinks.map((link) => (
+          <a href={link.href} class="nav-item">
+            {link.name}
+          </a>
+        ))
+      }
     </div>
-    
+
     <div class="mobile-tickets-section">
-      <a href="https://konfhub.com/svit" target="_blank" rel="noopener noreferrer">
+      <a
+        href="https://konfhub.com/svit"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <button class="mobile-tickets-button">REGISTER NOW</button>
       </a>
     </div>
@@ -41,14 +49,14 @@ const navLinks = [
 </div>
 
 <script is:inline>
-  document.addEventListener('DOMContentLoaded', () => {
-    const hamburgerBtn = document.getElementById('hamburger-btn');
-    const navOverlay = document.getElementById('nav-overlay');
-    const navPopup = document.getElementById('nav-popup');
+  document.addEventListener("DOMContentLoaded", () => {
+    const hamburgerBtn = document.getElementById("hamburger-btn");
+    const navOverlay = document.getElementById("nav-overlay");
+    const navPopup = document.getElementById("nav-popup");
 
     function toggleMenu() {
-      const isOpen = hamburgerBtn?.classList.contains('active');
-      
+      const isOpen = hamburgerBtn?.classList.contains("active");
+
       if (isOpen) {
         closeMenu();
       } else {
@@ -57,31 +65,31 @@ const navLinks = [
     }
 
     function openMenu() {
-      if (hamburgerBtn) hamburgerBtn.classList.add('active');
-      if (navOverlay) navOverlay.classList.add('active');
-      if (navPopup) navPopup.classList.add('active');
-      document.body.style.overflow = 'hidden';
+      if (hamburgerBtn) hamburgerBtn.classList.add("active");
+      if (navOverlay) navOverlay.classList.add("active");
+      if (navPopup) navPopup.classList.add("active");
+      document.body.style.overflow = "hidden";
     }
 
     function closeMenu() {
-      if (hamburgerBtn) hamburgerBtn.classList.remove('active');
-      if (navOverlay) navOverlay.classList.remove('active');
-      if (navPopup) navPopup.classList.remove('active');
-      document.body.style.overflow = '';
+      if (hamburgerBtn) hamburgerBtn.classList.remove("active");
+      if (navOverlay) navOverlay.classList.remove("active");
+      if (navPopup) navPopup.classList.remove("active");
+      document.body.style.overflow = "";
     }
 
     if (hamburgerBtn) {
-      hamburgerBtn.addEventListener('click', toggleMenu);
+      hamburgerBtn.addEventListener("click", toggleMenu);
     }
-    
+
     if (navOverlay) {
-      navOverlay.addEventListener('click', closeMenu);
+      navOverlay.addEventListener("click", closeMenu);
     }
 
     // Close menu when clicking on nav links
-    const navLinks = document.querySelectorAll('.nav-item');
-    navLinks.forEach(link => {
-      link.addEventListener('click', closeMenu);
+    const navLinks = document.querySelectorAll(".nav-item");
+    navLinks.forEach((link) => {
+      link.addEventListener("click", closeMenu);
     });
   });
 </script>
@@ -92,7 +100,7 @@ const navLinks = [
     position: fixed;
     top: 1.5rem;
     right: 1.5rem;
-    z-index: 1100;
+    z-index: 9100;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -144,7 +152,7 @@ const navLinks = [
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(2px);
-    z-index: 1050;
+    z-index: 9050;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -163,10 +171,15 @@ const navLinks = [
     width: 320px;
     max-width: 85vw;
     height: 100vh;
-    background: linear-gradient(135deg, rgba(60, 42, 86, 0.98), rgba(42, 30, 61, 0.98));
+    height: 100dvh;
+    background: linear-gradient(
+      135deg,
+      rgba(60, 42, 86, 0.98),
+      rgba(42, 30, 61, 0.98)
+    );
     backdrop-filter: blur(20px);
     border-left: 1px solid rgba(241, 181, 162, 0.2);
-    z-index: 1060;
+    z-index: 9060;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
   }
@@ -194,7 +207,7 @@ const navLinks = [
     padding: 2rem 1.5rem;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 100px);
+    min-height: calc(100dvh - 100px);
   }
 
   .mobile-nav-links {
@@ -224,19 +237,19 @@ const navLinks = [
 
   .nav-item:hover {
     background: rgba(241, 181, 162, 0.1);
-    color: #F1B5A2;
+    color: #f1b5a2;
     padding-left: 1.5rem;
   }
 
   .nav-item::before {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     top: 50%;
     transform: translateY(-50%);
     width: 0;
     height: 2px;
-    background: #F1B5A2;
+    background: #f1b5a2;
     transition: width 0.3s ease;
   }
 
@@ -246,8 +259,9 @@ const navLinks = [
 
   /* Mobile Tickets Section */
   .mobile-tickets-section {
-    margin-top: 1rem;
+    margin-top: auto;
     padding-top: 1.5rem;
+    padding-bottom: 2rem;
     border-top: 1px solid rgba(241, 181, 162, 0.2);
   }
 
@@ -257,8 +271,8 @@ const navLinks = [
 
   .mobile-tickets-button {
     width: 100%;
-    background: linear-gradient(135deg, #F1B5A2 0%, #E89B88 100%);
-    color: #3C2A56;
+    background: linear-gradient(135deg, #f1b5a2 0%, #e89b88 100%);
+    color: #3c2a56;
     border: none;
     padding: 1.2rem 2rem;
     border-radius: 12px;
@@ -272,7 +286,7 @@ const navLinks = [
   }
 
   .mobile-tickets-button:hover {
-    background: linear-gradient(135deg, #E89B88 0%, #F1B5A2 100%);
+    background: linear-gradient(135deg, #e89b88 0%, #f1b5a2 100%);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(241, 181, 162, 0.5);
   }

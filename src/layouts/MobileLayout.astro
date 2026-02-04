@@ -1,5 +1,6 @@
 ---
 import "../styles/index.css";
+import MobileNav from "../components/MobileNav.astro";
 const { title = "Astro Basics" } = Astro.props;
 
 // Server-side log
@@ -50,6 +51,8 @@ console.log("📱 [SERVER] MobileLayout.astro is rendering");
     </head>
 
     <body>
+        <MobileNav />
+
         <div id="loader-wrapper" class="loader-wrapper">
             <div id="sprite-animation" class="sprite-animation"></div>
         </div>
