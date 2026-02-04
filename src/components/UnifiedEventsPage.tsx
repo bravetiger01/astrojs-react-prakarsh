@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import ParticleField from "./ParticleField";
+import MatrixRain from "./MatrixRain";
+import GeometricPattern from "./GeometricPattern";
 import CassetteCard from "./CassetteCard";
-import ConsoleCard, { colorSchemes } from "./ConsoleCard";
+import ConsoleCard from "./ConsoleCard";
 import EsportsCard from "./EsportsCard";
 import type { Event } from "../data/event-types";
 
@@ -42,18 +43,28 @@ export default function UnifiedEventsPage({
   ];
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
-      <ParticleField />
+    <div className="relative min-h-screen text-foreground">
+      {/* Background animations - switch based on active tab */}
+      {activeTab === "esports" ? (
+        <GeometricPattern 
+          backgroundColor="#fbdacc"
+          primaryColor="#7B7BF8"
+          accentColors={["#7B7BF8", "#FF67D5", "#C9C9FF"]}
+          opacity={0.6}
+        />
+      ) : (
+        <MatrixRain />
+      )}
 
       <main className="relative z-10">
         {/* Corner decorations */}
-        <div className="absolute top-32 left-8 w-20 h-20 border-l-2 border-t-2 border-primary/30 pointer-events-none" />
+        {/* <div className="absolute top-32 left-8 w-20 h-20 border-l-2 border-t-2 border-primary/30 pointer-events-none" />
         <div className="absolute top-32 right-8 w-20 h-20 border-r-2 border-t-2 border-accent/30 pointer-events-none" />
         <div className="absolute bottom-8 left-8 w-20 h-20 border-l-2 border-b-2 border-accent/30 pointer-events-none" />
-        <div className="absolute bottom-8 right-8 w-20 h-20 border-r-2 border-b-2 border-primary/30 pointer-events-none" />
+        <div className="absolute bottom-8 right-8 w-20 h-20 border-r-2 border-b-2 border-primary/30 pointer-events-none" /> */}
 
         {/* Page content */}
-        <div className="pt-32 pb-16 px-6 bg-[#FBDACC]">
+        <div className="pt-32 pb-16 px-6">
           <div className="max-w-7xl mx-auto">
             {/* Back Button */}
             <motion.div
@@ -165,7 +176,6 @@ export default function UnifiedEventsPage({
                             title={event.name}
                             description={event.tagline}
                             category="non-tech"
-                            colorScheme={colorSchemes[index % colorSchemes.length]}
                           />
                         </a>
                       </motion.div>
@@ -193,7 +203,6 @@ export default function UnifiedEventsPage({
                             title={event.name}
                             description={event.tagline}
                             category="workshops"
-                            colorScheme={colorSchemes[index % colorSchemes.length]}
                           />
                         </a>
                       </motion.div>
