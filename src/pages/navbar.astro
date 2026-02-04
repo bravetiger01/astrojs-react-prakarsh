@@ -1,51 +1,141 @@
 ---
-import GlassSurface from '../components/GlassSurface/GlassSurface';
+import GlassSurface from "../components/GlassSurface/GlassSurface";
 
 const navLinks = [
-  { name: 'HOME', href: '/', highlight: false },
-  { name: 'ABOUT', href: '#about', highlight: false },
-  { name: 'EVENTS', href: '/events', highlight: false },
+  { name: "HOME", href: "/" },
+  { name: "ABOUT", href: "#about" },
+  { name: "EVENTS", href: "/events" },
 ];
 ---
 
-<nav class="navbar">
-  <div class="navbar-border-wrapper">
-    <GlassSurface 
-      client:load
-      width="100%"
-      height="auto"
-      borderRadius={50}
-      blur={10}
-      opacity={0.6}
-      backgroundOpacity={0.1}
-      saturation={1.8}
-      brightness={50}
-      className="navbar-glass"
-    >
-      <div class="navbar-content">
-        <div class="navbar-logo">
-          <img src="/assets/logo.svg" alt="Logo" />
-        </div>
-        
-        <div class="navbar-links">
-          {navLinks.map(link => (
-            <a href={link.href} class={`nav-link ${link.highlight ? 'nav-link-highlight' : ''}`}>
-              {link.name}
-            </a>
-          ))}
-        </div>
-        
-        <a href="#register" class="nav-button">
-          <span>REGISTER NOW</span>
-        </a>
+<nav id="navbar" class="navbar">
+  <GlassSurface client:load width="100%" borderRadius={50}>
+    <div class="content">
+      <div class="img">
+        <img id="logo" src="/assets/logo.svg" alt="Logo" />
       </div>
-    </GlassSurface>
-  </div>
+      <div class="navlinks">
+        <div class="links">
+        {navLinks.map((l) => <a href={l.href}>{l.name}</a>)}
+      </div>
+      <a href="#register" class="register-btn">REGISTER NOW</a>
+      </div>
+    </div>
+  </GlassSurface>
 </nav>
 
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap');
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
 
+  const logo = document.getElementById("logo");
+  const navbar = document.getElementById("navbar");
+  const loaderWrapper = document.getElementById("loader-wrapper");
+  const canvas = document.getElementById("sprite-canvas");
+
+  if (!logo || !navbar) {
+    console.error("Logo or navbar not found");
+  } else {
+    function run() {
+      const t = (window as any).__loaderTransition;
+      if (!t) {
+        console.log("No loader transition - showing navbar immediately");
+        gsap.set(navbar, { opacity: 1 });
+        return;
+      }
+
+      console.log("🎬 Starting transition animation");
+      console.log("Transition data:", t);
+
+      // Show navbar temporarily to measure logo position
+      gsap.set(navbar, { opacity: 1, visibility: "visible" });
+
+      requestAnimationFrame(() => {
+        if (!logo || !canvas) return;
+        
+        // Get the logo's actual position on screen
+        const final = logo.getBoundingClientRect();
+        const finalX = final.left + final.width / 2;
+        const finalY = final.top + final.height / 2;
+
+        console.log("📦 Logo rect:", final);
+        console.log("📍 Canvas start:", t.x, t.y, "size:", t.width, "x", t.height);
+        console.log("📍 Logo target:", finalX, finalY);
+        console.log("📐 Scale factor:", final.height / t.height);
+
+        // Hide navbar again
+        gsap.set(navbar, { opacity: 0, visibility: "hidden" });
+
+        // Set canvas to fixed position at its current location FIRST
+        gsap.set(canvas, {
+          position: "fixed",
+          left: t.x,
+          top: t.y,
+          x: "-50%",
+          y: "-50%",
+          zIndex: 10000,
+        });
+
+        // Animate the canvas to the navbar logo position
+        const tl = gsap.timeline({
+          onComplete() {
+            // Hide canvas and loader
+            if (loaderWrapper) {
+              loaderWrapper.classList.add("fade-out");
+              setTimeout(() => {
+                if (loaderWrapper) loaderWrapper.style.display = "none";
+              }, 500);
+            }
+            
+            // Show navbar
+            gsap.set(navbar, { opacity: 1, visibility: "visible" });
+            setupScroll();
+            console.log("✨ Animation complete!");
+          },
+        });
+
+        // Animate canvas - use logo height for proper scaling
+        tl.to(canvas, {
+          left: finalX,
+          top: finalY,
+          scale: final.height / t.height,
+          duration: 1.2,
+          ease: "power3.out",
+        });
+      });
+    }
+
+    // Listen for loader complete event
+    window.addEventListener("loader:complete", run);
+    
+    // If loader already completed (or skipped), run immediately
+    if ((window as any).__loaderTransition !== undefined) {
+      run();
+    } else if (!loaderWrapper || window.getComputedStyle(loaderWrapper).display === "none") {
+      // No loader at all, show navbar
+      gsap.set(navbar, { opacity: 1 });
+    }
+
+    function setupScroll() {
+      if (!logo) return;
+      ScrollTrigger.create({
+        start: "top top",
+        end: "+=300",
+        scrub: true,
+        onUpdate: (s) =>
+          gsap.to(logo, { 
+            scale: gsap.utils.interpolate(1.15, 1, s.progress),
+            duration: 0.1,
+            overwrite: "auto"
+          }),
+      });
+      console.log("📜 Scroll animation setup");
+    }
+  }
+</script>
+
+<style>
   .navbar {
     position: fixed;
     top: 20px;
@@ -53,145 +143,66 @@ const navLinks = [
     transform: translateX(-50%);
     width: 90%;
     max-width: 1200px;
+    opacity: 0;
     z-index: 1200;
-    font-family: 'Bruno Ace SC', sans-serif;
   }
 
-  .navbar-border-wrapper {
-    
-    position: relative;
-    padding: 2px;
-    border-radius: 52px;
-    background: linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.3) 0%, 
-      rgba(255, 255, 255, 0.1) 50%,
-      rgba(255, 255, 255, 0.3) 100%
-    );
-    box-shadow: 
-      0 0 20px rgba(255, 255, 255, 0.1),
-      0 0 40px rgba(0, 0, 0, 0.2);
-  }
-
-  .navbar-glass {
-    padding: 20px 40px;
-    border:10px solid peachpuff;
-  }
-
-  .navbar-content {
+  .content {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 20px 40px;
     width: 100%;
-    gap: 60px;
-    
   }
 
-  .navbar-logo {
+  .img {
     display: flex;
     align-items: center;
     flex-shrink: 0;
-    padding: 8px 0;
   }
 
-  .navbar-logo img {
+  #logo {
     height: 40px;
-    width: auto;
+    transform-origin: center;
   }
 
-  .navbar-links {
+  .navlinks {
     display: flex;
     align-items: center;
-    gap: 48px;
-    flex: 1;
-    justify-content: center;
+    gap: 40px;
   }
 
-  .nav-link {
-    color: #000000;
+  .links {
+    display: flex;
+    gap: 40px;
+  }
+
+  .links a {
+    color: #000;
     text-decoration: none;
-    font-size: 16px;
     font-weight: 500;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-    position: relative;
-    padding: 8px 0;
-    border-radius: 8px;
-    border-color: ;
+    transition: color 0.3s;
   }
 
-  .nav-link:hover {
+  .links a:hover {
     color: #F1B5A2;
   }
 
-  .nav-link-highlight {
-    color: #F1B5A2;
-    font-weight: 600;
-  }
-
-  .nav-button {
+  .register-btn {
     background: linear-gradient(135deg, #F1B5A2 0%, #E89B88 100%);
-    color: #000000;
+    color: #000;
     text-decoration: none;
-    padding: 14px 32px;
+    padding: 12px 28px;
     border-radius: 30px;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
-    letter-spacing: 0.5px;
     transition: all 0.3s ease;
-    border: none;
     box-shadow: 0 4px 20px rgba(241, 181, 162, 0.5);
     flex-shrink: 0;
-    position: relative;
-    z-index: 10;
-    isolation: isolate;
   }
 
-  .nav-button:hover {
+  .register-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 6px 25px rgba(241, 181, 162, 0.7);
-    background: linear-gradient(135deg, #E89B88 0%, #F1B5A2 100%);
-  }
-
-  @media (max-width: 768px) {
-    .navbar {
-      width: 95%;
-      top: 10px;
-    }
-
-    .navbar-border-wrapper {
-      border-radius: 32px;
-    }
-
-    .navbar-glass {
-      padding: 12px 20px;
-    }
-
-    .navbar-content {
-      gap: 20px;
-    }
-
-    .navbar-logo img {
-      height: 32px;
-    }
-
-    .navbar-links {
-      gap: 24px;
-    }
-
-    .nav-link {
-      font-size: 14px;
-      padding: 6px 0;
-    }
-
-    .nav-button {
-      padding: 10px 20px;
-      font-size: 13px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .navbar-links {
-      display: none;
-    }
   }
 </style>

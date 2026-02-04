@@ -1,10 +1,5 @@
 ---
 import "../styles/index.css";
-
-interface Props {
-	title?: string;
-}
-
 const { title = "Astro Basics" } = Astro.props;
 ---
 
@@ -13,11 +8,8 @@ const { title = "Astro Basics" } = Astro.props;
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-
-		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 
-		<!-- Preload sprite sheet for immediate display -->
 		<link
 			rel="preload"
 			href="/sprites/sprite_sheet.avif"
@@ -25,7 +17,6 @@ const { title = "Astro Basics" } = Astro.props;
 			fetchpriority="high"
 		/>
 
-		<!-- Inline critical loader CSS for instant visibility -->
 		<style>
 			.loader-wrapper {
 				position: fixed;
@@ -35,8 +26,7 @@ const { title = "Astro Basics" } = Astro.props;
 				align-items: center;
 				justify-content: center;
 				z-index: 9999;
-				opacity: 1;
-				transition: opacity 0.5s ease-out;
+				transition: opacity 0.5s ease;
 			}
 
 			.loader-wrapper.fade-out {
@@ -44,122 +34,60 @@ const { title = "Astro Basics" } = Astro.props;
 				pointer-events: none;
 			}
 
-			.loader-content {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				gap: 2rem;
-			}
-
 			#sprite-canvas {
 				image-rendering: pixelated;
 				image-rendering: crisp-edges;
-			}
-
-			@keyframes spin {
-				to {
-					transform: rotate(360deg);
-				}
+				transform-origin: center center;
 			}
 		</style>
 	</head>
+
 	<body>
-		<!-- Inline Loader HTML - shows immediately -->
 		<div id="loader-wrapper" class="loader-wrapper">
-			<div class="loader-content">
-				<canvas id="sprite-canvas"></canvas>
-			</div>
+			<canvas id="sprite-canvas"></canvas>
 		</div>
 
-		<!-- Inline script - starts progress animation immediately -->
+		<!-- LOADER CONTROL + EVENT DISPATCH -->
 		<script is:inline>
-			// Configuration
-			var EXPIRY_TIME = 60 * 60 * 1000; // 1 Hour
-			var LOCK_KEY = "loaderLastShown";
+			const EXPIRY_TIME = 60 * 60 * 1000;
+			const LOCK_KEY = "loaderLastShown";
 
-			// Logic to determine if loader should show
 			function shouldShowLoader() {
-				// 1. Only show on root path
-				if (
-					window.location.pathname !== "/" &&
-					window.location.pathname !== ""
-				) {
-					return false;
-				}
-
-				// 2. Check session storage for expiration
-				var lastShown = sessionStorage.getItem(LOCK_KEY);
-				var now = Date.now();
-
-				if (lastShown && now - parseInt(lastShown) < EXPIRY_TIME) {
-					return false; // Still within cooldown
-				}
-
-				return true; // Show loader
+				if (location.pathname !== "/") return false;
+				const last = sessionStorage.getItem(LOCK_KEY);
+				return !last || Date.now() - +last > EXPIRY_TIME;
 			}
 
-			var showLoader = shouldShowLoader();
+			const showLoader = shouldShowLoader();
+			const loader = document.getElementById("loader-wrapper");
 
 			if (!showLoader) {
-				// Hide loader immediately
-				var loaderWrapper = document.getElementById("loader-wrapper");
-				if (loaderWrapper) {
-					loaderWrapper.style.display = "none";
-				}
+				loader.style.display = "none";
 			} else {
-				// Show loader and set timestamp
-				sessionStorage.setItem(LOCK_KEY, Date.now().toString());
+				sessionStorage.setItem(LOCK_KEY, Date.now());
 
-				var isHiding = false;
-				var loaderWrapper = document.getElementById("loader-wrapper");
+				window.addEventListener("load", () => {
+					setTimeout(() => {
+						const canvas = document.getElementById("sprite-canvas");
+						const rect = canvas.getBoundingClientRect();
 
-				// Listen for load complete event
-				function handleLoadComplete() {
-					if (isHiding) return;
-					isHiding = true;
+						window.__loaderTransition = {
+							x: rect.left + rect.width / 2,
+							y: rect.top + rect.height / 2,
+							width: rect.width,
+							height: rect.height,
+						};
 
-					setTimeout(function () {
-						if (loaderWrapper) {
-							loaderWrapper.classList.add("fade-out");
-							setTimeout(function () {
-								loaderWrapper.style.display = "none";
-							}, 500);
-						}
-					}, 300);
-				}
+						console.log("🎯 Loader complete, dispatching event");
+						window.dispatchEvent(new Event("loader:complete"));
 
-				// Track when the page started loading
-				var pageStartTime = Date.now();
-				var minimumLoadTime = 5800; // 5 seconds minimum
-
-				// When page resources finish loading
-				window.addEventListener("load", function () {
-					var elapsedTime = Date.now() - pageStartTime;
-					var remainingTime = Math.max(
-						0,
-						minimumLoadTime - elapsedTime,
-					);
-
-					console.log(
-						"Window loaded after " +
-							elapsedTime +
-							"ms, waiting " +
-							remainingTime +
-							"ms more...",
-					);
-
-					// Wait for remaining time to reach 5 seconds total
-					setTimeout(function () {
-						console.log(
-							"Minimum 5 seconds elapsed, completing loader...",
-						);
-						handleLoadComplete();
-					}, remainingTime);
+						// Don't fade loader yet - let the animation happen first
+					}, 3000); // Reduced to 2000ms - animation completes in ~1.8s at 180 FPS
 				});
 			}
 		</script>
 
-		<!-- PixiJS Sprite Animation -->
+		<!-- PIXI LOADER (LOCKS ON LAST FRAME) -->
 		<script>
 			import {
 				Application,
@@ -168,295 +96,103 @@ const { title = "Astro Basics" } = Astro.props;
 				Texture,
 				Rectangle,
 			} from "pixi.js";
-			import { prefetchAllEvents } from "../lib/event-cache";
 
-			// Mirror the inline logic to sync state
-			const EXPIRY_TIME = 60 * 60 * 1000; // 1 Hour
-			const LOCK_KEY = "loaderLastShown";
-			const path = window.location.pathname;
+			const loader = document.getElementById("loader-wrapper");
+			if (!loader || getComputedStyle(loader).display === "none") {
+				console.log("Loader not shown, skipping PixiJS");
+			} else {
+				console.log("🎨 Initializing PixiJS loader...");
 
-			// We can check sessionStorage here, but since inline script already updated it if it ran,
-			// we need to be careful. However, we primarily need to know if we *should have* shown it.
-			// The inline script sets the key *immediately* if it shows.
-			// So if the key was just set a few ms ago, we show.
-			// But simpler: just check if the loader DOM is visible?
-			// No, that might be racy. Let's re-evaluate the "should show" condition similarly,
-			// but relying on the fact that if it *did* show, the key is now set to NOW.
-
-			// Actually, easiest way: Check if the wrapper is display: none.
-			// But inline script might run after this module script? No, inline runs first usually?
-			// To be safe, let's just stick to the pure logic.
-			// Check if we satisfy the condition "Is Root".
-			// And checking storage is tricky because inline script just updated it.
-			// Let's rely on a data attribute or class on the body? Or just re-calc.
-
-			// If we just updated session storage, the diff (now - lastShown) will be ~0.
-			// If we didn't update it, it will be > EXPIRY or null.
-
-			// Let's refine the logic:
-			// If not root -> Skip.
-			// If root:
-			//    Get timestamp.
-			//    If timestamp is very recent ( < 5000ms), it means inline script just set it -> SHOW.
-			//    If timestamp is old -> It means inline script decided NOT to show (wait, inline logic updates it ONLY if showing).
-			//    So if inline script decided NOT to show, it wouldn't have updated the timestamp.
-			//    So the timestamp would be OLD.
-			//    Wait, if logic is: "If valid cookie -> Don't Show".
-			//    Then inline script sees valid cookie -> Hides -> Does NOT update cookie.
-			//    Module script sees valid cookie -> Skips.
-			//
-			//    If NO valid cookie (or expired) -> Inline script sees expired -> Shows -> Updates Cookie to NOW.
-			//    Module script sees Cookie is NOW -> Shows.
-
-			const lastShown = sessionStorage.getItem(LOCK_KEY);
-			const now = Date.now();
-			const isRoot = path === "/" || path === "";
-			const isRecent = lastShown && now - parseInt(lastShown) < 5000; // Updated within last 5 seconds
-
-			// If it's root AND the lock was just updated, it means the loader is active.
-			// OR if it's the very first time ever? (Lock updated).
-
-			// What if user refreshes immediately?
-			// Inline: Cookie is recent -> Hides.
-			// Module: Cookie is recent -> But is it *TOO* recent?
-			// If cookie is 2 seconds old, Inline HIDES (because < 1 hour).
-			// Module sees 2 seconds old.
-			// We need to distinguish "Just set by THIS page load" vs "Set by PREVIOUS page load 2s ago".
-
-			// Better approach: Inline script sets a global flag on `window`.
-			const shouldShow =
-				(window as any).getComputedStyle(
-					document.getElementById("loader-wrapper")!,
-				).display !== "none";
-
-			if (shouldShow) {
-				// Start prefetching events immediately during loading screen
-				console.log(
-					"🚀 Starting event prefetch during loading screen...",
-				);
-				prefetchAllEvents()
-					.then(() => {
-						console.log("✅ Events prefetched successfully!");
-					})
-					.catch((error) => {
-						console.error("❌ Error prefetching events:", error);
-					});
-
-				// Sprite sheet configuration - Production settings
-				const SPRITE_CONFIG = {
+				const SPRITE = {
 					path: "/sprites/sprite_sheet.avif",
-					width: 7500,
-					height: 11000,
-					columns: 15,
+					cols: 15,
 					rows: 22,
-					frameWidth: 7500 / 15, // ~733.33px
-					frameHeight: 11000 / 22, // ~340.91px
-					fps: 60, // 60 FPS for smooth animation
-					scale: 0.6, // Larger scale to show complete frames
+					w: 7500 / 15,
+					h: 11000 / 22,
+					fps: 180, // Increased to 180 FPS - 330 frames will complete in ~1.8 seconds
+					scale: 0.6,
 				};
 
-				async function initSpriteAnimation() {
-					const canvasElement =
-						document.getElementById("sprite-canvas");
-					if (!canvasElement) return;
+				async function initPixi() {
+					const canvas = document.getElementById("sprite-canvas");
+					if (!canvas) {
+						console.error("Canvas not found");
+						return;
+					}
 
-					// Create PixiJS application with production-level settings
 					const app = new Application();
 					await app.init({
-						canvas: canvasElement as HTMLCanvasElement,
-						width: SPRITE_CONFIG.frameWidth * SPRITE_CONFIG.scale,
-						height: SPRITE_CONFIG.frameHeight * SPRITE_CONFIG.scale,
-						backgroundColor: 0x000000,
+						canvas: canvas as HTMLCanvasElement,
+						width: SPRITE.w * SPRITE.scale,
+						height: SPRITE.h * SPRITE.scale,
 						backgroundAlpha: 0,
-						antialias: false, // Crisp pixel art rendering
 						resolution: window.devicePixelRatio || 1,
 						autoDensity: true,
-						autoStart: true, // Start rendering immediately
 					});
 
-					// Lock to 60 FPS for production-level smoothness
-					app.ticker.maxFPS = 60;
+					console.log("📦 Loading sprite sheet...");
+					const base = await Assets.load(SPRITE.path);
+					const frames: Texture[] = [];
 
-					try {
-						// Load sprite sheet with caching
-						Assets.add({
-							alias: "spritesheet",
-							src: SPRITE_CONFIG.path,
-						});
-						const texture = await Assets.load("spritesheet");
-
-						// Create all frames (row by row)
-						const frames: Texture[] = [];
-						for (let row = 0; row < SPRITE_CONFIG.rows; row++) {
-							for (
-								let col = 0;
-								col < SPRITE_CONFIG.columns;
-								col++
-							) {
-								const frame = new Texture({
-									source: texture.source,
+					for (let r = 0; r < SPRITE.rows; r++) {
+						for (let c = 0; c < SPRITE.cols; c++) {
+							frames.push(
+								new Texture({
+									source: base.source,
 									frame: new Rectangle(
-										col * SPRITE_CONFIG.frameWidth,
-										row * SPRITE_CONFIG.frameHeight,
-										SPRITE_CONFIG.frameWidth,
-										SPRITE_CONFIG.frameHeight,
+										c * SPRITE.w,
+										r * SPRITE.h,
+										SPRITE.w,
+										SPRITE.h,
 									),
-								});
-								frames.push(frame);
-							}
+								}),
+							);
 						}
-
-						// Create sprite to display current frame with proper centering
-						const sprite = new Sprite(frames[0]);
-						sprite.anchor.set(0.5, 0.5); // Center anchor point
-						sprite.scale.set(SPRITE_CONFIG.scale);
-
-						// Position sprite at center of canvas
-						sprite.x = app.screen.width / 2;
-						sprite.y = app.screen.height / 2;
-
-						app.stage.addChild(sprite);
-
-						// Animation state
-						let currentFrame = 0;
-						let frameTime = 0;
-						const frameDelay = 1000 / SPRITE_CONFIG.fps; // milliseconds per frame
-
-						// Smooth animation loop using PixiJS ticker
-						app.ticker.add((ticker) => {
-							frameTime += ticker.deltaMS;
-
-							// Update frame when enough time has passed
-							if (frameTime >= frameDelay) {
-								frameTime -= frameDelay;
-
-								// Move to next frame
-								currentFrame =
-									(currentFrame + 1) % frames.length;
-								sprite.texture = frames[currentFrame];
-							}
-						});
-
-						// Cleanup function to destroy PixiJS app when loader is hidden
-						window.addEventListener("load", () => {
-							setTimeout(() => {
-								if (app) {
-									app.ticker.stop();
-									app.destroy(true, {
-										children: true,
-										texture: false,
-									});
-								}
-							}, 3000); // Destroy after loader fades out
-						});
-					} catch (error) {
-						console.error(
-							"Failed to load sprite animation:",
-							error,
-						);
-						// Fallback spinner
-						const fallbackDiv = document.createElement("div");
-						fallbackDiv.style.cssText =
-							"width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite;";
-						canvasElement.parentElement?.appendChild(fallbackDiv);
 					}
+
+					console.log(`✅ Loaded ${frames.length} frames`);
+
+					const sprite = new Sprite(frames[0]);
+					sprite.anchor.set(0.5);
+					sprite.scale.set(SPRITE.scale);
+					sprite.x = app.screen.width / 2;
+					sprite.y = app.screen.height / 2;
+					app.stage.addChild(sprite);
+
+					let frame = 0;
+					let acc = 0;
+					const delay = 1000 / SPRITE.fps;
+
+					const speedMultiplier = 1.0001; // 🔥 increase this to go faster (2, 3, 4...)
+
+					app.ticker.add((t) => {
+						acc += t.deltaMS;
+
+						const framesToAdvance = Math.floor(
+							(acc / delay) * speedMultiplier,
+						);
+
+						if (framesToAdvance > 0) {
+							acc = acc % delay;
+
+							frame = Math.min(
+								frame + framesToAdvance,
+								frames.length - 1,
+							);
+
+							sprite.texture = frames[frame];
+						}
+					});
+
+					console.log("🎬 Animation started!");
 				}
 
-				// Initialize when DOM is ready
-				if (document.readyState === "loading") {
-					document.addEventListener(
-						"DOMContentLoaded",
-						initSpriteAnimation,
-					);
-				} else {
-					initSpriteAnimation();
-				}
-			} else {
-				// Loader was skipped (direct visit to non-root page)
-				// Prefetch events in background without blocking
-				console.log(
-					"🔄 Prefetching events in background (direct visit)...",
-				);
-				prefetchAllEvents()
-					.then(() => {
-						console.log("✅ Background prefetch complete!");
-					})
-					.catch((error) => {
-						console.error("❌ Background prefetch error:", error);
-					});
+				initPixi().catch((err) => {
+					console.error("Failed to initialize PixiJS:", err);
+				});
 			}
 		</script>
 
 		<slot />
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-
-	.loader-wrapper {
-		position: fixed;
-		inset: 0;
-		background: black;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		z-index: 9999;
-		opacity: 1;
-		transition: opacity 0.5s ease-out;
-	}
-
-	.loader-wrapper.fade-out {
-		opacity: 0;
-		pointer-events: none;
-	}
-
-	.loader-content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 2rem;
-	}
-
-	#sprite-canvas {
-		image-rendering: pixelated;
-		image-rendering: crisp-edges;
-	}
-
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
-
-	/* Progress Bar Container */
-	.progress-bar-container {
-		width: 300px;
-		height: 8px;
-		background: rgba(255, 255, 255, 0.1);
-		border-radius: 4px;
-		overflow: hidden;
-		border: 1px solid rgba(255, 255, 255, 0.2);
-	}
-
-	/* Progress Bar Fill */
-	.progress-bar-fill {
-		height: 100%;
-		background: linear-gradient(90deg, #4caf50, #8bc34a);
-		transition: width 0.3s ease-out;
-		border-radius: 4px;
-	}
-
-	/* Progress Text */
-	.progress-text {
-		color: white;
-		font-family: monospace;
-		font-size: 14px;
-		margin-top: -0.5rem;
-	}
-</style>
