@@ -1,22 +1,69 @@
-<style>
-  body {
-    background: #1a1a2e;
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
+---
+// Mobile component - loads optimized-styles.css only for mobile view
+---
 
-  .mobile-container {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    flex-direction: column;
-    text-align: center;
-  }
+<style>
+  /* Import mobile-specific styles */
+  @import '../styles/optimized-styles.css';
 </style>
 
-<div class="mobile-container">
-  <h1>🚀 Mobile Experience</h1>
-  <p>Optimized animation coming soon</p>
+<div class="HomePage">
+  <div class="HeroSection">
+    <div class="sprite title"></div>
+    <div class="sprite baseClouds"></div>
+    <div class="sprite baseClouds2"></div>
+    <div class="WindMillParent">
+      <div class="sprite staticWindMill"></div>
+      <div class="sprite rotatingWindMill"></div>
+    </div>
+    <div class="WaterMillParent">
+      <div class="sprite rotatingWaterMill1"></div>
+      <div class="sprite rotatingWaterMill2"></div>
+      <div class="sprite staticWaterMill"></div>
+      <div class="sprite Water"></div>
+    </div>
+    <div class="sprite titleCloud1"></div>
+    <div class="sprite titleCloud2"></div>
+    <div class="sprite titleCloud3"></div>
+    <div class="sprite stars"></div>
+    <div class="sprite geometricCircleGrid"></div>
+    <div class="sprite babbageMachine"></div>
+  </div>
+
+  <div class="hourGlassLeftParent">
+    <div class="sprite hourGlassLeftPillar"></div>
+  </div>
+  <div class="hourGlassRightParent">
+    <div class="sprite hourGlassRightPillar"></div>
+  </div>
+  <div class="hourGlassTopParent">
+    <div class="sprite hourGlassTop"></div>
+  </div>
+  <div class="hourGlassBaseParent">
+    <div class="sprite hourGlassBase"></div>
+  </div>
+  <div class="MiddleSection">
+    <div class="sprite MobileHourGlassLeftMiddle"></div>
+    <div class="sprite MobileHourGlassRightMiddle"></div>
+
+    <div class="sprite purpleClouds1"></div>
+    <div class="sprite purpleClouds2"></div>
+    <div class="sprite girlFall"></div>
+    <div class="sprite guyFall"></div>
+    <div class="sprite peachClouds1"></div>
+    <div class="sprite peachClouds2"></div>
+  </div>
+  <div class="MiddleSection Shine">
+    <div class="sprite upShine"></div>
+    <div class="sprite downShine"></div>
+  </div>
+  <div class="FutureParent">
+    <div class="sprite bgFutureBuild"></div>
+    <div class="sprite bgFutureBuild2"></div>
+    <div class="sprite foreGroundRoad"></div>
+    <div class="BridgeAndTrainParent">
+      <div class="sprite train"></div>
+      <div class="sprite bridge"></div>
+    </div>
+  </div>
 </div>
