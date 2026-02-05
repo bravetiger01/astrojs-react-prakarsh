@@ -109,6 +109,13 @@
   }
 }
 
+@font-face {
+  font-family: "Black Ops One";
+  src: url("/fonts/BlackOpsOne-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
+
 @layer base {
   * {
     @apply border-border;

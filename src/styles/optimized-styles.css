@@ -84,14 +84,19 @@ body {
   transform: translateX(-50%) scale(0.3);
   z-index: 80;
 }
-.tagLine{
+.tagLine {
   color: #ffffff;
-  bottom:-10%;
+  bottom: -10%;
   right: 0;
   position: absolute;
   font-size: 120px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Black Ops One", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom, #3c2a56 0%, #ffffff 26%, #f4a27e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
+
 
 .baseClouds {
   position: absolute;
