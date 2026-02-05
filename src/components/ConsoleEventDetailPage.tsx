@@ -180,32 +180,7 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventDetailPageProps) => {
 
             {/* Decorative dial */}
             <div className="flex justify-center">
-              <div
-                className="w-48 h-48 rounded-full relative animate-pulse"
-                style={{
-                  backgroundColor: primaryColor,
-                  boxShadow: `0 0 60px ${accentColor}50`,
-                }}
-              >
-                <div
-                  className="absolute top-1/2 left-1/2 w-8 h-8 rounded-full -translate-x-1/2 -translate-y-1/2"
-                  style={{ backgroundColor: accentColor }}
-                />
-                {/* Dial markers */}
-                {[...Array(12)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="absolute w-1 h-4 origin-bottom"
-                    style={{
-                      backgroundColor: accentColor,
-                      top: "8px",
-                      left: "50%",
-                      transform: `translateX(-50%) rotate(${i * 30}deg)`,
-                      transformOrigin: "50% 88px",
-                    }}
-                  />
-                ))}
-              </div>
+              
             </div>
           </div>
         </div>
