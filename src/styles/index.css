@@ -291,7 +291,7 @@
      Used for tracking-heavy decorative text
      ============================================ */
   .font-display {
-    font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Bruno Ace SC', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-weight: 700;
     letter-spacing: 0.05em;
   }

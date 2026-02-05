@@ -107,7 +107,7 @@ export default function UnifiedEventsPage({
               className="text-center mb-12"
             >
               <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black mb-6 text-neon-cyan py-20">
-                All Events
+                Events
               </h1>
 
               <div className="flex items-center justify-center gap-4 mb-6">

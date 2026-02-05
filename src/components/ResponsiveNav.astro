@@ -52,6 +52,8 @@ const navLinks = [
 }
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap');
+    
     /* Default: Show mobile, hide desktop */
     .mobile-nav-wrapper {
         display: block;
@@ -72,7 +74,7 @@ const navLinks = [
         }
     }
 
-    /* Desktop navbar styles */
+    /* Desktop navbar styles - matching home page navbar.astro */
     .navbar {
         position: fixed;
         top: 20px;
@@ -81,6 +83,7 @@ const navLinks = [
         width: 90%;
         max-width: 1200px;
         z-index: 1200;
+        font-family: 'Bruno Ace SC', sans-serif;
     }
 
     .content {
@@ -126,7 +129,7 @@ const navLinks = [
     }
 
     .links a:hover {
-        color: #f1b5a2;
+        color: #b7654a;
     }
 
     .register-btn {
