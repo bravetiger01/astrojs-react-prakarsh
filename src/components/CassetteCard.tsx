@@ -1,5 +1,9 @@
+
+
+import { memo } from "react";
 import { motion } from "framer-motion";
-import type { Event } from "../data/event-types";
+
+import type { Event } from "@/data/event-types";
 import InteractiveTilt from "./InteractiveTilt";
 
 interface CassetteCardProps {
@@ -63,11 +67,13 @@ function GlobeIcon() {
   );
 }
 
-// Asterisk/star burst shape
-function StarBurst() {
+// Asterisk/star burst shape - optimized
+const StarBurst = memo(function StarBurst() {
   return (
     <motion.div
-      animate={{ rotate: 360 }}
+      initial={{ rotate: 0 }}
+      whileInView={{ rotate: 360 }}
+      viewport={{ once: false }}
       transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
       className="relative w-8 h-8"
     >
@@ -83,10 +89,10 @@ function StarBurst() {
       ))}
     </motion.div>
   );
-}
+});
 
-// Dot matrix pattern
-function DotMatrix({ count = 1 }: { count?: number }) {
+// Dot matrix pattern - optimized with viewport detection
+const DotMatrix = memo(function DotMatrix({ count = 1 }: { count?: number }) {
   const cols = Math.min(count, 6);
   return (
     <div
@@ -101,16 +107,17 @@ function DotMatrix({ count = 1 }: { count?: number }) {
             background: i % 2 === 0 ? COLORS.peach : `${COLORS.white}40`,
           }}
           initial={{ opacity: 0.3 }}
-          animate={{ opacity: [0.3, 1, 0.3] }}
+          whileInView={{ opacity: [0.3, 1, 0.3] }}
+          viewport={{ once: false }}
           transition={{ duration: 2, delay: i * 0.05, repeat: Infinity }}
         />
       ))}
     </div>
   );
-}
+});
 
-// Animated scan line
-function ScanLine() {
+// Animated scan line - only animate when in view
+const ScanLine = memo(function ScanLine() {
   return (
     <motion.div
       className="absolute left-0 right-0 h-[1px] pointer-events-none"
@@ -118,13 +125,14 @@ function ScanLine() {
         background: `linear-gradient(90deg, transparent, ${COLORS.peach}60, transparent)`,
       }}
       initial={{ top: 0, opacity: 0 }}
-      animate={{ top: "100%", opacity: [0, 1, 1, 0] }}
+      whileInView={{ top: "100%", opacity: [0, 1, 1, 0] }}
+      viewport={{ once: false }}
       transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
     />
   );
-}
+});
 
-export default function CassetteCard({
+const CassetteCardComponent = function CassetteCard({
   event,
   index,
   totalEvents = 26,
@@ -134,7 +142,7 @@ export default function CassetteCard({
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
+      transition={{ duration: 0.4, delay: index * 0.04 }}
       className="h-full"
     >
       <a href={`/event/${event.id}`} className="block h-full">
@@ -161,7 +169,9 @@ export default function CassetteCard({
                   <div />
                   <div className="flex items-center gap-4">
                     <motion.div
-                      animate={{ rotate: [0, 360] }}
+                      initial={{ rotate: 0 }}
+                      whileInView={{ rotate: 360 }}
+                      viewport={{ once: false }}
                       transition={{
                         duration: 30,
                         repeat: Infinity,
@@ -242,7 +252,7 @@ export default function CassetteCard({
                 </div>
 
                 {/* Orange accent pills */}
-                <motion.div
+                <div
                   className="px-3 py-1 font-display text-[10px] tracking-[0.15em] font-bold"
                   style={{
                     background: COLORS.peach,
@@ -250,12 +260,11 @@ export default function CassetteCard({
                     clipPath:
                       "polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%)",
                   }}
-                  whileHover={{ scale: 1.05 }}
                 >
                   OP{String((index + 1) * 7).padStart(2, "0")}
-                </motion.div>
+                </div>
 
-                <motion.div
+                <div
                   className="px-3 py-1 font-display text-[10px] tracking-[0.15em] font-bold"
                   style={{
                     background: COLORS.peach,
@@ -263,20 +272,18 @@ export default function CassetteCard({
                     clipPath:
                       "polygon(4px 0, 100% 0, calc(100% - 4px) 100%, 0 100%)",
                   }}
-                  whileHover={{ scale: 1.05 }}
                 >
                   EV#{String(index + 1).padStart(2, "0")}
-                </motion.div>
+                </div>
 
                 {/* Arrow indicator */}
-                <motion.div
+                <div
                   className="ml-auto flex items-center justify-center w-8 h-8"
                   style={{
                     background: COLORS.peach,
                     clipPath:
                       "polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%)",
                   }}
-                  whileHover={{ x: 4 }}
                 >
                   <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                     <path
@@ -287,7 +294,7 @@ export default function CassetteCard({
                       strokeLinejoin="round"
                     />
                   </svg>
-                </motion.div>
+                </div>
 
                 {/* Star burst */}
                 <StarBurst />
@@ -299,27 +306,24 @@ export default function CassetteCard({
                 style={{ borderTop: `1px solid ${COLORS.peach}40` }}
               >
                 <div className="flex items-end justify-between gap-4">
-                  {/* Left side - Name and category */}
+                  {/* Left side - Tags */}
                   <div className="flex-1 min-w-0">
-                    <div
-                      className="font-display text-lg font-black tracking-[0.08em] uppercase truncate"
-                      style={{ color: COLORS.white }}
-                    >
-                      {event.name}
-                    </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span
-                        className="font-display text-[9px] tracking-[0.25em] uppercase flex-shrink-0"
-                        style={{ color: `${COLORS.white}60` }}
-                      >
-                        Cat:
-                      </span>
-                      <span
-                        className="font-display text-[10px] tracking-[0.15em] uppercase font-medium truncate"
-                        style={{ color: COLORS.peach }}
-                      >
-                        {event.category}
-                      </span>
+                    <div className="flex flex-wrap gap-2">
+                      {(event.keywords && event.keywords.length > 0
+                        ? event.keywords
+                        : [event.category]
+                      ).map((tag, index) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider"
+                          style={{
+                            background: COLORS.peach,
+                            color: COLORS.accent,
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
@@ -377,7 +381,8 @@ export default function CassetteCard({
                       className="w-[2px]"
                       style={{ background: COLORS.peach }}
                       initial={{ height: h }}
-                      animate={{ height: [h, h + 4, h] }}
+                      whileInView={{ height: [h, h + 4, h] }}
+                      viewport={{ once: false }}
                       transition={{
                         duration: 0.8,
                         delay: i * 0.1,
@@ -417,4 +422,6 @@ export default function CassetteCard({
       </a>
     </motion.div>
   );
-}
+};
+
+export default memo(CassetteCardComponent);
