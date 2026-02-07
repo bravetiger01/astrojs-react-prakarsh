@@ -1,4 +1,4 @@
-
+import "../styles/CasatteCard.css"
 
 import { memo } from "react";
 import { motion } from "framer-motion";

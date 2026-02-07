@@ -67,7 +67,7 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails ) => {
       >
         <div className="text-center">
           <h1 className="text-4xl font-black mb-4">Event Not Found</h1>
-          <a href="/non-technical">Back to Events</a>
+          <a href="/events?category=non-tech">Back to Events</a>
         </div>
       </div>
     );
@@ -109,13 +109,13 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails ) => {
   const venue = event.location || "TBA";
 
   const backLink =
-    event.category === "workshops" ? "/workshops" : "/non-technical";
+    event.category === "workshops" ? "/events?category=workshops" : "/events?category=non-tech";
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: lightColor }}>
       {/* Hero Section */}
       <div
-        className="relative py-20 overflow-hidden"
+        className="relative py-8 overflow-hidden p-5 flex"
         style={{
           background: `linear-gradient(145deg, #e8e8e8 0%, ${lightColor} 20%, #c0c0c0 40%, #d8d8d8 60%, ${lightColor} 80%, #b8b8b8 100%)`,
         }}
@@ -130,7 +130,7 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails ) => {
         />
 
         {/* Corner accents */}
-        <div
+        {/* <div
           className="absolute top-0 left-0 w-32 h-32"
           style={{
             borderTop: `4px solid ${primaryColor}`,
@@ -143,10 +143,10 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails ) => {
             borderTop: `4px solid ${primaryColor}`,
             borderRight: `4px solid ${primaryColor}`,
           }}
-        />
+        /> */}
 
         {/* Cable connector */}
-        <div className="absolute top-4 left-16 flex flex-col items-center">
+        {/* <div className="absolute top-4 left-16 flex flex-col items-center">
           <div
             className="w-4 h-4 rounded-full"
             style={{ backgroundColor: primaryColor }}
@@ -155,7 +155,7 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails ) => {
             className="w-1.5 h-8"
             style={{ backgroundColor: primaryColor }}
           />
-        </div>
+        </div> */}
 
         {/* Back button */}
         <div className="container relative z-10">

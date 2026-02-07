@@ -2,8 +2,8 @@
 export const prerender = true;
 
 import PageLayout from "../../layouts/PageLayout.astro";
-import EventPage from "../../components/EventPage";
-import ConsoleEventDetailPage from "../../components/ConsoleEventDetailPage";
+import EventPage from "../../components/TechEventDetailPage";
+import NonTechEventDetailPage from "../../components/NonTechEventDetailPage";
 import EsportsEventDetailPage from "../../components/EsportsEventDetailPage";
 
 // For static build, we need to generate paths for all events
@@ -41,7 +41,7 @@ const finalEventId = eventId || id;
   }
   {
     (category === "non-tech" || category === "workshops") && (
-      <ConsoleEventDetailPage client:load eventId={finalEventId} />
+      <NonTechEventDetailPage client:load eventId={finalEventId} />
     )
   }
   {category === "tech" && <EventPage client:load eventId={finalEventId} />}
