@@ -21,6 +21,25 @@ const { title = "Prakarsh 2026", showDesktopNav = true } = Astro.props;
 
     <body>
         <ResponsiveNav showDesktopNav={showDesktopNav} />
+        
+        <!-- PREFETCH EVENT DATA ON PAGE LOAD -->
+        <script>
+            import { prefetchAllEvents } from "../lib/event-cache";
+            
+            console.log("🚀 PageLayout: Starting data prefetch...");
+            
+            const prefetchStart = performance.now();
+            
+            prefetchAllEvents()
+                .then(() => {
+                    const prefetchTime = performance.now() - prefetchStart;
+                    console.log(`✅ PageLayout: Data prefetch completed in ${Math.round(prefetchTime)}ms`);
+                })
+                .catch((error) => {
+                    console.warn("⚠️ PageLayout: Prefetch failed, will use local data:", error);
+                });
+        </script>
+        
         <slot />
     </body>
 </html>

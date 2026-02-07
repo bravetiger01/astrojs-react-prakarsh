@@ -80,7 +80,7 @@ const { title = "Prakarsh 2026" } = Astro.props;
 				sessionStorage.setItem(LOCK_KEY, Date.now());
 
 				// Animation completes in ~5.5s (330 frames at 60fps)
-				const ANIMATION_DURATION = 5500;
+				const ANIMATION_DURATION = 6300;
 
 				window.addEventListener("load", () => {
 					setTimeout(() => {
@@ -207,6 +207,32 @@ const { title = "Prakarsh 2026" } = Astro.props;
 				});
 			}
 			
+		</script>
+
+		<!-- PREFETCH EVENT DATA DURING LOADING -->
+		<script>
+			import { prefetchAllEvents } from "../lib/event-cache";
+
+			const loader = document.getElementById("loader-wrapper");
+			
+			// Only prefetch if loader is visible
+			if (loader && getComputedStyle(loader).display !== "none") {
+				console.log("🚀 Starting data prefetch during loading animation...");
+				
+				// Start prefetching immediately
+				const prefetchStart = performance.now();
+				
+				prefetchAllEvents()
+					.then(() => {
+						const prefetchTime = performance.now() - prefetchStart;
+						console.log(`✅ Data prefetch completed in ${Math.round(prefetchTime)}ms`);
+					})
+					.catch((error) => {
+						console.warn("⚠️ Prefetch failed, will use local data:", error);
+					});
+			} else {
+				console.log("ℹ️ Loader not shown, skipping prefetch (will fetch on-demand)");
+			}
 		</script>
 
 		<slot />
