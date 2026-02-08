@@ -48,11 +48,135 @@ const { title = "Prakarsh 2026" } = Astro.props;
 				image-rendering: crisp-edges;
 				transform-origin: center center;
 			}
+
+			/* Zoom notification popup */
+			.zoom-notification {
+				position: fixed;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				background: linear-gradient(135deg, #1a0f2e 0%, #2a1a3d 100%);
+				border: 2px solid #f1b5a2;
+				border-radius: 12px;
+				padding: 2rem;
+				max-width: 500px;
+				z-index: 10001;
+				box-shadow: 0 0 40px rgba(241, 181, 162, 0.3), 0 0 80px rgba(112, 0, 116, 0.2);
+				animation: slideIn 0.3s ease-out;
+			}
+
+			.zoom-notification-overlay {
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, 0.8);
+				backdrop-filter: blur(4px);
+				z-index: 10000;
+				animation: fadeIn 0.3s ease-out;
+			}
+
+			.zoom-notification h2 {
+				color: #f1b5a2;
+				font-size: 1.5rem;
+				font-weight: bold;
+				margin-bottom: 1rem;
+				text-align: center;
+				font-family: 'Bruno Ace SC', sans-serif;
+			}
+
+			.zoom-notification p {
+				color: rgba(255, 255, 255, 0.9);
+				line-height: 1.6;
+				margin-bottom: 1rem;
+				text-align: center;
+			}
+
+			.zoom-notification .instructions {
+				background: rgba(0, 0, 0, 0.3);
+				border: 1px solid rgba(241, 181, 162, 0.3);
+				border-radius: 8px;
+				padding: 1rem;
+				margin: 1rem 0;
+			}
+
+			.zoom-notification .instructions p {
+				margin: 0.5rem 0;
+				font-size: 0.9rem;
+				color: rgba(255, 255, 255, 0.8);
+			}
+
+			.zoom-notification .instructions strong {
+				color: #f1b5a2;
+			}
+
+			.zoom-notification button {
+				width: 100%;
+				padding: 0.75rem 1.5rem;
+				background: linear-gradient(135deg, #f1b5a2, #e84faa);
+				color: white;
+				border: none;
+				border-radius: 8px;
+				font-weight: bold;
+				font-size: 1rem;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				margin-top: 1rem;
+			}
+
+			.zoom-notification button:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 4px 20px rgba(241, 181, 162, 0.5);
+			}
+
+			@keyframes slideIn {
+				from {
+					opacity: 0;
+					transform: translate(-50%, -60%);
+				}
+				to {
+					opacity: 1;
+					transform: translate(-50%, -50%);
+				}
+			}
+
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+				}
+				to {
+					opacity: 1;
+				}
+			}
+
+			.hidden {
+				display: none !important;
+			}
 		</style>
 	</head>
 
 	<body>
 		<Navbar />
+
+		<!-- Zoom Notification Popup -->
+		<div id="zoom-notification-overlay" class="zoom-notification-overlay hidden"></div>
+		<div id="zoom-notification" class="zoom-notification hidden">
+			<h2>⚡ OPTIMAL VIEWING</h2>
+			<p>This site is optimized for <strong>100% display scaling</strong></p>
+			<p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin-top: 0.5rem;">
+				If your Windows display scale is set to 125% or higher, please adjust your browser zoom to <strong>80%</strong> for the best experience
+			</p>
+			
+			<div class="instructions">
+				<p><strong>Windows/Linux:</strong> Press <strong>Ctrl</strong> and <strong>-</strong> (minus) twice</p>
+				<p><strong>Mac:</strong> Press <strong>⌘</strong> and <strong>-</strong> (minus) twice</p>
+				<p><strong>Or:</strong> Hold <strong>Ctrl/⌘</strong> and scroll down with your mouse wheel</p>
+			</div>
+
+			<p style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); margin-top: 1rem; font-style: italic;">
+				💡 Already using 100% display scaling? You're all set!
+			</p>
+
+			<button id="zoom-notification-close">Got it!</button>
+		</div>
 
 		<div id="loader-wrapper" class="loader-wrapper">
 			<canvas id="sprite-canvas"></canvas>
@@ -96,6 +220,33 @@ const { title = "Prakarsh 2026" } = Astro.props;
 
 						console.log("🎯 Loader complete, dispatching event");
 						window.dispatchEvent(new Event("loader:complete"));
+						
+						// Show zoom notification after loading screen finishes (desktop only)
+						const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+						const ZOOM_NOTIFICATION_KEY = "zoomNotificationShown";
+						
+						if (!isMobileDevice && !sessionStorage.getItem(ZOOM_NOTIFICATION_KEY)) {
+							setTimeout(() => {
+								const overlay = document.getElementById("zoom-notification-overlay");
+								const notification = document.getElementById("zoom-notification");
+								const closeBtn = document.getElementById("zoom-notification-close");
+
+								if (overlay && notification && closeBtn) {
+									overlay.classList.remove("hidden");
+									notification.classList.remove("hidden");
+
+									const closeNotification = () => {
+										overlay.classList.add("hidden");
+										notification.classList.add("hidden");
+										sessionStorage.setItem(ZOOM_NOTIFICATION_KEY, "true");
+									};
+
+									closeBtn.addEventListener("click", closeNotification);
+									overlay.addEventListener("click", closeNotification);
+								}
+							}, 500); // Small delay after loader finishes
+						}
+						
 						// Navbar animation script handles fade-out after merge animation
 					}, ANIMATION_DURATION);
 				});
