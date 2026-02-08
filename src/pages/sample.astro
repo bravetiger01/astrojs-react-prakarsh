@@ -1,0 +1,36 @@
+---
+import HolographicCard from "@/components/HolographicCard";
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout>
+    <div style="min-height: 100vh; background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a0a1a 100%); display: flex; align-items: center; justify-content: center; gap: 40px; padding: 40px; flex-wrap: wrap;">
+        <HolographicCard 
+            title="TECH EVENTS" 
+            href="/events?category=tech" 
+            accentColor="#4af0f0"
+            client:load
+        />
+        
+        <HolographicCard 
+            title="NON-TECH" 
+            href="/events?category=non-tech" 
+            accentColor="#ff00ff"
+            client:load
+        />
+        
+        <HolographicCard 
+            title="ESPORTS" 
+            href="/events?category=esports" 
+            accentColor="#00ff88"
+            client:load
+        />
+        
+        <HolographicCard 
+            title="WORKSHOPS" 
+            href="/events?category=workshops" 
+            accentColor="#ffaa00"
+            client:load
+        />
+    </div>
+</Layout>

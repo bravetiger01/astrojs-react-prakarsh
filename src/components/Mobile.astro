@@ -1,6 +1,8 @@
 ---
 // Mobile component - loads optimized-styles.css only for mobile view
 import MobileNav from "./MobileNav.astro";
+import HolographicCard from "./HolographicCard";
+import FlyingShipBanner from "./FlyingShipBanner";
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,15 +15,123 @@ import MobileNav from "./MobileNav.astro";
   /* Import mobile-specific styles */
   @import "../styles/optimized-styles.css";
 
-  
+  /* Responsive positioning for billboards */
+  .tech-billboard {
+    position: absolute;
+    bottom: 23%;
+    left: 8%;
+    z-index: 9000;
+    transform: scale(0.7);
+  }
+
+  .nontech-ship {
+    position: absolute;
+    bottom: 30%;
+    right: 15%;
+    z-index: 600;
+    transform: scale(0.7);
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .tech-billboard {
+      bottom: 28%;
+      left: 15%;
+      transform: scale(0.35) perspective(600px) rotateY(15deg);
+      transform-origin: left center;
+    }
+
+    .nontech-ship {
+      bottom: 28%;
+      right: 15%;
+      left: auto;
+      transform: scale(0.3) perspective(600px) rotateY(-15deg);
+      transform-origin: right center;
+    }
+  }
+
+  /* Small phones - S20 Ultra and similar (412px - 480px) */
+  @media (max-width: 480px) {
+    .tech-billboard {
+      bottom: 35%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.28) perspective(800px) rotateY(-2deg);
+      transform-origin: center center;
+      clip-path: none;
+    }
+
+    .nontech-ship {
+      bottom: 35%;
+      right: -5%;
+      left: auto;
+      transform: scale(0.24) perspective(600px) rotateY(-12deg);
+      transform-origin: right center;
+    }
+  }
+
+  /* Very small phones */
+  @media (max-width: 375px) {
+    .tech-billboard {
+      bottom: 36%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.25) perspective(700px) rotateY(-3deg);
+      transform-origin: center center;
+    }
+
+    .nontech-ship {
+      bottom: 36%;
+      right: -8%;
+      left: auto;
+      transform: scale(0.22) perspective(550px) rotateY(-15deg);
+      transform-origin: right center;
+    }
+  }
+
+  /* Extra small phones */
+  @media (max-width: 360px) {
+    .tech-billboard {
+      bottom: 34%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.23) perspective(650px) rotateY(-4deg);
+      transform-origin: center center;
+    }
+
+    .nontech-ship {
+      bottom: 34%;
+      right: -10%;
+      left: auto;
+      transform: scale(0.2) perspective(500px) rotateY(-18deg);
+      transform-origin: right center;
+    }
+  }
 </style>
 
 <!-- MobileNav rendered OUTSIDE HomePage to avoid z-index stacking issues -->
 <MobileNav />
 <div class="HomePage">
 <div class="designHomePage">
-   <a href="/events?category=tech" class="holobutton"><button class="button">TECH EVENTS</button></a>
-   <a href="/events?category=non-tech" class="holobutton2"><button class="button">NON TECH EVENTS</button></a>
+   <!-- Holographic Card Buttons - Billboard Style in City Area -->
+   <!-- Left billboard on left building -->
+   <div class="tech-billboard">
+     <HolographicCard 
+       title="TECH EVENTS" 
+       href="/events?category=tech" 
+       accentColor="#4af0f0"
+       secondaryColor="#ff00ff"
+       polePosition="left"
+       client:load
+     />
+   </div>
+   <!-- Right billboard - Flying Ship with NON TECH banner -->
+   <div class="nontech-ship">
+     <FlyingShipBanner 
+       title="NON TECH" 
+       href="/events?category=non-tech" 
+       accentColor="#ff00ff"
+       secondaryColor="#4af0f0"
+       client:load
+     />
+   </div>
   <div class="HeroSection">
     <div class="sprite title">
       <p class="tagLine">THE NEXT ITERATION</p>
