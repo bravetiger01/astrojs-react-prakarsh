@@ -156,6 +156,30 @@ const { title = "Prakarsh 2026" } = Astro.props;
 	<body>
 		<Navbar />
 
+		<!-- Background Music -->
+		<audio id="background-music" loop preload="auto" style="display: none;">
+			<source src="/audio/background-music.mp3" type="audio/mpeg">
+			<source src="/audio/background-music.ogg" type="audio/ogg">
+		</audio>
+
+		<!-- Audio Control Button -->
+		<button
+			id="audio-toggle"
+			aria-label="Toggle background music"
+			style="position: fixed; bottom: 2rem; right: 2rem; z-index: 9998; width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #f1b5a2, #e84faa); border: 2px solid rgba(255, 255, 255, 0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(241, 181, 162, 0.4); transition: all 0.3s ease;"
+		>
+			<svg id="audio-icon-playing" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+				<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+				<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+				<path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+			</svg>
+			<svg id="audio-icon-paused" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+				<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+				<line x1="23" y1="9" x2="17" y2="15"></line>
+				<line x1="17" y1="9" x2="23" y2="15"></line>
+			</svg>
+		</button>
+
 		<!-- Zoom Notification Popup -->
 		<div id="zoom-notification-overlay" class="zoom-notification-overlay hidden"></div>
 		<div id="zoom-notification" class="zoom-notification hidden">
@@ -184,6 +208,74 @@ const { title = "Prakarsh 2026" } = Astro.props;
 
 		<!-- LOADER CONTROL + EVENT DISPATCH -->
 		<script is:inline>
+			// Background Music Control
+			const audio = document.getElementById("background-music");
+			const audioToggle = document.getElementById("audio-toggle");
+			const iconPlaying = document.getElementById("audio-icon-playing");
+			const iconPaused = document.getElementById("audio-icon-paused");
+			let isPlaying = false;
+
+			// Try to autoplay (will work after user interaction)
+			const tryAutoplay = () => {
+				if (audio && !isPlaying) {
+					audio.play()
+						.then(() => {
+							isPlaying = true;
+							iconPlaying.style.display = "block";
+							iconPaused.style.display = "none";
+							console.log("🎵 Background music started");
+						})
+						.catch((error) => {
+							console.log("⏸️ Autoplay blocked, waiting for user interaction");
+							isPlaying = false;
+							iconPlaying.style.display = "none";
+							iconPaused.style.display = "block";
+						});
+				}
+			};
+
+			// Toggle audio on button click
+			if (audioToggle && audio) {
+				audioToggle.addEventListener("click", () => {
+					if (isPlaying) {
+						audio.pause();
+						isPlaying = false;
+						iconPlaying.style.display = "none";
+						iconPaused.style.display = "block";
+						audioToggle.style.background = "linear-gradient(135deg, #6B3FA0, #3c2a56)";
+					} else {
+						audio.play();
+						isPlaying = true;
+						iconPlaying.style.display = "block";
+						iconPaused.style.display = "none";
+						audioToggle.style.background = "linear-gradient(135deg, #f1b5a2, #e84faa)";
+					}
+				});
+
+				// Hover effect
+				audioToggle.addEventListener("mouseenter", () => {
+					audioToggle.style.transform = "scale(1.1)";
+					audioToggle.style.boxShadow = "0 6px 30px rgba(241, 181, 162, 0.6)";
+				});
+
+				audioToggle.addEventListener("mouseleave", () => {
+					audioToggle.style.transform = "scale(1)";
+					audioToggle.style.boxShadow = "0 4px 20px rgba(241, 181, 162, 0.4)";
+				});
+			}
+
+			// Try to start music immediately
+			tryAutoplay();
+
+			// Also try on first user interaction
+			const startOnInteraction = () => {
+				tryAutoplay();
+				document.removeEventListener("click", startOnInteraction);
+				document.removeEventListener("keydown", startOnInteraction);
+			};
+			document.addEventListener("click", startOnInteraction);
+			document.addEventListener("keydown", startOnInteraction);
+
 			const EXPIRY_TIME = 60 * 60 * 1000;
 			const LOCK_KEY = "loaderLastShown";
 
