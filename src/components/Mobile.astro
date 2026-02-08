@@ -28,7 +28,7 @@ import FlyingShipBanner from "./FlyingShipBanner";
     position: absolute;
     bottom: 30%;
     right: 15%;
-    z-index: 600;
+    z-index: 9000;
     transform: scale(0.7);
   }
 
@@ -53,18 +53,18 @@ import FlyingShipBanner from "./FlyingShipBanner";
   /* Small phones - S20 Ultra and similar (412px - 480px) */
   @media (max-width: 480px) {
     .tech-billboard {
-      bottom: 35%;
+      bottom: 26%;
       left: 50%;
-      transform: translateX(-50%) scale(0.28) perspective(800px) rotateY(-2deg);
+      transform: translateX(-50%) scale(0.3) perspective(700px) rotateY(2deg);
       transform-origin: center center;
       clip-path: none;
     }
 
     .nontech-ship {
-      bottom: 35%;
+      bottom: 20%;
       right: -5%;
       left: auto;
-      transform: scale(0.24) perspective(600px) rotateY(-12deg);
+      transform: scale(0.54) perspective(600px) rotateY(-12deg);
       transform-origin: right center;
     }
   }
