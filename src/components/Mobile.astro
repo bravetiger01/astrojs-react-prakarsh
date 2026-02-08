@@ -3,6 +3,7 @@
 import MobileNav from "./MobileNav.astro";
 import HolographicCard from "./HolographicCard";
 import FlyingShipBanner from "./FlyingShipBanner";
+import SponsorBanner from "./SponsorBanner";
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -91,7 +92,6 @@ import FlyingShipBanner from "./FlyingShipBanner";
   /* iPhone 16 Pro Max */
   @media (max-width: 440px) {
     .tech-billboard {
-     
       left: 40%;
       transform: translateX(-50%) scale(0.29) perspective(700px) rotateY(2deg);
       transform-origin: center center;
@@ -261,116 +261,191 @@ import FlyingShipBanner from "./FlyingShipBanner";
 <!-- MobileNav rendered OUTSIDE HomePage to avoid z-index stacking issues -->
 <MobileNav />
 <div class="HomePage">
-<div class="designHomePage">
-   <!-- Holographic Card Buttons - Billboard Style in City Area -->
-   <!-- Left billboard on left building -->
-   <div class="tech-billboard">
-     <FlyingShipBanner 
-       title="TECH EVENTS" 
-       href="/events?category=tech" 
-       accentColor="#4af0f0"
-       secondaryColor="#ff00ff"
-       polePosition="left"
-       client:load
-     />
-   </div>
-   <!-- Right billboard - Flying Ship with NON TECH banner -->
-   <div class="nontech-ship">
-     <FlyingShipBanner 
-       title="NON TECH EVENTS" 
-       href="/events?category=non-tech" 
-       accentColor="#ff00ff"
-       secondaryColor="#4af0f0"
-       client:load
-     />
-   </div>
-  <div class="HeroSection">
-    <div class="sprite title">
-      <p class="tagLine">THE NEXT ITERATION</p>
+  <div class="designHomePage">
+    <!-- Holographic Card Buttons - Billboard Style in City Area -->
+    <!-- Left billboard on left building -->
+    <div class="tech-billboard">
+      <FlyingShipBanner
+        title="TECH EVENTS"
+        href="/events?category=tech"
+        accentColor="#4af0f0"
+        secondaryColor="#ff00ff"
+        polePosition="left"
+        client:load
+      />
+    </div>
+    <!-- Right billboard - Flying Ship with NON TECH banner -->
+    <div class="nontech-ship">
+      <FlyingShipBanner
+        title="NON TECH EVENTS"
+        href="/events?category=non-tech"
+        accentColor="#ff00ff"
+        secondaryColor="#4af0f0"
+        client:load
+      />
+    </div>
+    <div class="HeroSection">
+      <div class="sprite title">
+        <p class="tagLine">THE NEXT ITERATION</p>
+      </div>
+
+      <div class="sprite baseClouds"></div>
+      <div class="sprite baseClouds2"></div>
+      <div class="WindMillParent">
+        <div class="sprite staticWindMill"></div>
+        <div class="sprite rotatingWindMill"></div>
+      </div>
+      <div class="WaterMillParent">
+        <div class="sprite rotatingWaterMill1"></div>
+        <div class="sprite rotatingWaterMill2"></div>
+        <div class="sprite staticWaterMill"></div>
+        <div class="sprite Water"></div>
+      </div>
+      <div class="sprite titleCloud1"></div>
+      <div class="sprite titleCloud2"></div>
+      <div class="sprite titleCloud3"></div>
+      <div class="sprite stars"></div>
+      <div class="sprite geometricCircleGrid"></div>
+      <div class="sprite babbageMachine"></div>
     </div>
 
-    <div class="sprite baseClouds"></div>
-    <div class="sprite baseClouds2"></div>
-    <div class="WindMillParent">
-      <div class="sprite staticWindMill"></div>
-      <div class="sprite rotatingWindMill"></div>
+    <div class="hourGlassLeftParent">
+      <div class="sprite hourGlassLeftPillar"></div>
     </div>
-    <div class="WaterMillParent">
-      <div class="sprite rotatingWaterMill1"></div>
-      <div class="sprite rotatingWaterMill2"></div>
-      <div class="sprite staticWaterMill"></div>
-      <div class="sprite Water"></div>
+    <div class="hourGlassRightParent">
+      <div class="sprite hourGlassRightPillar"></div>
     </div>
-    <div class="sprite titleCloud1"></div>
-    <div class="sprite titleCloud2"></div>
-    <div class="sprite titleCloud3"></div>
-    <div class="sprite stars"></div>
-    <div class="sprite geometricCircleGrid"></div>
-    <div class="sprite babbageMachine"></div>
-  </div>
-
-  <div class="hourGlassLeftParent">
-    <div class="sprite hourGlassLeftPillar"></div>
-  </div>
-  <div class="hourGlassRightParent">
-    <div class="sprite hourGlassRightPillar"></div>
-  </div>
-  <div class="hourGlassTopParent">
-    <div class="sprite hourGlassTop"></div>
-  </div>
-  <div class="hourGlassBaseParent">
-    <div class="sprite hourGlassBase"></div>
-  </div>
-  <div class="MiddleSection">
-    <p class="dialogue">Sometimes you let go... </p>
-    <p class="dialogue2">free-falling inside evolution's events...</p>
-    <div class="sprite MobileHourGlassLeftMiddle"></div>
-    <div class="sprite MobileHourGlassRightMiddle"></div>
-
-    <div class="sprite purpleClouds1"></div>
-    <div class="sprite purpleClouds2"></div>
-    <div class="sprite girlFall"></div>
-    <div class="sprite guyFall"></div>
-    <div class="sprite peachClouds1"></div>
-    <div class="sprite peachClouds2"></div>
-  </div>
-  <div class="MiddleSection Shine">
-    <div class="sprite upShine"></div>
-    <div class="sprite downShine"></div>
-  </div>
- 
-  <div class="FutureParent">
-    <div class="sprite bgFutureBuild"></div>
-    <div class="sprite bgFutureBuild2"></div>
-    <div class="sprite foreGroundRoad"></div>
-    <div class="BridgeAndTrainParent">
-      <div class="sprite train"></div>
-      <div class="sprite bridge"></div>
+    <div class="hourGlassTopParent">
+      <div class="sprite hourGlassTop"></div>
     </div>
-  </div>
+    <div class="hourGlassBaseParent">
+      <div class="sprite hourGlassBase"></div>
+    </div>
+    <div class="MiddleSection">
+      <p class="dialogue">Sometimes you let go...</p>
+      <p class="dialogue2">free-falling inside evolution's events...</p>
+      <div class="sprite MobileHourGlassLeftMiddle"></div>
+      <div class="sprite MobileHourGlassRightMiddle"></div>
 
-</div>
-  <div class="footer">
-    <div class="sponserPage">
-      <div class="GlobalColliance"></div>
-      <div class="spComp">
-        <div class="AssociateSp">
-          <p>Associate Sponsors </p>
-          <div class="ASPimagesContRow">
-            <div class="strikers aspImg"></div>
-            <div class="cafe aspImg"></div>
-          </div>
-            <div class="ASPimagesContRow">
-            <div class="yogi aspImg"></div>
-            <div class="IMS aspImg"></div>
-          </div>
-        </div>
-        <div class="OurGenerousDonor">
-                    <p>Our Generous Doner </p>
-          <div class="ourGenerousImg"></div>
-        </div>
+      <div class="sprite purpleClouds1"></div>
+      <div class="sprite purpleClouds2"></div>
+      <div class="sprite girlFall"></div>
+      <div class="sprite guyFall"></div>
+      <div class="sprite peachClouds1"></div>
+      <div class="sprite peachClouds2"></div>
+    </div>
+    <div class="MiddleSection Shine">
+      <div class="sprite upShine"></div>
+      <div class="sprite downShine"></div>
+    </div>
+
+    <div class="FutureParent">
+      <div class="sprite bgFutureBuild"></div>
+      <div class="sprite bgFutureBuild2"></div>
+      <div class="sprite foreGroundRoad"></div>
+      <div class="BridgeAndTrainParent">
+        <div class="sprite train"></div>
+        <div class="sprite bridge"></div>
       </div>
     </div>
   </div>
+  <!-- Sponsors Section with Flying Ship Banners -->
+  <div class="footer">
+    <div class="sponsors-container">
+      <!-- Title Sponsor Banner -->
+      <div class="title-sponsor">
+        <SponsorBanner
+          title="Title Sponsor"
+          sponsorLogos={[
+            {
+              name: "Global Colliance",
+              imageSrc: "/sponsors/pXGlobalColliance.png",
+            },
+          ]}
+          accentColor="#7B7BF8"
+          secondaryColor="#4af0f0"
+          scale={2}
+          client:load
+        />
+      </div>
 
+      <!-- Associate Sponsors Banner -->
+      <div class="associate-sponsors">
+        <SponsorBanner
+          title="Associate Sponsors"
+          sponsorLogos={[
+            { name: "Strikers", imageSrc: "/sponsors/strikers.png" },
+            { name: "Cafe Appetito", imageSrc: "/sponsors/cafe.png" },
+            { name: "Yogi", imageSrc: "/sponsors/yogi.png" },
+            { name: "IMS", imageSrc: "/sponsors/IMS.png" },
+          ]}
+          accentColor="#ff00ff"
+          secondaryColor="#4af0f0"
+          scale={1.2}
+          client:load
+        />
+      </div>
+
+      <!-- Donor Banner -->
+      <div class="donor-sponsor">
+        <SponsorBanner
+          title="Our Generous Donor"
+          sponsorLogos={[{ name: "VTV", imageSrc: "/sponsors/VTV.png" }]}
+          accentColor="#4af0f0"
+          secondaryColor="#ff00ff"
+          scale={1.1}
+          client:load
+        />
+      </div>
+    </div>
+  </div>
 </div>
+
+<style>
+  .sponsors-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2rem;
+    padding: 2rem;
+    width: 100%;
+  }
+
+  .title-sponsor {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .associate-sponsors,
+  .donor-sponsor {
+    display: flex;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .sponsors-container {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .title-sponsor,
+    .associate-sponsors,
+    .donor-sponsor {
+      width: 100%;
+      transform: scale(0.85);
+      transform-origin: top center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .title-sponsor,
+    .associate-sponsors,
+    .donor-sponsor {
+      transform: scale(0.65);
+    }
+  }
+</style>
