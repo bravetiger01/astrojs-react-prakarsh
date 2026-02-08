@@ -81,7 +81,7 @@ body {
   display: flex;
   justify-content: center;
   position: relative;
-  z-index: 2000;
+  z-index: 900;
   bottom:0;
   width: 100%;
   min-height: 50vh;
