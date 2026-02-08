@@ -325,14 +325,15 @@ const SponsorBanner = ({
                   style={{
                     width: `${180 * scale}px`,
                     height: `${130 * scale}px`,
-                    background: "rgba(255,255,255,0.12)",
-                    border: `1px solid ${accentColor}40`,
-                    borderRadius: "4px",
+                    background: "rgba(255, 255, 255, 0.95)",
+                    border: `2px solid ${accentColor}`,
+                    borderRadius: "8px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: `${5 * scale}px`,
+                    padding: `${10 * scale}px`,
                     transition: "all 0.3s ease",
+                    boxShadow: `0 0 20px ${accentColor}30`,
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = accentColor;
