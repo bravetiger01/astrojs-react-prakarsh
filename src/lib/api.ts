@@ -91,6 +91,7 @@ const transformDbRowToEvent = (row: EventDbRow): Event => {
     eventHighlights: miscData.eventHighlights || [],
     keywords: miscData.keywords || [],
     colors: miscData.colors || "",
+    solo: row.solo ?? undefined,
     rules: miscData.rules,
     posterImage: getPosterImageForEvent(row.id.toString(), row.name),
     date: row.date || undefined,

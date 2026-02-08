@@ -17,6 +17,12 @@ const COLORS = {
 const EventPage = ({ eventId }: EventPageProps) => {
   const { event, loading, error } = useEventById(eventId);
 
+  const teamSizeLabel = event?.solo === true
+    ? "Solo"
+    : event?.solo === false
+      ? "Multiple"
+      : "Individual";
+
   // Determine the back link based on event category
   const getBackLink = () => {
     if (!event) return "/events";
@@ -329,7 +335,7 @@ const EventPage = ({ eventId }: EventPageProps) => {
                       className="font-display font-bold text-sm md:text-base"
                       style={{ color: COLORS.accent }}
                     >
-                      1-4 Members
+                      {teamSizeLabel}
                     </p>
                   </div>
                 </div>
