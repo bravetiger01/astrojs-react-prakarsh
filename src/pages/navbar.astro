@@ -46,6 +46,9 @@ const navLinks = [
         console.log("No loader transition - showing navbar immediately");
         gsap.set(navbar, { opacity: 1 });
         document.documentElement.classList.remove("loading");
+        // Show main content when no loader
+        const mainContent = document.getElementById("main-content");
+        if (mainContent) mainContent.classList.add("visible");
         return;
       }
 
@@ -98,6 +101,9 @@ const navLinks = [
               setTimeout(() => {
                 if (loaderWrapper) loaderWrapper.style.display = "none";
                 document.documentElement.classList.remove("loading");
+                // Show main content after loader fades
+                const mainContent = document.getElementById("main-content");
+                if (mainContent) mainContent.classList.add("visible");
               }, 500);
             }
 
@@ -152,7 +158,7 @@ const navLinks = [
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap");
   .navbar {
     position: fixed;
     top: 20px;
@@ -162,7 +168,7 @@ const navLinks = [
     max-width: 1200px;
     opacity: 0;
     z-index: 1200;
-    font-family: 'Bruno Ace SC', sans-serif;
+    font-family: "Bruno Ace SC", sans-serif;
   }
 
   .content {

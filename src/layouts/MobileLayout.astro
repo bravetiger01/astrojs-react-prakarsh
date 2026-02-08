@@ -1,5 +1,6 @@
 ---
 import "../styles/index.css";
+import GlobalAudio from "../components/GlobalAudio.astro";
 const { title = "Prakarsh 2026" } = Astro.props;
 
 // Server-side log
@@ -53,7 +54,7 @@ console.log("📱 [SERVER] MobileLayout.astro is rendering");
     </head>
 
     <body>
-
+        <GlobalAudio />
         <div id="loader-wrapper" class="loader-wrapper">
             <div id="sprite-animation" class="sprite-animation"></div>
         </div>
