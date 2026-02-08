@@ -21,6 +21,7 @@ export interface Event {
   keywords: string[];
   colors: string;
   category: "tech" | "non-tech" | "esports" | "workshops";
+  solo?: boolean;
   rules?: {
     singles?: RuleCategory;
     doubles?: RuleCategory;
@@ -117,6 +118,7 @@ export interface EventDbRow {
   category: string | null;
   misc: string | null; // JSON string
   location: string | null;
+  solo: boolean | null;
   created_at: string;
   updated_at: string;
 }
