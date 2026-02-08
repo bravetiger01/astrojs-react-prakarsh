@@ -381,7 +381,7 @@ import SponsorBanner from "./SponsorBanner";
           ]}
           accentColor="#ff00ff"
           secondaryColor="#4af0f0"
-          scale={1.2}
+          scale={0.7}
           client:load
         />
       </div>
@@ -393,7 +393,7 @@ import SponsorBanner from "./SponsorBanner";
           sponsorLogos={[{ name: "VTV", imageSrc: "/sponsors/VTV.png" }]}
           accentColor="#4af0f0"
           secondaryColor="#ff00ff"
-          scale={1.1}
+          scale={0.65}
           client:load
         />
       </div>
@@ -404,48 +404,72 @@ import SponsorBanner from "./SponsorBanner";
 <style>
   .sponsors-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start;
-    gap: 2rem;
-    padding: 2rem;
+    align-items: center;
+    gap: 0;
+    padding: 1rem 0.5rem;
     width: 100%;
+    overflow-x: hidden;
   }
 
   .title-sponsor {
     width: 100%;
     display: flex;
     justify-content: center;
+    margin-bottom: -2rem;
   }
 
-  .associate-sponsors,
+  .associate-sponsors {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -2rem;
+  }
+
   .donor-sponsor {
+    width: 100%;
     display: flex;
     justify-content: center;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 480px) {
     .sponsors-container {
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
+      padding: 0.5rem 0;
+      gap: 0;
     }
 
-    .title-sponsor,
-    .associate-sponsors,
-    .donor-sponsor {
-      width: 100%;
+    .title-sponsor {
       transform: scale(0.85);
+      transform-origin: top center;
+      margin-bottom: -3rem;
+    }
+
+    .associate-sponsors {
+      transform: scale(0.75);
+      transform-origin: top center;
+      margin-bottom: -3rem;
+    }
+
+    .donor-sponsor {
+      transform: scale(0.7);
       transform-origin: top center;
     }
   }
 
-  @media (max-width: 480px) {
-    .title-sponsor,
-    .associate-sponsors,
+  @media (max-width: 380px) {
+    .title-sponsor {
+      transform: scale(0.7);
+      margin-bottom: -4rem;
+    }
+
+    .associate-sponsors {
+      transform: scale(0.6);
+      margin-bottom: -4rem;
+    }
+
     .donor-sponsor {
-      transform: scale(0.65);
+      transform: scale(0.55);
     }
   }
 </style>
