@@ -71,8 +71,12 @@ const { title = "Prakarsh 2026" } = Astro.props;
 			.zoom-notification-overlay {
 				position: fixed;
 				inset: 0;
-				background: rgba(0, 0, 0, 0.8);
-				backdrop-filter: blur(4px);
+				background: linear-gradient(
+					135deg,
+					#0a0515 0%,
+					#1a0f2e 50%,
+					#0a0515 100%
+				);
 				z-index: 10000;
 				animation: fadeIn 0.3s ease-out;
 			}
