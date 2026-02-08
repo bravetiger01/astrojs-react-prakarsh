@@ -1,0 +1,175 @@
+---
+/**
+ * GlobalAudio - Shared audio player component with toggle button
+ * Persists music preference across page navigations using localStorage
+ */
+---
+
+<!-- Background Music -->
+<audio id="background-music" loop preload="auto" style="display: none;">
+    <source src="/audio/background-music.mp3" type="audio/mpeg" />
+    <source src="/audio/background-music.ogg" type="audio/ogg" />
+</audio>
+
+<!-- Audio Control Button -->
+<button
+    id="audio-toggle"
+    aria-label="Toggle background music"
+    class="audio-toggle-btn"
+>
+    <svg
+        id="audio-icon-playing"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+    >
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+    </svg>
+    <svg
+        id="audio-icon-paused"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        style="display: none;"
+    >
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+    </svg>
+</button>
+
+<style>
+    .audio-toggle-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 9998;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f1b5a2, #e84faa);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(241, 181, 162, 0.4);
+        transition: all 0.3s ease;
+    }
+
+    .audio-toggle-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 30px rgba(241, 181, 162, 0.6);
+    }
+
+    .audio-toggle-btn.paused {
+        background: linear-gradient(135deg, #6b3fa0, #3c2a56);
+    }
+</style>
+
+<script is:inline>
+    (function () {
+        const MUSIC_PREF_KEY = "musicEnabled";
+        const MUSIC_POS_KEY = "musicPosition";
+        const audio = document.getElementById("background-music");
+        const audioToggle = document.getElementById("audio-toggle");
+        const iconPlaying = document.getElementById("audio-icon-playing");
+        const iconPaused = document.getElementById("audio-icon-paused");
+
+        if (!audio || !audioToggle) return;
+
+        // Set volume
+        audio.volume = 0.3;
+
+        // Check localStorage for music preference and position
+        const musicEnabled = localStorage.getItem(MUSIC_PREF_KEY) === "true";
+        const savedPosition =
+            parseFloat(localStorage.getItem(MUSIC_POS_KEY)) || 0;
+
+        function updateUI(playing) {
+            if (playing) {
+                iconPlaying.style.display = "block";
+                iconPaused.style.display = "none";
+                audioToggle.classList.remove("paused");
+            } else {
+                iconPlaying.style.display = "none";
+                iconPaused.style.display = "block";
+                audioToggle.classList.add("paused");
+            }
+        }
+
+        // Save position periodically while playing
+        setInterval(() => {
+            if (!audio.paused && audio.currentTime > 0) {
+                localStorage.setItem(
+                    MUSIC_POS_KEY,
+                    audio.currentTime.toString(),
+                );
+            }
+        }, 1000);
+
+        // Save position before page unload
+        window.addEventListener("beforeunload", () => {
+            if (!audio.paused) {
+                localStorage.setItem(
+                    MUSIC_POS_KEY,
+                    audio.currentTime.toString(),
+                );
+            }
+        });
+
+        // If music was enabled, try to resume from saved position
+        if (musicEnabled) {
+            audio.currentTime = savedPosition;
+            audio
+                .play()
+                .then(() => {
+                    updateUI(true);
+                    console.log(
+                        "🎵 Music resumed from position:",
+                        savedPosition.toFixed(1) + "s",
+                    );
+                })
+                .catch(() => {
+                    // Autoplay blocked - need user interaction
+                    updateUI(false);
+                    console.log(
+                        "⏸️ Autoplay blocked, waiting for user interaction",
+                    );
+                });
+        } else {
+            updateUI(false);
+        }
+
+        // Toggle audio on button click
+        audioToggle.addEventListener("click", () => {
+            if (audio.paused) {
+                audio
+                    .play()
+                    .then(() => {
+                        localStorage.setItem(MUSIC_PREF_KEY, "true");
+                        updateUI(true);
+                    })
+                    .catch((err) => {
+                        console.log("Play failed:", err);
+                    });
+            } else {
+                audio.pause();
+                localStorage.setItem(MUSIC_PREF_KEY, "false");
+                updateUI(false);
+            }
+        });
+    })();
+</script>

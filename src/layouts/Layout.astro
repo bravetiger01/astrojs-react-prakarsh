@@ -1,6 +1,7 @@
 ---
 import "../styles/index.css";
 import Navbar from "../pages/navbar.astro";
+import GlobalAudio from "../components/GlobalAudio.astro";
 const { title = "Prakarsh 2026" } = Astro.props;
 ---
 
@@ -12,7 +13,7 @@ const { title = "Prakarsh 2026" } = Astro.props;
 		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="apple-touch-icon" href="/favicon.svg" />
-		
+
 		<title>{title}</title>
 
 		<link
@@ -61,15 +62,21 @@ const { title = "Prakarsh 2026" } = Astro.props;
 				padding: 2rem;
 				max-width: 500px;
 				z-index: 10001;
-				box-shadow: 0 0 40px rgba(241, 181, 162, 0.3), 0 0 80px rgba(112, 0, 116, 0.2);
+				box-shadow:
+					0 0 40px rgba(241, 181, 162, 0.3),
+					0 0 80px rgba(112, 0, 116, 0.2);
 				animation: slideIn 0.3s ease-out;
 			}
 
 			.zoom-notification-overlay {
 				position: fixed;
 				inset: 0;
-				background: rgba(0, 0, 0, 0.8);
-				backdrop-filter: blur(4px);
+				background: linear-gradient(
+					135deg,
+					#0a0515 0%,
+					#1a0f2e 50%,
+					#0a0515 100%
+				);
 				z-index: 10000;
 				animation: fadeIn 0.3s ease-out;
 			}
@@ -80,7 +87,7 @@ const { title = "Prakarsh 2026" } = Astro.props;
 				font-weight: bold;
 				margin-bottom: 1rem;
 				text-align: center;
-				font-family: 'Bruno Ace SC', sans-serif;
+				font-family: "Bruno Ace SC", sans-serif;
 			}
 
 			.zoom-notification p {
@@ -150,52 +157,103 @@ const { title = "Prakarsh 2026" } = Astro.props;
 			.hidden {
 				display: none !important;
 			}
+
+			/* Main content visibility control */
+			#main-content {
+				opacity: 0;
+				pointer-events: none;
+				transition: opacity 0.5s ease;
+			}
+
+			#main-content.visible {
+				opacity: 1;
+				pointer-events: auto;
+			}
+
+			html.loading #main-content {
+				opacity: 0 !important;
+				pointer-events: none !important;
+			}
 		</style>
 	</head>
 
 	<body>
 		<Navbar />
+		<GlobalAudio />
 
-		<!-- Background Music -->
-		<audio id="background-music" loop preload="auto" style="display: none;">
-			<source src="/audio/background-music.mp3" type="audio/mpeg">
-			<source src="/audio/background-music.ogg" type="audio/ogg">
-		</audio>
-
-		<!-- Audio Control Button -->
-		<button
-			id="audio-toggle"
-			aria-label="Toggle background music"
-			style="position: fixed; bottom: 2rem; right: 2rem; z-index: 9998; width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #f1b5a2, #e84faa); border: 2px solid rgba(255, 255, 255, 0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(241, 181, 162, 0.4); transition: all 0.3s ease;"
+		<!-- Music Enable Popup (appears before loading screen) -->
+		<div
+			id="music-enable-overlay"
+			class="zoom-notification-overlay"
+			style="z-index: 10002;"
 		>
-			<svg id="audio-icon-playing" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-				<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-				<path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-				<path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-			</svg>
-			<svg id="audio-icon-paused" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-				<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-				<line x1="23" y1="9" x2="17" y2="15"></line>
-				<line x1="17" y1="9" x2="23" y2="15"></line>
-			</svg>
-		</button>
+		</div>
+		<div
+			id="music-enable-popup"
+			class="zoom-notification"
+			style="z-index: 10003;"
+		>
+			<h2>🎵 IMMERSIVE EXPERIENCE</h2>
+			<p>Enable background music for the best experience?</p>
+			<p
+				style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); margin-top: 0.5rem;"
+			>
+				You can toggle it anytime using the button in the corner
+			</p>
+
+			<div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+				<button
+					id="music-enable-yes"
+					style="flex: 1; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #f1b5a2, #e84faa); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: all 0.3s ease;"
+				>
+					Yes, Enable Music
+				</button>
+				<button
+					id="music-enable-no"
+					style="flex: 1; padding: 0.75rem 1.5rem; background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.8); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: all 0.3s ease;"
+				>
+					No Thanks
+				</button>
+			</div>
+		</div>
 
 		<!-- Zoom Notification Popup -->
-		<div id="zoom-notification-overlay" class="zoom-notification-overlay hidden"></div>
+		<div
+			id="zoom-notification-overlay"
+			class="zoom-notification-overlay hidden"
+		>
+		</div>
 		<div id="zoom-notification" class="zoom-notification hidden">
 			<h2>⚡ OPTIMAL VIEWING</h2>
-			<p>This site is optimized for <strong>100% display scaling</strong></p>
-			<p style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin-top: 0.5rem;">
-				If your Windows display scale is set to 125% or higher, please adjust your browser zoom to <strong>80%</strong> for the best experience
+			<p>
+				This site is optimized for <strong>100% display scaling</strong>
 			</p>
-			
+			<p
+				style="font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); margin-top: 0.5rem;"
+			>
+				If your Windows display scale is set to 125% or higher, please
+				adjust your browser zoom to <strong>80%</strong> for the best experience
+			</p>
+
 			<div class="instructions">
-				<p><strong>Windows/Linux:</strong> Press <strong>Ctrl</strong> and <strong>-</strong> (minus) twice</p>
-				<p><strong>Mac:</strong> Press <strong>⌘</strong> and <strong>-</strong> (minus) twice</p>
-				<p><strong>Or:</strong> Hold <strong>Ctrl/⌘</strong> and scroll down with your mouse wheel</p>
+				<p>
+					<strong>Windows/Linux:</strong> Press <strong>Ctrl</strong> and
+					<strong>-</strong> (minus) twice
+				</p>
+				<p>
+					<strong>Mac:</strong> Press <strong>⌘</strong> and <strong
+						>-</strong
+					> (minus) twice
+				</p>
+				<p>
+					<strong>Or:</strong> Hold <strong>Ctrl/⌘</strong> and scroll down
+					with your mouse wheel
+				</p>
 			</div>
 
-			<p style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); margin-top: 1rem; font-style: italic;">
+			<p
+				style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); margin-top: 1rem; font-style: italic;"
+			>
 				💡 Already using 100% display scaling? You're all set!
 			</p>
 
@@ -208,31 +266,233 @@ const { title = "Prakarsh 2026" } = Astro.props;
 
 		<!-- LOADER CONTROL + EVENT DISPATCH -->
 		<script is:inline>
-			// Background Music Control
+			const EXPIRY_TIME = 60 * 60 * 1000;
+			const LOCK_KEY = "loaderLastShown";
+			const MUSIC_PROMPT_KEY = "musicPromptShown";
+
+			function shouldShowLoader() {
+				if (location.pathname !== "/") return false;
+				const last = sessionStorage.getItem(LOCK_KEY);
+				return !last || Date.now() - +last > EXPIRY_TIME;
+			}
+
+			// Get elements
 			const audio = document.getElementById("background-music");
 			const audioToggle = document.getElementById("audio-toggle");
 			const iconPlaying = document.getElementById("audio-icon-playing");
 			const iconPaused = document.getElementById("audio-icon-paused");
+			const musicPopup = document.getElementById("music-enable-popup");
+			const musicOverlay = document.getElementById(
+				"music-enable-overlay",
+			);
+			const musicYesBtn = document.getElementById("music-enable-yes");
+			const musicNoBtn = document.getElementById("music-enable-no");
+			const loader = document.getElementById("loader-wrapper");
+
 			let isPlaying = false;
 
-			// Try to autoplay (will work after user interaction)
-			const tryAutoplay = () => {
-				if (audio && !isPlaying) {
-					audio.play()
-						.then(() => {
-							isPlaying = true;
-							iconPlaying.style.display = "block";
-							iconPaused.style.display = "none";
-							console.log("🎵 Background music started");
-						})
-						.catch((error) => {
-							console.log("⏸️ Autoplay blocked, waiting for user interaction");
-							isPlaying = false;
-							iconPlaying.style.display = "none";
-							iconPaused.style.display = "block";
-						});
+			// Set volume to 30%
+			if (audio) {
+				audio.volume = 0.3;
+			}
+
+			const showMusicPrompt = !sessionStorage.getItem(MUSIC_PROMPT_KEY);
+			const showLoader = shouldShowLoader();
+
+			// Initial setup
+			if (showMusicPrompt) {
+				// Show music popup, hide loader and content
+				if (loader) loader.style.display = "none";
+				if (musicPopup) musicPopup.style.display = "block";
+				if (musicOverlay) musicOverlay.style.display = "block";
+				document.documentElement.classList.add("loading");
+			} else {
+				// Hide music popup
+				if (musicPopup) musicPopup.style.display = "none";
+				if (musicOverlay) musicOverlay.style.display = "none";
+
+				// Show or hide loader based on shouldShowLoader
+				if (!showLoader) {
+					if (loader) loader.style.display = "none";
+					// No loader and no prompt - show content immediately when DOM ready
+					document.addEventListener("DOMContentLoaded", () => {
+						const mainContent =
+							document.getElementById("main-content");
+						if (mainContent) mainContent.classList.add("visible");
+					});
+				} else {
+					document.documentElement.classList.add("loading");
+					sessionStorage.setItem(LOCK_KEY, Date.now());
 				}
-			};
+			}
+
+			// Handle music enable buttons
+			if (musicYesBtn && musicNoBtn && audio) {
+				const handleMusicChoice = (enableMusic) => {
+					sessionStorage.setItem(MUSIC_PROMPT_KEY, "true");
+
+					// Save preference to localStorage for cross-page persistence
+					localStorage.setItem(
+						"musicEnabled",
+						enableMusic ? "true" : "false",
+					);
+
+					if (enableMusic) {
+						// Start music
+						audio
+							.play()
+							.then(() => {
+								isPlaying = true;
+								if (iconPlaying)
+									iconPlaying.style.display = "block";
+								if (iconPaused)
+									iconPaused.style.display = "none";
+								// Update toggle button state
+								const audioToggle =
+									document.getElementById("audio-toggle");
+								if (audioToggle)
+									audioToggle.classList.remove("paused");
+								console.log("🎵 Background music started");
+							})
+							.catch((error) => {
+								console.log("⏸️ Music play failed:", error);
+								if (iconPlaying)
+									iconPlaying.style.display = "none";
+								if (iconPaused)
+									iconPaused.style.display = "block";
+							});
+					} else {
+						// Set icon to paused
+						if (iconPlaying) iconPlaying.style.display = "none";
+						if (iconPaused) iconPaused.style.display = "block";
+						// Update toggle button state
+						const audioToggle =
+							document.getElementById("audio-toggle");
+						if (audioToggle) audioToggle.classList.add("paused");
+					}
+
+					// Hide popup
+					if (musicPopup) musicPopup.classList.add("hidden");
+					if (musicOverlay) musicOverlay.classList.add("hidden");
+
+					// Show loader if needed
+					if (showLoader && loader) {
+						loader.style.display = "flex";
+						sessionStorage.setItem(LOCK_KEY, Date.now());
+
+						// Set flag and call callback if PixiJS already set it up
+						window.__loaderStarted = true;
+						if (typeof window.__startPixiAnimation === "function") {
+							window.__startPixiAnimation();
+						}
+
+						// Start the loader completion timer (animation takes ~6.3s)
+						const ANIMATION_DURATION = 6300;
+						setTimeout(() => {
+							const canvas =
+								document.getElementById("sprite-canvas");
+							if (canvas) {
+								const rect = canvas.getBoundingClientRect();
+								window.__loaderTransition = {
+									x: rect.left + rect.width / 2,
+									y: rect.top + rect.height / 2,
+									width: rect.width,
+									height: rect.height,
+								};
+							}
+
+							console.log(
+								"🎯 Loader complete (after music choice), dispatching event",
+							);
+							window.dispatchEvent(new Event("loader:complete"));
+
+							// Show zoom notification after loading screen finishes (desktop only)
+							const isMobileDevice =
+								/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+									navigator.userAgent,
+								);
+							const ZOOM_NOTIFICATION_KEY =
+								"zoomNotificationShown";
+
+							if (
+								!isMobileDevice &&
+								!sessionStorage.getItem(ZOOM_NOTIFICATION_KEY)
+							) {
+								setTimeout(() => {
+									const overlay = document.getElementById(
+										"zoom-notification-overlay",
+									);
+									const notification =
+										document.getElementById(
+											"zoom-notification",
+										);
+									const closeBtn = document.getElementById(
+										"zoom-notification-close",
+									);
+
+									if (overlay && notification && closeBtn) {
+										overlay.classList.remove("hidden");
+										notification.classList.remove("hidden");
+
+										const closeNotification = () => {
+											overlay.classList.add("hidden");
+											notification.classList.add(
+												"hidden",
+											);
+											sessionStorage.setItem(
+												ZOOM_NOTIFICATION_KEY,
+												"true",
+											);
+										};
+
+										closeBtn.addEventListener(
+											"click",
+											closeNotification,
+										);
+										overlay.addEventListener(
+											"click",
+											closeNotification,
+										);
+									}
+								}, 500);
+							}
+						}, ANIMATION_DURATION);
+					} else {
+						// No loader, remove loading class and show content
+						document.documentElement.classList.remove("loading");
+						const mainContent =
+							document.getElementById("main-content");
+						if (mainContent) mainContent.classList.add("visible");
+					}
+				};
+
+				musicYesBtn.addEventListener("click", () =>
+					handleMusicChoice(true),
+				);
+				musicNoBtn.addEventListener("click", () =>
+					handleMusicChoice(false),
+				);
+
+				// Hover effects for buttons
+				musicYesBtn.addEventListener("mouseenter", () => {
+					musicYesBtn.style.transform = "translateY(-2px)";
+					musicYesBtn.style.boxShadow =
+						"0 4px 20px rgba(241, 181, 162, 0.5)";
+				});
+				musicYesBtn.addEventListener("mouseleave", () => {
+					musicYesBtn.style.transform = "translateY(0)";
+					musicYesBtn.style.boxShadow = "none";
+				});
+
+				musicNoBtn.addEventListener("mouseenter", () => {
+					musicNoBtn.style.transform = "translateY(-2px)";
+					musicNoBtn.style.background = "rgba(255, 255, 255, 0.15)";
+				});
+				musicNoBtn.addEventListener("mouseleave", () => {
+					musicNoBtn.style.transform = "translateY(0)";
+					musicNoBtn.style.background = "rgba(255, 255, 255, 0.1)";
+				});
+			}
 
 			// Toggle audio on button click
 			if (audioToggle && audio) {
@@ -242,57 +502,38 @@ const { title = "Prakarsh 2026" } = Astro.props;
 						isPlaying = false;
 						iconPlaying.style.display = "none";
 						iconPaused.style.display = "block";
-						audioToggle.style.background = "linear-gradient(135deg, #6B3FA0, #3c2a56)";
+						audioToggle.style.background =
+							"linear-gradient(135deg, #6B3FA0, #3c2a56)";
 					} else {
 						audio.play();
 						isPlaying = true;
 						iconPlaying.style.display = "block";
 						iconPaused.style.display = "none";
-						audioToggle.style.background = "linear-gradient(135deg, #f1b5a2, #e84faa)";
+						audioToggle.style.background =
+							"linear-gradient(135deg, #f1b5a2, #e84faa)";
 					}
 				});
 
 				// Hover effect
 				audioToggle.addEventListener("mouseenter", () => {
 					audioToggle.style.transform = "scale(1.1)";
-					audioToggle.style.boxShadow = "0 6px 30px rgba(241, 181, 162, 0.6)";
+					audioToggle.style.boxShadow =
+						"0 6px 30px rgba(241, 181, 162, 0.6)";
 				});
 
 				audioToggle.addEventListener("mouseleave", () => {
 					audioToggle.style.transform = "scale(1)";
-					audioToggle.style.boxShadow = "0 4px 20px rgba(241, 181, 162, 0.4)";
+					audioToggle.style.boxShadow =
+						"0 4px 20px rgba(241, 181, 162, 0.4)";
 				});
 			}
 
-			// Try to start music immediately
-			tryAutoplay();
-
-			// Also try on first user interaction
-			const startOnInteraction = () => {
-				tryAutoplay();
-				document.removeEventListener("click", startOnInteraction);
-				document.removeEventListener("keydown", startOnInteraction);
-			};
-			document.addEventListener("click", startOnInteraction);
-			document.addEventListener("keydown", startOnInteraction);
-
-			const EXPIRY_TIME = 60 * 60 * 1000;
-			const LOCK_KEY = "loaderLastShown";
-
-			function shouldShowLoader() {
-				if (location.pathname !== "/") return false;
-				const last = sessionStorage.getItem(LOCK_KEY);
-				return !last || Date.now() - +last > EXPIRY_TIME;
-			}
-
-			const showLoader = shouldShowLoader();
-			const loader = document.getElementById("loader-wrapper");
-
-			if (!showLoader) {
-				loader.style.display = "none";
+			// Loader animation logic
+			if (!showLoader || showMusicPrompt) {
+				// Don't run loader animation
 			} else {
+				// Run loader animation
 				// Prevent scrollbar during loading
-				document.documentElement.classList.add("loading");
 				sessionStorage.setItem(LOCK_KEY, Date.now());
 
 				// Animation completes in ~5.5s (330 frames at 60fps)
@@ -312,16 +553,29 @@ const { title = "Prakarsh 2026" } = Astro.props;
 
 						console.log("🎯 Loader complete, dispatching event");
 						window.dispatchEvent(new Event("loader:complete"));
-						
+
 						// Show zoom notification after loading screen finishes (desktop only)
-						const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+						const isMobileDevice =
+							/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+								navigator.userAgent,
+							);
 						const ZOOM_NOTIFICATION_KEY = "zoomNotificationShown";
-						
-						if (!isMobileDevice && !sessionStorage.getItem(ZOOM_NOTIFICATION_KEY)) {
+
+						if (
+							!isMobileDevice &&
+							!sessionStorage.getItem(ZOOM_NOTIFICATION_KEY)
+						) {
 							setTimeout(() => {
-								const overlay = document.getElementById("zoom-notification-overlay");
-								const notification = document.getElementById("zoom-notification");
-								const closeBtn = document.getElementById("zoom-notification-close");
+								const overlay = document.getElementById(
+									"zoom-notification-overlay",
+								);
+								const notification =
+									document.getElementById(
+										"zoom-notification",
+									);
+								const closeBtn = document.getElementById(
+									"zoom-notification-close",
+								);
 
 								if (overlay && notification && closeBtn) {
 									overlay.classList.remove("hidden");
@@ -330,15 +584,24 @@ const { title = "Prakarsh 2026" } = Astro.props;
 									const closeNotification = () => {
 										overlay.classList.add("hidden");
 										notification.classList.add("hidden");
-										sessionStorage.setItem(ZOOM_NOTIFICATION_KEY, "true");
+										sessionStorage.setItem(
+											ZOOM_NOTIFICATION_KEY,
+											"true",
+										);
 									};
 
-									closeBtn.addEventListener("click", closeNotification);
-									overlay.addEventListener("click", closeNotification);
+									closeBtn.addEventListener(
+										"click",
+										closeNotification,
+									);
+									overlay.addEventListener(
+										"click",
+										closeNotification,
+									);
 								}
 							}, 500); // Small delay after loader finishes
 						}
-						
+
 						// Navbar animation script handles fade-out after merge animation
 					}, ANIMATION_DURATION);
 				});
@@ -356,8 +619,19 @@ const { title = "Prakarsh 2026" } = Astro.props;
 			} from "pixi.js";
 
 			const loader = document.getElementById("loader-wrapper");
-			if (!loader || getComputedStyle(loader).display === "none") {
-				console.log("Loader not shown, skipping PixiJS");
+			// Check if we should initialize PixiJS - need to check if we'll show loader eventually
+			// (loader may be hidden initially while music popup is showing)
+			const EXPIRY_TIME = 60 * 60 * 1000;
+			const LOCK_KEY = "loaderLastShown";
+			const isRootPath = location.pathname === "/";
+			const loaderLastShown = sessionStorage.getItem(LOCK_KEY);
+			const shouldShowLoaderEventually =
+				isRootPath &&
+				(!loaderLastShown ||
+					Date.now() - +loaderLastShown > EXPIRY_TIME);
+
+			if (!loader || !shouldShowLoaderEventually) {
+				console.log("Loader not needed, skipping PixiJS");
 			} else {
 				console.log("🎨 Initializing PixiJS loader...");
 
@@ -441,15 +715,47 @@ const { title = "Prakarsh 2026" } = Astro.props;
 							sprite.texture = frames[frame];
 						}
 					});
-
 					console.log("🎬 Animation started!");
 				}
 
-				initPixi().catch((err) => {
-					console.error("Failed to initialize PixiJS:", err);
-				});
+				// Check if music popup is showing (if so, wait for callback)
+				const MUSIC_PROMPT_KEY = "musicPromptShown";
+				const showMusicPrompt =
+					!sessionStorage.getItem(MUSIC_PROMPT_KEY);
+
+				if (showMusicPrompt) {
+					// Check if loader already started (inline script already ran)
+					if ((window as any).__loaderStarted) {
+						console.log(
+							"🎨 Loader already started, initializing PixiJS...",
+						);
+						initPixi().catch((err) => {
+							console.error("Failed to initialize PixiJS:", err);
+						});
+					} else {
+						// Set up callback for inline script to call
+						console.log(
+							"⏳ Waiting for music choice before starting animation...",
+						);
+						(window as any).__startPixiAnimation = () => {
+							console.log(
+								"🎨 Music choice made, initializing PixiJS...",
+							);
+							initPixi().catch((err) => {
+								console.error(
+									"Failed to initialize PixiJS:",
+									err,
+								);
+							});
+						};
+					}
+				} else {
+					// No music popup, start immediately
+					initPixi().catch((err) => {
+						console.error("Failed to initialize PixiJS:", err);
+					});
+				}
 			}
-			
 		</script>
 
 		<!-- PREFETCH EVENT DATA DURING LOADING -->
@@ -457,29 +763,39 @@ const { title = "Prakarsh 2026" } = Astro.props;
 			import { prefetchAllEvents } from "../lib/event-cache";
 
 			const loader = document.getElementById("loader-wrapper");
-			
+
 			// Only prefetch if loader is visible
 			if (loader && getComputedStyle(loader).display !== "none") {
-				console.log("🚀 Starting data prefetch during loading animation...");
-				
+				console.log(
+					"🚀 Starting data prefetch during loading animation...",
+				);
+
 				// Start prefetching immediately
 				const prefetchStart = performance.now();
-				
+
 				prefetchAllEvents()
 					.then(() => {
 						const prefetchTime = performance.now() - prefetchStart;
-						console.log(`✅ Data prefetch completed in ${Math.round(prefetchTime)}ms`);
+						console.log(
+							`✅ Data prefetch completed in ${Math.round(prefetchTime)}ms`,
+						);
 					})
 					.catch((error) => {
-						console.warn("⚠️ Prefetch failed, will use local data:", error);
+						console.warn(
+							"⚠️ Prefetch failed, will use local data:",
+							error,
+						);
 					});
 			} else {
-				console.log("ℹ️ Loader not shown, skipping prefetch (will fetch on-demand)");
+				console.log(
+					"ℹ️ Loader not shown, skipping prefetch (will fetch on-demand)",
+				);
 			}
 		</script>
 
-		<slot />
-
-</body>
+		<!-- Main content wrapper - hidden until loading sequence completes -->
+		<div id="main-content">
+			<slot />
+		</div>
 	</body>
 </html>
