@@ -56,33 +56,33 @@ const teamMembers: TeamMember[] = [
 ---
 
 <PageLayout title="Team - Prakarsh '26">
-  <main style="background: linear-gradient(to bottom, #2a1a3d 0%, #1a0f2e 50%, #0a0515 100%); min-height: 100vh; padding-top: 8rem; padding-bottom: 4rem;">
-    <div class="container mx-auto px-4">
+  <main style="background: linear-gradient(to bottom, #2a1a3d 0%, #1a0f2e 50%, #0a0515 100%); min-height: 100vh; padding-top: 8rem; padding-bottom: 4rem; position: fixed; top: 0; left: 0; right: 0; bottom: 0; overflow-y: auto;">
+    <div class="container mx-auto px-4" style="min-height: calc(100vh - 12rem);">
       <!-- Header -->
-      <div class="text-center mb-8" style="margin-top: 2rem;">
+      <div class="text-center mb-8 md:mb-8 mb-4" style="margin-top: 2rem;">
         <div
-          class="text-xs font-semibold tracking-[0.4em] mb-3"
+          class="text-[10px] md:text-xs font-semibold tracking-[0.3em] md:tracking-[0.4em] mb-2 md:mb-3"
           style="color: #D4A574;"
         >
           PRAKARSH '26
         </div>
         <h1
-          class="text-4xl md:text-6xl font-extrabold tracking-[0.05em] uppercase"
+          class="text-3xl md:text-4xl lg:text-6xl font-extrabold tracking-[0.05em] uppercase px-4"
           style="background: linear-gradient(135deg, #FFFFFF 0%, #F1B5A2 50%, #E84FAA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
         >
           WEBSITE TEAM
         </h1>
 
         <p
-          class="max-w-md mx-auto text-sm mt-3"
+          class="max-w-md mx-auto text-xs md:text-sm mt-2 md:mt-3 px-4"
           style="color: rgba(255,255,255,0.5);"
         >
           Drag to rotate the ring. Meet the visionaries behind Prakarsh'26.
         </p>
 
-        <div class="flex items-center justify-center gap-4 mt-4">
+        <div class="flex items-center justify-center gap-3 md:gap-4 mt-3 md:mt-4">
           <div
-            class="h-px w-20"
+            class="h-px w-12 md:w-20"
             style="background: linear-gradient(90deg, transparent, #E84FAA60);"
           />
           <div
@@ -90,7 +90,7 @@ const teamMembers: TeamMember[] = [
             style="background: linear-gradient(135deg, #E84FAA, #6CB4EE); box-shadow: 0 0 8px #E84FAA80;"
           />
           <div
-            class="h-px w-20"
+            class="h-px w-12 md:w-20"
             style="background: linear-gradient(90deg, #6CB4EE60, transparent);"
           />
         </div>

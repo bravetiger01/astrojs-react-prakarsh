@@ -1,7 +1,8 @@
+
 import { memo, useRef, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
-export interface TeamMember {
+interface TeamMember {
   id: string;
   name: string;
   role: string;
@@ -12,6 +13,7 @@ interface TeamRingProps {
   members: TeamMember[];
 }
 
+/* ── Prakarsh poster palette ── */
 const C = {
   cardBg: "#1A0E2E",
   cardBgLight: "#2D1B4E",
@@ -25,6 +27,7 @@ const C = {
   statsBg: "#140B24",
 } as const;
 
+/* ── Individual ring card — NFT style ── */
 const RingCard = memo(function RingCard({
   member,
   index,
@@ -36,6 +39,8 @@ const RingCard = memo(function RingCard({
 }) {
   const [hovered, setHovered] = useState(false);
   const reduceMotion = useReducedMotion();
+  const serialNum = `PRK-${String(index + 1).padStart(3, "0")}`;
+  const sectorNum = String(index + 1).padStart(2, "0");
 
   return (
     <div
@@ -44,6 +49,7 @@ const RingCard = memo(function RingCard({
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
+      {/* Outer glow on hover */}
       <div
         className="absolute -inset-[2px] rounded-2xl opacity-0 transition-opacity duration-500 pointer-events-none"
         style={{
@@ -53,6 +59,7 @@ const RingCard = memo(function RingCard({
         }}
       />
 
+      {/* Card body */}
       <div
         className="relative w-full h-full rounded-2xl overflow-hidden flex flex-col"
         style={{
@@ -65,19 +72,28 @@ const RingCard = memo(function RingCard({
             : `0 3px 16px -10px rgba(0,0,0,0.55)`,
         }}
       >
-        <div className="px-3.5 pt-2 pb-1 relative z-10">
+        {/* ── Top badge (role) ── */}
+        <div className="flex justify-center pt-3 pb-2 relative z-10">
           <div
-            className="text-[10px] font-bold tracking-[0.2em] uppercase text-center"
-            style={{ color: C.gold }}
+            className="px-4 py-1 rounded-full text-[9px] font-bold tracking-[0.2em] uppercase"
+            style={{
+              background: `linear-gradient(135deg, ${C.blue}DD, ${C.purple}DD)`,
+              color: C.white,
+              boxShadow: `0 2px 10px ${C.blue}40`,
+              transition: "box-shadow 0.3s ease",
+              ...(hovered ? { boxShadow: `0 2px 18px ${C.blue}70` } : {}),
+            }}
           >
             PRAKARSH '26
           </div>
         </div>
 
+        {/* ── Image area ── */}
         <div
           className="relative mx-3 flex-1 min-h-0"
           style={{ maxHeight: "55%" }}
         >
+          {/* Gradient border wrapper */}
           <div
             className="absolute inset-0 rounded-xl"
             style={{
@@ -104,13 +120,16 @@ const RingCard = memo(function RingCard({
                   }}
                 />
               ) : (
+                /* Placeholder with decorative pattern */
                 <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+                  {/* Background gradient */}
                   <div
                     className="absolute inset-0"
                     style={{
                       background: `radial-gradient(circle at 50% 40%, ${C.purple}60 0%, ${C.cardBg} 70%)`,
                     }}
                   />
+                  {/* Floating decorative circles */}
                   <div
                     className="absolute w-24 h-24 rounded-full opacity-20"
                     style={{
@@ -124,6 +143,31 @@ const RingCard = memo(function RingCard({
                     }}
                   />
                   <div
+                    className="absolute w-16 h-16 rounded-full opacity-15"
+                    style={{
+                      background: `linear-gradient(135deg, ${C.blue}, ${C.cyan})`,
+                      bottom: "20%",
+                      right: "15%",
+                      transition: "transform 0.5s ease",
+                      transform: hovered
+                        ? "translate(-5px, 3px) scale(1.15)"
+                        : "translate(0, 0)",
+                    }}
+                  />
+                  <div
+                    className="absolute w-10 h-10 rounded-full opacity-10"
+                    style={{
+                      background: C.gold,
+                      top: "40%",
+                      right: "25%",
+                      transition: "transform 0.5s ease",
+                      transform: hovered
+                        ? "translate(-3px, -6px)"
+                        : "translate(0, 0)",
+                    }}
+                  />
+                  {/* Big letter */}
+                  <div
                     className="relative text-7xl font-bold select-none"
                     style={{
                       color: `${C.purple}40`,
@@ -136,6 +180,7 @@ const RingCard = memo(function RingCard({
                 </div>
               )}
 
+              {/* Hover scan line */}
               {!reduceMotion && (hovered || isActive) && (
                 <motion.div
                   className="absolute left-0 right-0 h-[1px] pointer-events-none"
@@ -155,7 +200,9 @@ const RingCard = memo(function RingCard({
           </div>
         </div>
 
+        {/* ── Info section ── */}
         <div className="px-3.5 pt-2.5 pb-1.5 flex flex-col gap-0.5 relative z-10">
+          {/* Member ID */}
           <div
             className="text-[9px] font-semibold tracking-[0.15em] uppercase"
             style={{ color: C.gold }}
@@ -163,6 +210,7 @@ const RingCard = memo(function RingCard({
             PRK-{String(index + 1).padStart(3, "0")}
           </div>
 
+          {/* Name */}
           <h3
             className="text-sm font-extrabold tracking-[0.06em] uppercase leading-tight"
             style={{ color: C.white }}
@@ -170,6 +218,7 @@ const RingCard = memo(function RingCard({
             {member.name}
           </h3>
 
+          {/* Role subtitle row */}
           <div className="flex items-center gap-1.5 mt-0.5">
             <span
               className="text-[9px] font-semibold tracking-[0.12em] uppercase"
@@ -179,71 +228,13 @@ const RingCard = memo(function RingCard({
             </span>
           </div>
         </div>
-
-        <div
-          className="mx-3 mb-3 mt-1.5 rounded-lg px-3 py-2 flex items-center justify-between"
-          style={{
-            background: C.statsBg,
-            border: `1px solid ${C.purple}40`,
-          }}
-        >
-          <div className="flex flex-col">
-            <span
-              className="text-[7px] tracking-[0.2em] uppercase"
-              style={{ color: `${C.white}50` }}
-            >
-              Sector
-            </span>
-            <span className="text-xs font-bold" style={{ color: C.white }}>
-              {String(index + 1).padStart(2, "0")}
-            </span>
-          </div>
-
-          <div
-            className="w-[1px] h-6"
-            style={{ background: `${C.purple}50` }}
-          />
-
-          <div className="flex flex-col items-end">
-            <span
-              className="text-[7px] tracking-[0.2em] uppercase"
-              style={{ color: `${C.white}50` }}
-            >
-              Clearance
-            </span>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <div className="flex items-center gap-1">
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ background: C.pink }}
-                />
-                <span
-                  className="text-[9px] font-bold"
-                  style={{ color: C.white }}
-                >
-                  A
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ background: C.blue }}
-                />
-                <span
-                  className="text-[9px] font-bold"
-                  style={{ color: C.white }}
-                >
-                  B
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
 });
+RingCard.displayName = "RingCard";
 
+/* ── Main 3D ring carousel ── */
 export default function TeamRing({ members }: TeamRingProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
@@ -251,13 +242,14 @@ export default function TeamRing({ members }: TeamRingProps) {
   const currentRotation = useRef(0);
   const [rotation, setRotation] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const animationRef = useRef<number>();
   const rafRef = useRef<number | null>(null);
   const reduceMotion = useReducedMotion();
 
   const numItems = members.length;
   const anglePerItem = 360 / numItems;
-  const radius = Math.max(400, numItems * 32);
+  const radius = isMobile ? Math.max(280, numItems * 24) : Math.max(400, numItems * 32);
 
   const getActiveIndex = useCallback(
     (rot: number) => {
@@ -267,6 +259,16 @@ export default function TeamRing({ members }: TeamRingProps) {
     },
     [anglePerItem, numItems],
   );
+
+  // Detect mobile on mount
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     isDragging.current = true;
@@ -413,7 +415,8 @@ export default function TeamRing({ members }: TeamRingProps) {
   const activeMember = members[activeIndex] || members[0];
 
   return (
-    <div className="relative w-full flex flex-col items-center">
+    <div className="relative w-full flex flex-col items-center" style={{ minHeight: isMobile ? "500px" : "700px" }}>
+      {/* Active member info */}
       <AnimatePresence mode="wait">
         <motion.div
           key={activeMember.id}
@@ -421,12 +424,13 @@ export default function TeamRing({ members }: TeamRingProps) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.3 }}
-          className="text-center mb-8 min-h-[80px]"
+          className="text-center mb-8 md:mb-12"
+          style={{ minHeight: isMobile ? "70px" : "90px" }}
         >
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex items-center justify-center gap-2 md:gap-3">
             <button
               type="button"
-              className="inline-flex items-center justify-center w-8 h-8 rounded-full"
+              className="inline-flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full text-lg md:text-xl flex-shrink-0"
               style={{
                 border: `1px solid ${C.pink}50`,
                 color: C.peach,
@@ -437,18 +441,22 @@ export default function TeamRing({ members }: TeamRingProps) {
               ‹
             </button>
             <h2
-              className="text-3xl md:text-4xl font-extrabold tracking-[0.08em] uppercase"
+              className="text-xl md:text-3xl lg:text-4xl font-extrabold tracking-[0.08em] uppercase px-2"
               style={{
                 background: `linear-gradient(135deg, ${C.white}, ${C.peach})`,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
+                minHeight: "1.5em",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
               }}
             >
               {activeMember.name}
             </h2>
             <button
               type="button"
-              className="inline-flex items-center justify-center w-8 h-8 rounded-full"
+              className="inline-flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full text-lg md:text-xl flex-shrink-0"
               style={{
                 border: `1px solid ${C.pink}50`,
                 color: C.peach,
@@ -462,12 +470,13 @@ export default function TeamRing({ members }: TeamRingProps) {
         </motion.div>
       </AnimatePresence>
 
+      {/* 3D Ring */}
       <div
         ref={containerRef}
         className="relative w-full select-none"
         style={{
-          height: "440px",
-          perspective: "1200px",
+          height: isMobile ? "320px" : "440px",
+          perspective: isMobile ? "800px" : "1200px",
           cursor: "grab",
         }}
         onPointerDown={handlePointerDown}
@@ -478,8 +487,8 @@ export default function TeamRing({ members }: TeamRingProps) {
         <div
           className="absolute left-1/2 top-1/2"
           style={{
-            width: "240px",
-            height: "360px",
+            width: isMobile ? "180px" : "240px",
+            height: isMobile ? "280px" : "360px",
             transform: `translate(-50%, -50%) rotateY(${-rotation}deg)`,
             transformStyle: "preserve-3d",
             transition: isDragging.current || reduceMotion ? "none" : undefined,
@@ -508,26 +517,22 @@ export default function TeamRing({ members }: TeamRingProps) {
         </div>
       </div>
 
+      {/* Drag hint */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
-        className="mt-6 flex items-center gap-3"
+        className="mt-4 md:mt-6 flex items-center gap-2 md:gap-3"
       >
         <div
-          className="h-px w-12"
+          className="h-px w-8 md:w-12"
           style={{
             background: `linear-gradient(90deg, transparent, ${C.pink}50)`,
           }}
         />
-        <span
-          className="text-[10px] font-semibold tracking-[0.3em] uppercase"
-          style={{ color: `${C.peach}60` }}
-        >
-          Drag to rotate
-        </span>
+
         <div
-          className="h-px w-12"
+          className="h-px w-8 md:w-12"
           style={{
             background: `linear-gradient(90deg, ${C.pink}50, transparent)`,
           }}
@@ -536,3 +541,4 @@ export default function TeamRing({ members }: TeamRingProps) {
     </div>
   );
 }
+
