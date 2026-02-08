@@ -18,8 +18,8 @@ import MobileNav from "./MobileNav.astro";
 
 <!-- MobileNav rendered OUTSIDE HomePage to avoid z-index stacking issues -->
 <MobileNav />
-
 <div class="HomePage">
+<div class="designHomePage">
    <a href="/events?category=tech" class="holobutton"><button class="button">TECH EVENTS</button></a>
    <a href="/events?category=non-tech" class="holobutton2"><button class="button">NON TECH EVENTS</button></a>
   <div class="HeroSection">
@@ -86,95 +86,29 @@ import MobileNav from "./MobileNav.astro";
       <div class="sprite bridge"></div>
     </div>
   </div>
+
 </div>
-
-<!--
----
-// Mobile component - loads optimized-styles.css only for mobile view
-
----
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Basic:wght@100..400&display=swap" rel="stylesheet">
-<style>
-  /* Import mobile-specific styles */
-  @import "../styles/optimized-styles.css";
-</style>
-
-<div class="HomePage">
-  <div class="HeroSection">
-    <div class="sprite title">
-      <p class="tagLine">The Next Iteration</p>
-    </div>
-    
-    <div class="sprite baseClouds"></div>
-    <div class="sprite baseClouds2"></div>
-    <div class="WindMillParent">
-      <div class="sprite staticWindMill"></div>
-      <div class="sprite rotatingWindMill"></div>
-    </div>
-    <div class="WaterMillParent">
-      <div class="sprite rotatingWaterMill1"></div>
-      <div class="sprite rotatingWaterMill2"></div>
-      <div class="sprite staticWaterMill"></div>
-      <div class="sprite Water"></div>
-    </div>
-    <div class="sprite titleCloud1"></div>
-    <div class="sprite titleCloud2"></div>
-    <div class="sprite titleCloud3"></div>
-    <div class="sprite stars"></div>
-    <div class="sprite geometricCircleGrid"></div>
-    <div class="sprite babbageMachine"></div>
-  </div>
-
-  <div class="hourGlassLeftParent">
-    <div class="sprite hourGlassLeftPillar"></div>
-  </div>
-  <div class="hourGlassRightParent">
-    <div class="sprite hourGlassRightPillar"></div>
-  </div>
-  <div class="hourGlassTopParent">
-    <div class="sprite hourGlassTop"></div>
-  </div>
-  <div class="hourGlassBaseParent">
-    <div class="sprite hourGlassBase"></div>
-  </div>
-  <div class="MiddleSection">
-    <p class="dialogue">Sometimes you let go, free-falling inside evolution's events...</p>
-    <div class="sprite MobileHourGlassLeftMiddle"></div>
-    <div class="sprite MobileHourGlassRightMiddle"></div>
-
-    <div class="sprite purpleClouds1"></div>
-    <div class="sprite purpleClouds2"></div>
-    <div class="sprite girlFall"></div>
-    <div class="sprite guyFall"></div>
-    <div class="sprite peachClouds1"></div>
-    <div class="sprite peachClouds2"></div>
-  </div>
-  <div class="MiddleSection Shine">
-    <div class="sprite upShine"></div>
-    <div class="sprite downShine"></div>
-  </div>
-  <div class="FutureParent">
-<div class="container">
-  <div class="radio-wrapper">
-    <input class="input" name="btn" id="value-1" type="radio" />
-    <div class="btn">
-      <span aria-hidden="">_</span>Cyber
-      <span class="btn__glitch" aria-hidden="">_TECH EVENT</span>
-      <label class="number">r1</label>
+  <div class="footer">
+    <div class="sponserPage">
+      <div class="GlobalColliance"></div>
+      <div class="spComp">
+        <div class="AssociateSp">
+          <p>Associate Sponsors </p>
+          <div class="ASPimagesContRow">
+            <div class="strikers aspImg"></div>
+            <div class="cafe aspImg"></div>
+          </div>
+            <div class="ASPimagesContRow">
+            <div class="yogi aspImg"></div>
+            <div class="IMS aspImg"></div>
+          </div>
+        </div>
+        <div class="OurGenerousDonor">
+                    <p>Our Generous Doner </p>
+          <div class="ourGenerousImg"></div>
+        </div>
+      </div>
     </div>
   </div>
+
 </div>
-
-
-    <div class="sprite bgFutureBuild"></div>
-    <div class="sprite bgFutureBuild2"></div>
-    <div class="sprite foreGroundRoad"></div>
-    <div class="BridgeAndTrainParent">
-      <div class="sprite train"></div>
-      <div class="sprite bridge"></div>
-    </div>
-  </div>
-</div> 
- -->
