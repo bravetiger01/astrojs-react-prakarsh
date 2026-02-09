@@ -657,19 +657,10 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
 			} from "pixi.js";
 
 			const loader = document.getElementById("loader-wrapper");
-			// Check if we should initialize PixiJS - need to check if we'll show loader eventually
-			// (loader may be hidden initially while music popup is showing)
-			const EXPIRY_TIME = 60 * 60 * 1000;
-			const LOCK_KEY = "loaderLastShown";
-			const isRootPath = location.pathname === "/";
-			const loaderLastShown = sessionStorage.getItem(LOCK_KEY);
-			const shouldShowLoaderEventually =
-				isRootPath &&
-				(!loaderLastShown ||
-					Date.now() - +loaderLastShown > EXPIRY_TIME);
-
-			if (!loader || !shouldShowLoaderEventually) {
-				console.log("Loader not needed, skipping PixiJS");
+			
+			// Only initialize if loader is visible
+			if (!loader || getComputedStyle(loader).display === "none") {
+				console.log("Loader not shown, skipping PixiJS");
 			} else {
 				console.log("🎨 Initializing PixiJS loader...");
 
@@ -756,45 +747,11 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
 					console.log("🎬 Animation started!");
 				}
 
-				// Check if music popup is showing (if so, wait for callback)
-				const MUSIC_PROMPT_KEY = "musicPromptShown";
-				const ENABLE_MUSIC_POPUP_CHECK = typeof ENABLE_MUSIC_POPUP !== 'undefined' ? ENABLE_MUSIC_POPUP : false;
-				const showMusicPrompt =
-					ENABLE_MUSIC_POPUP_CHECK && !sessionStorage.getItem(MUSIC_PROMPT_KEY);
-
-				if (showMusicPrompt) {
-					// Check if loader already started (inline script already ran)
-					if ((window as any).__loaderStarted) {
-						console.log(
-							"🎨 Loader already started, initializing PixiJS...",
-						);
-						initPixi().catch((err) => {
-							console.error("Failed to initialize PixiJS:", err);
-						});
-					} else {
-						// Set up callback for inline script to call
-						console.log(
-							"⏳ Waiting for music choice before starting animation...",
-						);
-						(window as any).__startPixiAnimation = () => {
-							console.log(
-								"🎨 Music choice made, initializing PixiJS...",
-							);
-							initPixi().catch((err) => {
-								console.error(
-									"Failed to initialize PixiJS:",
-									err,
-								);
-							});
-						};
-					}
-				} else {
-					// No music popup, start immediately
-					console.log("🎨 No music popup, starting PixiJS immediately...");
-					initPixi().catch((err) => {
-						console.error("Failed to initialize PixiJS:", err);
-					});
-				}
+				// Start PixiJS immediately (no music popup)
+				console.log("🎨 Starting PixiJS immediately...");
+				initPixi().catch((err) => {
+					console.error("Failed to initialize PixiJS:", err);
+				});
 			}
 		</script>
 
