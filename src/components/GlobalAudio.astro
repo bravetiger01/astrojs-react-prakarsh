@@ -98,6 +98,9 @@
         const savedPosition =
             parseFloat(localStorage.getItem(MUSIC_POS_KEY)) || 0;
 
+        // Music is DISABLED by default
+        updateUI(false);
+
         function updateUI(playing) {
             if (playing) {
                 iconPlaying.style.display = "block";
@@ -130,7 +133,10 @@
             }
         });
 
-        // If music was enabled, try to resume from saved position
+        // Music is DISABLED by default
+        updateUI(false);
+
+        // If music was previously enabled, try to resume from saved position
         if (musicEnabled) {
             audio.currentTime = savedPosition;
             audio
@@ -149,8 +155,6 @@
                         "⏸️ Autoplay blocked, waiting for user interaction",
                     );
                 });
-        } else {
-            updateUI(false);
         }
 
         // Toggle audio on button click

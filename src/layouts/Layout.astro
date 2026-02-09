@@ -8,8 +8,8 @@ const {
 } = Astro.props;
 
 // Feature toggles for popups
-const ENABLE_MUSIC_POPUP = true; // Set to true to enable music prompt popup
-const ENABLE_ZOOM_POPUP = true; // Set to true to enable zoom/scaling notification popup
+const ENABLE_MUSIC_POPUP = false; // Set to true to enable music prompt popup
+const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notification popup
 ---
 
 <!doctype html>
@@ -329,20 +329,16 @@ const ENABLE_ZOOM_POPUP = true; // Set to true to enable zoom/scaling notificati
 				if (musicOverlay) musicOverlay.style.display = "block";
 				document.documentElement.classList.add("loading");
 			} else {
-				// Hide music popup
+				// Hide music popup (always hidden when ENABLE_MUSIC_POPUP is false)
 				if (musicPopup) musicPopup.style.display = "none";
 				if (musicOverlay) musicOverlay.style.display = "none";
 
 				// Show or hide loader based on shouldShowLoader
 				if (!showLoader) {
 					if (loader) loader.style.display = "none";
-					// No loader and no prompt - show content immediately when DOM ready
-					document.addEventListener("DOMContentLoaded", () => {
-						const mainContent =
-							document.getElementById("main-content");
-						if (mainContent) mainContent.classList.add("visible");
-					});
 				} else {
+					// Show loader
+					if (loader) loader.style.display = "flex";
 					document.documentElement.classList.add("loading");
 					sessionStorage.setItem(LOCK_KEY, Date.now());
 				}
@@ -553,7 +549,15 @@ const ENABLE_ZOOM_POPUP = true; // Set to true to enable zoom/scaling notificati
 
 			// Loader animation logic
 			if (!showLoader || showMusicPrompt) {
-				// Don't run loader animation
+				// Don't run loader animation - show content immediately
+				if (!showMusicPrompt) {
+					// No popup and no loader - show content right away
+					document.addEventListener("DOMContentLoaded", () => {
+						document.documentElement.classList.remove("loading");
+						const mainContent = document.getElementById("main-content");
+						if (mainContent) mainContent.classList.add("visible");
+					});
+				}
 			} else {
 				// Run loader animation
 				// Prevent scrollbar during loading
@@ -576,6 +580,16 @@ const ENABLE_ZOOM_POPUP = true; // Set to true to enable zoom/scaling notificati
 
 						console.log("🎯 Loader complete, dispatching event");
 						window.dispatchEvent(new Event("loader:complete"));
+
+						// Show main content after loader
+						setTimeout(() => {
+							document.documentElement.classList.remove("loading");
+							const mainContent = document.getElementById("main-content");
+							if (mainContent) {
+								mainContent.classList.add("visible");
+								console.log("✅ Main content visible");
+							}
+						}, 1500); // Small delay for navbar animation
 
 						// Show zoom notification after loading screen finishes (desktop only)
 						const isMobileDevice =
@@ -744,8 +758,9 @@ const ENABLE_ZOOM_POPUP = true; // Set to true to enable zoom/scaling notificati
 
 				// Check if music popup is showing (if so, wait for callback)
 				const MUSIC_PROMPT_KEY = "musicPromptShown";
+				const ENABLE_MUSIC_POPUP_CHECK = typeof ENABLE_MUSIC_POPUP !== 'undefined' ? ENABLE_MUSIC_POPUP : false;
 				const showMusicPrompt =
-					!sessionStorage.getItem(MUSIC_PROMPT_KEY);
+					ENABLE_MUSIC_POPUP_CHECK && !sessionStorage.getItem(MUSIC_PROMPT_KEY);
 
 				if (showMusicPrompt) {
 					// Check if loader already started (inline script already ran)
@@ -775,6 +790,7 @@ const ENABLE_ZOOM_POPUP = true; // Set to true to enable zoom/scaling notificati
 					}
 				} else {
 					// No music popup, start immediately
+					console.log("🎨 No music popup, starting PixiJS immediately...");
 					initPixi().catch((err) => {
 						console.error("Failed to initialize PixiJS:", err);
 					});
