@@ -5,7 +5,7 @@ import GeometricPattern from "./GeometricPattern";
 import CassetteCard from "./CassetteCard";
 import ConsoleCard from "./ConsoleCard";
 import EsportsCard from "./EsportsCard";
-import type { Event } from "../data/event-types";
+import type { Event } from "../types/event-types";
 
 interface UnifiedEventsPageProps {
   technicalEvents: Event[];

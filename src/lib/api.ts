@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { Event, EventDbRow, EventMiscData } from "@/data/event-types.ts";
+import type { Event, EventDbRow, EventMiscData } from "@/types/event-types";
 import freeFirePoster from "@/assets/freefire-poster.png";
 import valorantPoster from "@/assets/valorant-poster.png";
 import bgmiPoster from "@/assets/bgmi-poster.png";

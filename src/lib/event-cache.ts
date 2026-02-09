@@ -1,17 +1,5 @@
-import type { Event } from "@/data/event-types";
+import type { Event } from "@/types/event-types";
 import { fetchAllEvents } from "./api";
-import { technicalEvents } from "@/data/technical_events";
-import { nonTechnicalEvents } from "@/data/non_technical";
-import { workshopEvents } from "@/data/workshops";
-import { esportsEvents } from "@/data/esports";
-
-// Combine all local events as fallback
-const allLocalEvents = [
-  ...technicalEvents,
-  ...nonTechnicalEvents,
-  ...workshopEvents,
-  ...esportsEvents,
-];
 
 // Global cache
 interface EventCache {
@@ -70,35 +58,17 @@ export const prefetchAllEvents = async (): Promise<void> => {
   cache.isPrefetching = true;
   cache.prefetchPromise = (async () => {
     try {
-      console.log("🔄 Prefetching all events...");
+      console.log("🔄 Prefetching all events from Supabase...");
       
-      let supabaseEvents: Event[] = [];
-      try {
-        supabaseEvents = await fetchAllEvents();
-        console.log(`📥 Fetched ${supabaseEvents.length} events from Supabase`);
-      } catch (error) {
-        console.warn("⚠️ Supabase not responding:", error);
-      }
+      const events = await fetchAllEvents();
+      console.log(`📥 Fetched ${events.length} events from Supabase`);
       
-      // Merge Supabase events with local events
-      // Local events take priority (they have string IDs that match routes)
-      const mergedEvents = [...allLocalEvents];
-      
-      // Add Supabase events that don't conflict with local ones
-      supabaseEvents.forEach(supabaseEvent => {
-        const existsInLocal = allLocalEvents.some(local => 
-          local.name === supabaseEvent.name || local.id === supabaseEvent.id
-        );
-        if (!existsInLocal) {
-          mergedEvents.push(supabaseEvent);
-        }
-      });
-      
-      console.log(`✨ Merged cache: ${allLocalEvents.length} local + ${supabaseEvents.length} Supabase = ${mergedEvents.length} total events`);
-      initializeCache(mergedEvents);
+      initializeCache(events);
     } catch (error) {
-      console.warn("⚠️ Error during prefetch, using local data only:", error);
-      initializeCache(allLocalEvents);
+      console.error("❌ Error fetching events from Supabase:", error);
+      // Initialize with empty array if Supabase fails
+      initializeCache([]);
+      throw error;
     } finally {
       cache.isPrefetching = false;
       cache.prefetchPromise = null;

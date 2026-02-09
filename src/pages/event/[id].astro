@@ -5,22 +5,13 @@ import PageLayout from "../../layouts/PageLayout.astro";
 import EventPage from "../../components/TechEventDetailPage";
 import NonTechEventDetailPage from "../../components/NonTechEventDetailPage";
 import EsportsEventDetailPage from "../../components/EsportsEventDetailPage";
+import { fetchAllEvents } from "../../lib/api";
 
-// For static build, we need to generate paths for all events
-import { technicalEvents } from "../../data/technical_events";
-import { nonTechnicalEvents } from "../../data/non_technical";
-import { workshopEvents } from "../../data/workshops";
-import { esportsEvents } from "../../data/esports";
+// For static build, we need to generate paths for all events from Supabase
+export async function getStaticPaths() {
+  const allEvents = await fetchAllEvents();
 
-export function getStaticPaths() {
-  const allLocalEvents = [
-    ...technicalEvents,
-    ...nonTechnicalEvents,
-    ...workshopEvents,
-    ...esportsEvents,
-  ];
-
-  return allLocalEvents.map((event) => ({
+  return allEvents.map((event) => ({
     params: { id: event.id },
     props: { category: event.category, eventId: event.id },
   }));

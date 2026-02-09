@@ -1,10 +1,13 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
 import UnifiedEventsPage from "../components/UnifiedEventsPage";
-import { technicalEvents } from "../data/technical_events";
-import { nonTechnicalEvents } from "../data/non_technical";
-import { workshopEvents } from "../data/workshops";
-import { esportsEvents } from "../data/esports";
+import { getCachedEventsByCategory } from "../lib/event-cache";
+
+// Fetch events by category from Supabase
+const technicalEvents = await getCachedEventsByCategory("tech");
+const nonTechnicalEvents = await getCachedEventsByCategory("non-tech");
+const workshopEvents = await getCachedEventsByCategory("workshops");
+const esportsEvents = await getCachedEventsByCategory("esports");
 ---
 
 <PageLayout title="Events - Prakarsh '26">
