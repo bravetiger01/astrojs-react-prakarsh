@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import type { Event, EventDbRow, EventMiscData } from "@/types/event-types";
+import type { Event, EventDbRow, EventMiscData } from "./event-types";
 import freeFirePoster from "@/assets/freefire-poster.png";
 import valorantPoster from "@/assets/valorant-poster.png";
 import bgmiPoster from "@/assets/bgmi-poster.png";
@@ -17,11 +17,11 @@ const getPosterImageForEvent = (
     name.includes("free fire") ||
     name.includes("freefire")
   ) {
-    return freeFirePoster;
+    return freeFirePoster.src;
   } else if (id.includes("valorant") || name.includes("valorant")) {
-    return valorantPoster;
+    return valorantPoster.src;
   } else if (id.includes("bgmi") || name.includes("bgmi")) {
-    return bgmiPoster;
+    return bgmiPoster.src;
   }
 
   return undefined;

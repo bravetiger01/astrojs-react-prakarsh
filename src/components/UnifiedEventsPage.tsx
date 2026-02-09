@@ -5,21 +5,12 @@ import GeometricPattern from "./GeometricPattern";
 import CassetteCard from "./CassetteCard";
 import ConsoleCard from "./ConsoleCard";
 import EsportsCard from "./EsportsCard";
-import type { Event } from "../types/event-types";
+import type { Event } from "@/lib/event-types";
+import { useEvents } from "@/hooks/use-events";
 
-interface UnifiedEventsPageProps {
-  technicalEvents: Event[];
-  nonTechnicalEvents: Event[];
-  workshopEvents: Event[];
-  esportsEvents?: Event[];
-}
+export default function UnifiedEventsPage() {
+  const { events, loading, error } = useEvents();
 
-export default function UnifiedEventsPage({
-  technicalEvents,
-  nonTechnicalEvents,
-  workshopEvents,
-  esportsEvents = [],
-}: UnifiedEventsPageProps) {
   // Read category from URL parameter
   const getInitialTab = () => {
     if (typeof window !== 'undefined') {
@@ -34,6 +25,12 @@ export default function UnifiedEventsPage({
 
   const [activeTab, setActiveTab] = useState<"all" | "tech" | "non-tech" | "workshops" | "esports">(getInitialTab());
 
+  // Filter events by category
+  const technicalEvents = events.filter(e => e.category === 'tech');
+  const nonTechnicalEvents = events.filter(e => e.category === 'non-tech');
+  const workshopEvents = events.filter(e => e.category === 'workshops');
+  const esportsEvents = events.filter(e => e.category === 'esports');
+
   // Category descriptions
   const categoryDescriptions = {
     all: "Explore all technical events, non-technical challenges, workshops, and esports tournaments at Prakarsh '26",
@@ -42,6 +39,30 @@ export default function UnifiedEventsPage({
     workshops: "Learn directly from industry experts through hands-on workshops focused on practical skills, emerging technologies, and real-world applications. Perfect for gaining knowledge beyond the classroom.",
     esports: "Enter the arena and compete in adrenaline-packed esports tournaments. Show off your gaming skills, teamwork, and strategy in high-stakes matches against the best players at Prakarsh '26.",
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(to bottom, #000000, #1a0033)" }}>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-white mb-4">Loading Events...</div>
+          <div className="text-gray-400">Fetching from Supabase</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(to bottom, #000000, #1a0033)" }}>
+        <div className="text-center">
+          <div className="text-2xl font-bold text-red-500 mb-4">Error Loading Events</div>
+          <div className="text-gray-400">{error.message}</div>
+        </div>
+      </div>
+    );
+  }
 
   const allEvents = [
     ...technicalEvents.map(e => ({ ...e, displayCategory: "tech" as const })),
