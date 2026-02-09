@@ -6,12 +6,10 @@ import vercel from "@astrojs/vercel"
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [
-    react(),
-    tailwind({
-      applyBaseStyles: false,
-    }),
-  ],
+  site : "https://www.prakarsh.org/",
+  integrations: [react(), tailwind({
+    applyBaseStyles: false,
+  })],
   output: "server",
   adapter: vercel(),
   vite: {
@@ -22,4 +20,3 @@ export default defineConfig({
     }
   }
 });
-

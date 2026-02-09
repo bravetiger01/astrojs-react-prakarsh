@@ -2,7 +2,10 @@
 import "../styles/index.css";
 import Navbar from "../pages/navbar.astro";
 import GlobalAudio from "../components/GlobalAudio.astro";
-const { title = "Prakarsh 2026" } = Astro.props;
+const { 
+	title = "Prakarsh 2026",
+	description = "Prakarsh - The Annual Technical Festival of SVIT College. Join us for exciting tech events, workshops, competitions, and esports tournaments."
+} = Astro.props;
 
 // Feature toggles for popups
 const ENABLE_MUSIC_POPUP = true; // Set to true to enable music prompt popup
@@ -14,11 +17,13 @@ const ENABLE_ZOOM_POPUP = true; // Set to true to enable zoom/scaling notificati
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content={description} />
 		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="apple-touch-icon" href="/favicon.svg" />
 
 		<title>{title}</title>
+
 
 		<link
 			rel="preload"
