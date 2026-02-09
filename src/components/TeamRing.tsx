@@ -1,4 +1,3 @@
-
 import { memo, useRef, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
@@ -6,6 +5,7 @@ interface TeamMember {
   id: string;
   name: string;
   role: string;
+  nickname?: string;
   image: string;
 }
 
@@ -202,17 +202,9 @@ const RingCard = memo(function RingCard({
 
         {/* ── Info section ── */}
         <div className="px-3.5 pt-2.5 pb-1.5 flex flex-col gap-0.5 relative z-10">
-          {/* Member ID */}
-          <div
-            className="text-[9px] font-semibold tracking-[0.15em] uppercase"
-            style={{ color: C.gold }}
-          >
-            PRK-{String(index + 1).padStart(3, "0")}
-          </div>
-
           {/* Name */}
           <h3
-            className="text-sm font-extrabold tracking-[0.06em] uppercase leading-tight"
+            className="text-m font-extrabold tracking-[0.06em] uppercase leading-tight"
             style={{ color: C.white }}
           >
             {member.name}
@@ -221,12 +213,23 @@ const RingCard = memo(function RingCard({
           {/* Role subtitle row */}
           <div className="flex items-center gap-1.5 mt-0.5">
             <span
-              className="text-[9px] font-semibold tracking-[0.12em] uppercase"
+              className="text-[12px] font-semibold tracking-[0.12em] uppercase"
               style={{ color: `${C.white}80` }}
             >
               {member.role}
             </span>
           </div>
+
+          {member.nickname && (
+            <div className="flex items-center gap-1.5">
+              <span
+                className="text-[9px] font-semibold tracking-[0.12em] uppercase"
+                style={{ color: `${C.cyan}90` }}
+              >
+                {member.nickname}
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -243,13 +246,15 @@ export default function TeamRing({ members }: TeamRingProps) {
   const [rotation, setRotation] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number>(0);
   const rafRef = useRef<number | null>(null);
   const reduceMotion = useReducedMotion();
 
   const numItems = members.length;
   const anglePerItem = 360 / numItems;
-  const radius = isMobile ? Math.max(280, numItems * 24) : Math.max(400, numItems * 32);
+  const radius = isMobile
+    ? Math.max(280, numItems * 24)
+    : Math.max(400, numItems * 32);
 
   const getActiveIndex = useCallback(
     (rot: number) => {
@@ -266,8 +271,8 @@ export default function TeamRing({ members }: TeamRingProps) {
       setIsMobile(window.innerWidth < 768);
     };
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
@@ -415,7 +420,10 @@ export default function TeamRing({ members }: TeamRingProps) {
   const activeMember = members[activeIndex] || members[0];
 
   return (
-    <div className="relative w-full flex flex-col items-center" style={{ minHeight: isMobile ? "500px" : "700px" }}>
+    <div
+      className="relative w-full flex flex-col items-center"
+      style={{ minHeight: isMobile ? "500px" : "700px" }}
+    >
       {/* Active member info */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -541,4 +549,3 @@ export default function TeamRing({ members }: TeamRingProps) {
     </div>
   );
 }
-
