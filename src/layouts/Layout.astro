@@ -288,6 +288,10 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
 
 		<!-- LOADER CONTROL + EVENT DISPATCH -->
 		<script is:inline define:vars={{ ENABLE_MUSIC_POPUP, ENABLE_ZOOM_POPUP }}>
+			// Make these available to other scripts
+			window.__ENABLE_MUSIC_POPUP = ENABLE_MUSIC_POPUP;
+			window.__ENABLE_ZOOM_POPUP = ENABLE_ZOOM_POPUP;
+			
 			const EXPIRY_TIME = 60 * 60 * 1000;
 			const LOCK_KEY = "loaderLastShown";
 			const MUSIC_PROMPT_KEY = "musicPromptShown";
@@ -656,19 +660,19 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
 				Rectangle,
 			} from "pixi.js";
 
-			const loader = document.getElementById("loader-wrapper");
+			const loaderEl = document.getElementById("loader-wrapper");
 			// Check if we should initialize PixiJS - need to check if we'll show loader eventually
 			// (loader may be hidden initially while music popup is showing)
-			const EXPIRY_TIME = 60 * 60 * 1000;
-			const LOCK_KEY = "loaderLastShown";
+			const EXPIRY_TIME_PIXI = 60 * 60 * 1000;
+			const LOCK_KEY_PIXI = "loaderLastShown";
 			const isRootPath = location.pathname === "/";
-			const loaderLastShown = sessionStorage.getItem(LOCK_KEY);
+			const loaderLastShown = sessionStorage.getItem(LOCK_KEY_PIXI);
 			const shouldShowLoaderEventually =
 				isRootPath &&
 				(!loaderLastShown ||
-					Date.now() - +loaderLastShown > EXPIRY_TIME);
+					Date.now() - +loaderLastShown > EXPIRY_TIME_PIXI);
 
-			if (!loader || !shouldShowLoaderEventually) {
+			if (!loaderEl || !shouldShowLoaderEventually) {
 				console.log("Loader not needed, skipping PixiJS");
 			} else {
 				console.log("🎨 Initializing PixiJS loader...");
@@ -758,9 +762,9 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
 
 				// Check if music popup is showing (if so, wait for callback)
 				const MUSIC_PROMPT_KEY = "musicPromptShown";
-				const ENABLE_MUSIC_POPUP_CHECK = typeof ENABLE_MUSIC_POPUP !== 'undefined' ? ENABLE_MUSIC_POPUP : false;
+				const ENABLE_MUSIC_POPUP = (window as any).__ENABLE_MUSIC_POPUP || false;
 				const showMusicPrompt =
-					ENABLE_MUSIC_POPUP_CHECK && !sessionStorage.getItem(MUSIC_PROMPT_KEY);
+					ENABLE_MUSIC_POPUP && !sessionStorage.getItem(MUSIC_PROMPT_KEY);
 
 				if (showMusicPrompt) {
 					// Check if loader already started (inline script already ran)

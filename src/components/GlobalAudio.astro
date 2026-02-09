@@ -94,12 +94,14 @@
         audio.volume = 0.3;
 
         // Check localStorage for music preference and position
-        const musicEnabled = localStorage.getItem(MUSIC_PREF_KEY) === "true";
+        // Default to true (enabled) if no preference is set
+        const musicEnabledStored = localStorage.getItem(MUSIC_PREF_KEY);
+        const musicEnabled = musicEnabledStored === null ? true : musicEnabledStored === "true";
         const savedPosition =
             parseFloat(localStorage.getItem(MUSIC_POS_KEY)) || 0;
 
-        // Music is DISABLED by default
-        updateUI(false);
+        // Initial UI state based on preference
+        updateUI(musicEnabled);
 
         function updateUI(playing) {
             if (playing) {
@@ -133,19 +135,16 @@
             }
         });
 
-        // Music is DISABLED by default
-        updateUI(false);
-
-        // If music was previously enabled, try to resume from saved position
+        // Try to autoplay music (enabled by default)
         if (musicEnabled) {
             audio.currentTime = savedPosition;
             audio
                 .play()
                 .then(() => {
                     updateUI(true);
+                    localStorage.setItem(MUSIC_PREF_KEY, "true");
                     console.log(
-                        "🎵 Music resumed from position:",
-                        savedPosition.toFixed(1) + "s",
+                        "🎵 Music " + (savedPosition > 0 ? "resumed from position: " + savedPosition.toFixed(1) + "s" : "started"),
                     );
                 })
                 .catch(() => {
@@ -155,6 +154,9 @@
                         "⏸️ Autoplay blocked, waiting for user interaction",
                     );
                 });
+        } else {
+            // Music explicitly disabled by user
+            updateUI(false);
         }
 
         // Toggle audio on button click
