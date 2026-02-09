@@ -40,20 +40,8 @@ export default function UnifiedEventsPage() {
     esports: "Enter the arena and compete in adrenaline-packed esports tournaments. Show off your gaming skills, teamwork, and strategy in high-stakes matches against the best players at Prakarsh '26.",
   };
 
-  // Show loading state
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(to bottom, #000000, #1a0033)" }}>
-        <div className="text-center">
-          <div className="text-2xl font-bold text-white mb-4">Loading Events...</div>
-          <div className="text-gray-400">Fetching from Supabase</div>
-        </div>
-      </div>
-    );
-  }
-
-  // Show error state
-  if (error) {
+  // Show error state only if there's an error AND no cached data
+  if (error && events.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: "linear-gradient(to bottom, #000000, #1a0033)" }}>
         <div className="text-center">
