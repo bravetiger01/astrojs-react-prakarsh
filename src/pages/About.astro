@@ -1,22 +1,11 @@
 ---
-import ResponsiveNav from "../components/ResponsiveNav.astro";
-
-// About.astro
+import PageLayout from "../layouts/PageLayout.astro";
 ---
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <title>About Us | Prakarsh 2026</title>
-    </head>
-    <body>
-        <ResponsiveNav />
-        <div class="college-bg"></div>
+<PageLayout title="About Us | Prakarsh 2026">
+    <div class="college-bg"></div>
 
-        <div class="page-wrapper">
+    <div class="page-wrapper">
             <div class="lamination">
                 <main class="document">
                     <div class="document-body">
@@ -103,8 +92,7 @@ import ResponsiveNav from "../components/ResponsiveNav.astro";
                 </main>
             </div>
         </div>
-    </body>
-</html>
+</PageLayout>
 
 <style>
     /* Reset & Core */
