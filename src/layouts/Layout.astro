@@ -3,6 +3,10 @@ import "../styles/index.css";
 import Navbar from "../pages/navbar.astro";
 import GlobalAudio from "../components/GlobalAudio.astro";
 const { title = "Prakarsh 2026" } = Astro.props;
+
+// Feature toggles for popups
+const ENABLE_MUSIC_POPUP = false; // Set to true to enable music prompt popup
+const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notification popup
 ---
 
 <!doctype html>
@@ -265,7 +269,7 @@ const { title = "Prakarsh 2026" } = Astro.props;
 		</div>
 
 		<!-- LOADER CONTROL + EVENT DISPATCH -->
-		<script is:inline>
+		<script is:inline define:vars={{ ENABLE_MUSIC_POPUP, ENABLE_ZOOM_POPUP }}>
 			const EXPIRY_TIME = 60 * 60 * 1000;
 			const LOCK_KEY = "loaderLastShown";
 			const MUSIC_PROMPT_KEY = "musicPromptShown";
@@ -296,7 +300,7 @@ const { title = "Prakarsh 2026" } = Astro.props;
 				audio.volume = 0.3;
 			}
 
-			const showMusicPrompt = !sessionStorage.getItem(MUSIC_PROMPT_KEY);
+			const showMusicPrompt = ENABLE_MUSIC_POPUP && !sessionStorage.getItem(MUSIC_PROMPT_KEY);
 			const showLoader = shouldShowLoader();
 
 			// Initial setup
@@ -415,6 +419,7 @@ const { title = "Prakarsh 2026" } = Astro.props;
 								"zoomNotificationShown";
 
 							if (
+								ENABLE_ZOOM_POPUP &&
 								!isMobileDevice &&
 								!sessionStorage.getItem(ZOOM_NOTIFICATION_KEY)
 							) {
@@ -562,6 +567,7 @@ const { title = "Prakarsh 2026" } = Astro.props;
 						const ZOOM_NOTIFICATION_KEY = "zoomNotificationShown";
 
 						if (
+							ENABLE_ZOOM_POPUP &&
 							!isMobileDevice &&
 							!sessionStorage.getItem(ZOOM_NOTIFICATION_KEY)
 						) {
