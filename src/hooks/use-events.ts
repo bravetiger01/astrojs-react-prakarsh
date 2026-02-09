@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { Event } from "@/data/event-types.ts";
+import type { Event } from "@/lib/event-types";
 import {
   getCachedEvents,
   getCachedEventById,
