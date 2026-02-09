@@ -71,6 +71,75 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
         transform-origin: center center;
       }
 
+      /* Music button instruction tooltip */
+      .music-instruction {
+        position: fixed;
+        bottom: 5.5rem;
+        right: 1rem;
+        background: linear-gradient(135deg, #1a0f2e 0%, #2a1a3d 100%);
+        border: 2px solid #f1b5a2;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        max-width: 280px;
+        z-index: 9997;
+        box-shadow:
+          0 0 30px rgba(241, 181, 162, 0.4),
+          0 0 60px rgba(112, 0, 116, 0.2);
+        animation: slideInFromRight 0.5s ease-out;
+        pointer-events: none;
+      }
+
+      .music-instruction::after {
+        content: "";
+        position: absolute;
+        bottom: -10px;
+        right: 1.5rem;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid #f1b5a2;
+      }
+
+      .music-instruction p {
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 0.9rem;
+        line-height: 1.4;
+        margin: 0;
+        text-align: center;
+      }
+
+      .music-instruction .icon {
+        display: inline-block;
+        margin-left: 0.25rem;
+      }
+
+      @keyframes slideInFromRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .music-instruction.fade-out {
+        animation: fadeOutToRight 0.5s ease-out forwards;
+      }
+
+      @keyframes fadeOutToRight {
+        from {
+          opacity: 1;
+          transform: translateX(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+      }
+
       /* Zoom notification popup */
       .zoom-notification {
         position: fixed;
@@ -284,6 +353,13 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
       <canvas id="sprite-canvas"></canvas>
     </div>
 
+    <!-- Music Button Instruction Tooltip -->
+    <div id="music-instruction" class="music-instruction hidden">
+      <p>
+        🎵 Click here to enable background music<span class="icon">👇</span>
+      </p>
+    </div>
+
     <!-- LOADER CONTROL + EVENT DISPATCH -->
     <script is:inline define:vars={{ ENABLE_MUSIC_POPUP, ENABLE_ZOOM_POPUP }}>
       // Make these available to other scripts
@@ -451,6 +527,30 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
                   }
                 }, 500);
               }
+
+              // Show music instruction tooltip if music is not playing (desktop only)
+              if (!isMobileDevice && !enableMusic) {
+                const MUSIC_INSTRUCTION_KEY = "musicInstructionShown";
+                if (!sessionStorage.getItem(MUSIC_INSTRUCTION_KEY)) {
+                  setTimeout(() => {
+                    const musicInstruction = document.getElementById(
+                      "music-instruction",
+                    );
+                    if (musicInstruction) {
+                      musicInstruction.classList.remove("hidden");
+
+                      // Auto-hide after 5 seconds
+                      setTimeout(() => {
+                        musicInstruction.classList.add("fade-out");
+                        setTimeout(() => {
+                          musicInstruction.classList.add("hidden");
+                          sessionStorage.setItem(MUSIC_INSTRUCTION_KEY, "true");
+                        }, 500);
+                      }, 5000);
+                    }
+                  }, ENABLE_ZOOM_POPUP ? 3000 : 1000); // Delay if zoom popup is shown
+                }
+              }
             }, ANIMATION_DURATION);
           } else {
             // No loader, remove loading class and show content
@@ -595,6 +695,34 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
                   overlay.addEventListener("click", closeNotification);
                 }
               }, 500); // Small delay after loader finishes
+            }
+
+            // Show music instruction tooltip if music is not playing (desktop only)
+            const MUSIC_INSTRUCTION_KEY = "musicInstructionShown";
+            const musicEnabled = localStorage.getItem("musicEnabled");
+            
+            if (
+              !isMobileDevice &&
+              musicEnabled !== "true" &&
+              !sessionStorage.getItem(MUSIC_INSTRUCTION_KEY)
+            ) {
+              setTimeout(() => {
+                const musicInstruction = document.getElementById(
+                  "music-instruction",
+                );
+                if (musicInstruction) {
+                  musicInstruction.classList.remove("hidden");
+
+                  // Auto-hide after 5 seconds
+                  setTimeout(() => {
+                    musicInstruction.classList.add("fade-out");
+                    setTimeout(() => {
+                      musicInstruction.classList.add("hidden");
+                      sessionStorage.setItem(MUSIC_INSTRUCTION_KEY, "true");
+                    }, 500);
+                  }, 5000);
+                }
+              }, ENABLE_ZOOM_POPUP ? 3000 : 1000); // Delay if zoom popup is shown
             }
 
             // Navbar animation script handles fade-out after merge animation
