@@ -139,7 +139,9 @@ const EventPage = ({ eventId }: EventPageProps) => {
         className="hidden md:block fixed bottom-8 right-8 z-50"
       >
         <motion.a
-          href="#register"
+          href="https://konfhub.com/svit"
+          target="_blank"
+          rel="noopener noreferrer"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="group relative flex items-center gap-3 px-8 py-4 font-display tracking-widest text-base font-bold overflow-hidden backdrop-blur-sm"
@@ -190,7 +192,9 @@ const EventPage = ({ eventId }: EventPageProps) => {
         }}
       >
         <motion.a
-          href="#register"
+          href="https://konfhub.com/svit"
+          target="_blank"
+          rel="noopener noreferrer"
           whileTap={{ scale: 0.97 }}
           className="group relative flex items-center justify-center gap-2 w-full px-6 py-4 font-display tracking-widest text-sm font-bold overflow-hidden backdrop-blur-sm"
           style={{

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import type { Event } from "../data/event-types";
+import type { Event } from "../types/event-types";
 import InteractiveTilt from "./InteractiveTilt";
 
 interface EventIdCardProps {
