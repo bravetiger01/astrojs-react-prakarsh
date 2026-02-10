@@ -9,6 +9,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useEventById } from "../hooks/use-events";
+import { CONFIG } from "../lib/config";
 
 interface EsportsEventDetailPageProps {
   eventId?: string;
@@ -76,8 +77,8 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
   const tournamentName = event.esports?.tournamentName || event.name;
   const prizePool = event.esports?.prizePool || "TBA";
   const teamSize = event.esports?.teamSize || "TBA";
-  const date = formatDate(event.date);
-  const time = formatTime(event.time);
+  const date = CONFIG.SHOW_EVENT_DATES ? formatDate(event.date) : "TBA";
+  const time = CONFIG.SHOW_EVENT_DATES ? formatTime(event.time) : "TBA";
   const venue = event.location || "TBA";
   const description = event.description?.[0] || event.tagline || "";
   const rules =
@@ -97,10 +98,12 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
       ? event.esports.requirements
       : ["Requirements to be announced"];
   const posterImageRaw = event.esports?.posterImage || event.posterImage;
-  
+
   // Extract src from ImageMetadata if needed
-  const posterImage = posterImageRaw 
-    ? (typeof posterImageRaw === 'string' ? posterImageRaw : posterImageRaw.src)
+  const posterImage = posterImageRaw
+    ? typeof posterImageRaw === "string"
+      ? posterImageRaw
+      : posterImageRaw.src
     : undefined;
 
   return (

@@ -12,9 +12,12 @@ const navLinks = [
 <nav id="navbar" class="navbar">
   <GlassSurface client:load width="100%" borderRadius={50}>
     <div class="content">
-      <div class="img">
+      <div class="img justify-content:space-between">
         <img id="logo" src="/assets/logo.svg" alt="Logo" />
+
+        <img id="logo" src="/assets/SvitLogo.svg" alt="Logo" />
       </div>
+      <div class="img"></div>
       <div class="navlinks">
         <div class="links">
           {navLinks.map((l) => <a href={l.href}>{l.name}</a>)}
@@ -183,6 +186,7 @@ const navLinks = [
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    gap: 30px;
   }
 
   #logo {

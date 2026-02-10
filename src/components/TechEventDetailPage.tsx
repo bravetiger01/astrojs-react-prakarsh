@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Sparkles, Users, Calendar, MapPin } from "lucide-react";
 import { useEventById } from "../hooks/use-events";
 import ParticleField from "./ParticleField";
+import { CONFIG } from "../lib/config";
 
 interface EventPageProps {
   eventId?: string;
@@ -17,11 +18,12 @@ const COLORS = {
 const EventPage = ({ eventId }: EventPageProps) => {
   const { event, loading, error } = useEventById(eventId);
 
-  const teamSizeLabel = event?.solo === true
-    ? "Solo"
-    : event?.solo === false
-      ? "Multiple"
-      : "Individual";
+  const teamSizeLabel =
+    event?.solo === true
+      ? "Solo"
+      : event?.solo === false
+        ? "Multiple"
+        : "Individual";
 
   // Determine the back link based on event category
   const getBackLink = () => {
@@ -167,10 +169,10 @@ const EventPage = ({ eventId }: EventPageProps) => {
               background: `linear-gradient(90deg, transparent, ${COLORS.white}40, transparent)`,
             }}
           />
-          
+
           <Sparkles size={20} className="animate-pulse" />
           <span>REGISTER NOW</span>
-          
+
           {/* Hover glow */}
           <motion.div
             className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -219,7 +221,7 @@ const EventPage = ({ eventId }: EventPageProps) => {
               background: `linear-gradient(90deg, transparent, ${COLORS.white}40, transparent)`,
             }}
           />
-          
+
           <Sparkles size={18} className="animate-pulse" />
           <span>REGISTER NOW</span>
         </motion.a>
@@ -326,7 +328,11 @@ const EventPage = ({ eventId }: EventPageProps) => {
                     className="p-2 rounded-full flex-shrink-0"
                     style={{ backgroundColor: `${COLORS.peach}30` }}
                   >
-                    <Users size={16} className="md:w-[18px] md:h-[18px]" style={{ color: COLORS.accent }} />
+                    <Users
+                      size={16}
+                      className="md:w-[18px] md:h-[18px]"
+                      style={{ color: COLORS.accent }}
+                    />
                   </div>
                   <div>
                     <p
@@ -356,7 +362,11 @@ const EventPage = ({ eventId }: EventPageProps) => {
                     className="p-2 rounded-full flex-shrink-0"
                     style={{ backgroundColor: `${COLORS.peach}30` }}
                   >
-                    <Calendar size={16} className="md:w-[18px] md:h-[18px]" style={{ color: COLORS.accent }} />
+                    <Calendar
+                      size={16}
+                      className="md:w-[18px] md:h-[18px]"
+                      style={{ color: COLORS.accent }}
+                    />
                   </div>
                   <div>
                     <p
@@ -553,7 +563,10 @@ const EventPage = ({ eventId }: EventPageProps) => {
                     <div className="space-y-4 md:space-y-6">
                       {event.rules.singles.sections.map(
                         (section, sectionIdx) => (
-                          <div key={sectionIdx} className="space-y-2 md:space-y-3">
+                          <div
+                            key={sectionIdx}
+                            className="space-y-2 md:space-y-3"
+                          >
                             <div className="flex items-start gap-2 md:gap-3">
                               <span
                                 className="font-display font-bold text-base md:text-lg flex-shrink-0 w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-full"
@@ -574,7 +587,10 @@ const EventPage = ({ eventId }: EventPageProps) => {
 
                             <div className="ml-7 md:ml-9 space-y-2 md:space-y-3">
                               {section.items.map((item, itemIdx) => (
-                                <div key={itemIdx} className="space-y-1.5 md:space-y-2">
+                                <div
+                                  key={itemIdx}
+                                  className="space-y-1.5 md:space-y-2"
+                                >
                                   {item.subtitle && (
                                     <p
                                       className="font-medium text-sm md:text-base"
@@ -649,7 +665,10 @@ const EventPage = ({ eventId }: EventPageProps) => {
                     <div className="space-y-4 md:space-y-6">
                       {event.rules.doubles.sections.map(
                         (section, sectionIdx) => (
-                          <div key={sectionIdx} className="space-y-2 md:space-y-3">
+                          <div
+                            key={sectionIdx}
+                            className="space-y-2 md:space-y-3"
+                          >
                             <div className="flex items-start gap-2 md:gap-3">
                               <span
                                 className="font-display font-bold text-base md:text-lg flex-shrink-0 w-5 h-5 md:w-6 md:h-6 flex items-center justify-center rounded-full"
@@ -670,7 +689,10 @@ const EventPage = ({ eventId }: EventPageProps) => {
 
                             <div className="ml-7 md:ml-9 space-y-2 md:space-y-3">
                               {section.items.map((item, itemIdx) => (
-                                <div key={itemIdx} className="space-y-1.5 md:space-y-2">
+                                <div
+                                  key={itemIdx}
+                                  className="space-y-1.5 md:space-y-2"
+                                >
                                   {item.subtitle && (
                                     <p
                                       className="font-medium text-sm md:text-base"
@@ -742,7 +764,8 @@ const EventPage = ({ eventId }: EventPageProps) => {
                 className="text-base md:text-lg mb-6 md:mb-8 max-w-2xl mx-auto px-4"
                 style={{ color: `${COLORS.white}90` }}
               >
-                Don't miss out on this incredible opportunity to showcase your innovation and entrepreneurial skills!
+                Don't miss out on this incredible opportunity to showcase your
+                innovation and entrepreneurial skills!
               </p>
               {/* <motion.a
                 href="#register"

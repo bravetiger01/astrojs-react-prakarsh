@@ -1,4 +1,3 @@
-
 import {
   ArrowLeft,
   Calendar,
@@ -11,11 +10,11 @@ import {
   Zap,
 } from "lucide-react";
 import { useEventById } from "@/hooks/use-events";
+import { CONFIG } from "@/lib/config";
 
-interface ConsoleEventPageDetails{
+interface ConsoleEventPageDetails {
   eventId: string;
 }
-
 
 const formatDate = (value?: string) => {
   if (!value) return "TBA";
@@ -38,8 +37,7 @@ const formatTime = (value?: string) => {
   });
 };
 
-const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails ) => {
-  
+const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails) => {
   const { event, loading, error } = useEventById(eventId);
 
   if (loading) {
@@ -104,12 +102,14 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails ) => {
       ? event.console.prerequisites
       : ["No prerequisites announced yet"];
   const capacity = event.console?.capacity || "Open";
-  const date = formatDate(event.date);
-  const time = formatTime(event.time);
+  const date = CONFIG.SHOW_EVENT_DATES ? formatDate(event.date) : "TBA";
+  const time = CONFIG.SHOW_EVENT_DATES ? formatTime(event.time) : "TBA";
   const venue = event.location || "TBA";
 
   const backLink =
-    event.category === "workshops" ? "/events?category=workshops" : "/events?category=non-tech";
+    event.category === "workshops"
+      ? "/events?category=workshops"
+      : "/events?category=non-tech";
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: lightColor }}>
@@ -217,19 +217,19 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails ) => {
             </div>
 
             <div className="flex flex-wrap gap-3">
-                  {techStack.map((tech, index) => (
-                    <span
-                      key={index}
-                      className="px-4 py-2 text-sm font-mono uppercase tracking-wider"
-                      style={{
-                        background: "linear-gradient(145deg, #d0d0d0, #c0c0c0)",
-                        color: primaryColor,
-                      }}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
+              {techStack.map((tech, index) => (
+                <span
+                  key={index}
+                  className="px-4 py-2 text-sm font-mono uppercase tracking-wider"
+                  style={{
+                    background: "linear-gradient(145deg, #d0d0d0, #c0c0c0)",
+                    color: primaryColor,
+                  }}
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -482,4 +482,3 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails ) => {
 };
 
 export default ConsoleEventDetailPage;
-

@@ -35,7 +35,7 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
 
-    <title>{title}</title>
+    <title>Prakarsh 2026</title>
 
     <link
       rel="preload"
@@ -532,23 +532,28 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
               if (!isMobileDevice && !enableMusic) {
                 const MUSIC_INSTRUCTION_KEY = "musicInstructionShown";
                 if (!sessionStorage.getItem(MUSIC_INSTRUCTION_KEY)) {
-                  setTimeout(() => {
-                    const musicInstruction = document.getElementById(
-                      "music-instruction",
-                    );
-                    if (musicInstruction) {
-                      musicInstruction.classList.remove("hidden");
+                  setTimeout(
+                    () => {
+                      const musicInstruction =
+                        document.getElementById("music-instruction");
+                      if (musicInstruction) {
+                        musicInstruction.classList.remove("hidden");
 
-                      // Auto-hide after 5 seconds
-                      setTimeout(() => {
-                        musicInstruction.classList.add("fade-out");
+                        // Auto-hide after 5 seconds
                         setTimeout(() => {
-                          musicInstruction.classList.add("hidden");
-                          sessionStorage.setItem(MUSIC_INSTRUCTION_KEY, "true");
-                        }, 500);
-                      }, 5000);
-                    }
-                  }, ENABLE_ZOOM_POPUP ? 3000 : 1000); // Delay if zoom popup is shown
+                          musicInstruction.classList.add("fade-out");
+                          setTimeout(() => {
+                            musicInstruction.classList.add("hidden");
+                            sessionStorage.setItem(
+                              MUSIC_INSTRUCTION_KEY,
+                              "true",
+                            );
+                          }, 500);
+                        }, 5000);
+                      }
+                    },
+                    ENABLE_ZOOM_POPUP ? 3000 : 1000,
+                  ); // Delay if zoom popup is shown
                 }
               }
             }, ANIMATION_DURATION);
@@ -700,29 +705,31 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
             // Show music instruction tooltip if music is not playing (desktop only)
             const MUSIC_INSTRUCTION_KEY = "musicInstructionShown";
             const musicEnabled = localStorage.getItem("musicEnabled");
-            
+
             if (
               !isMobileDevice &&
               musicEnabled !== "true" &&
               !sessionStorage.getItem(MUSIC_INSTRUCTION_KEY)
             ) {
-              setTimeout(() => {
-                const musicInstruction = document.getElementById(
-                  "music-instruction",
-                );
-                if (musicInstruction) {
-                  musicInstruction.classList.remove("hidden");
+              setTimeout(
+                () => {
+                  const musicInstruction =
+                    document.getElementById("music-instruction");
+                  if (musicInstruction) {
+                    musicInstruction.classList.remove("hidden");
 
-                  // Auto-hide after 5 seconds
-                  setTimeout(() => {
-                    musicInstruction.classList.add("fade-out");
+                    // Auto-hide after 5 seconds
                     setTimeout(() => {
-                      musicInstruction.classList.add("hidden");
-                      sessionStorage.setItem(MUSIC_INSTRUCTION_KEY, "true");
-                    }, 500);
-                  }, 5000);
-                }
-              }, ENABLE_ZOOM_POPUP ? 3000 : 1000); // Delay if zoom popup is shown
+                      musicInstruction.classList.add("fade-out");
+                      setTimeout(() => {
+                        musicInstruction.classList.add("hidden");
+                        sessionStorage.setItem(MUSIC_INSTRUCTION_KEY, "true");
+                      }, 500);
+                    }, 5000);
+                  }
+                },
+                ENABLE_ZOOM_POPUP ? 3000 : 1000,
+              ); // Delay if zoom popup is shown
             }
 
             // Navbar animation script handles fade-out after merge animation
