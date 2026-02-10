@@ -109,7 +109,7 @@ const RingCard = memo(function RingCard({
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="absolute inset-0 w-full h-full object-contain"
+                  className="absolute inset-0 w-full h-full object-cover"
                   draggable={false}
                   loading="lazy"
                   decoding="async"
