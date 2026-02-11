@@ -230,7 +230,7 @@ const EventPage = ({ eventId }: EventPageProps) => {
       {/* Main content */}
       <div className="relative z-10 pt-20 md:pt-24 pb-24 md:pb-16 px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="grid gap-8 md:gap-10 lg:grid-cols-2 items-start">
+          <div className="grid gap-8 md:gap-12 lg:gap-16 lg:grid-cols-2 items-start">
             {/* Left: badge, name, tagline, keywords */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -271,7 +271,7 @@ const EventPage = ({ eventId }: EventPageProps) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 md:mb-6 leading-tight relative"
+                className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 md:mb-6 leading-tight relative break-words hyphens-auto"
                 style={{ color: COLORS.accent }}
               >
                 {event.name}
