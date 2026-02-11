@@ -233,6 +233,8 @@ const FlyingShipBanner = ({
         href={href}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onTouchStart={() => setIsHovered(true)}
+        onTouchEnd={() => setIsHovered(false)}
         style={{
           position: "absolute",
           bottom: "20px",
@@ -244,6 +246,8 @@ const FlyingShipBanner = ({
           textDecoration: "none",
           cursor: "pointer",
           animation: "bannerSway 4s ease-in-out infinite",
+          pointerEvents: "auto",
+          touchAction: "manipulation",
         }}
       >
         {/* Banner frame */}
