@@ -85,7 +85,7 @@ body {
   display: flex;
   justify-content: center;
   position: absolute;
-  z-index: 9000;
+  z-index: 1200;
   bottom:0%;
   /* width: 100%;
   height: 68.99vh; */
