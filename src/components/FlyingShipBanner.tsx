@@ -121,24 +121,14 @@ const FlyingShipBanner = ({
         >
           <circle cx="15" cy="15" r="12" fill="#1a0a2e" stroke={accentColor} strokeWidth="2" />
           <circle cx="15" cy="15" r="8" fill={accentColor} opacity="0.3" />
-          <line
-            x1="15"
-            y1="3"
-            x2="15"
-            y2="27"
-            stroke={accentColor}
-            strokeWidth="2"
-            style={{ animation: "propellerSpin 0.5s linear infinite" }}
-          />
-          <line
-            x1="3"
-            y1="15"
-            x2="27"
-            y2="15"
-            stroke={accentColor}
-            strokeWidth="2"
-            style={{ animation: "propellerSpin 0.5s linear infinite" }}
-          />
+          {/* Propeller blades - 4 blades */}
+          <g style={{ transformOrigin: "15px 15px", animation: "propellerSpin 1s linear infinite" }}>
+            <ellipse cx="15" cy="6" rx="2" ry="9" fill={accentColor} opacity="0.8" />
+            <ellipse cx="24" cy="15" rx="9" ry="2" fill={accentColor} opacity="0.8" />
+            <ellipse cx="15" cy="24" rx="2" ry="9" fill={accentColor} opacity="0.6" />
+            <ellipse cx="6" cy="15" rx="9" ry="2" fill={accentColor} opacity="0.6" />
+          </g>
+          <circle cx="15" cy="15" r="3" fill="#1a0a2e" stroke={accentColor} strokeWidth="1" />
         </svg>
 
         <svg
@@ -153,24 +143,14 @@ const FlyingShipBanner = ({
         >
           <circle cx="15" cy="15" r="12" fill="#1a0a2e" stroke={accentColor} strokeWidth="2" />
           <circle cx="15" cy="15" r="8" fill={accentColor} opacity="0.3" />
-          <line
-            x1="15"
-            y1="3"
-            x2="15"
-            y2="27"
-            stroke={accentColor}
-            strokeWidth="2"
-            style={{ animation: "propellerSpin 0.5s linear infinite" }}
-          />
-          <line
-            x1="3"
-            y1="15"
-            x2="27"
-            y2="15"
-            stroke={accentColor}
-            strokeWidth="2"
-            style={{ animation: "propellerSpin 0.5s linear infinite" }}
-          />
+          {/* Propeller blades - 4 blades */}
+          <g style={{ transformOrigin: "15px 15px", animation: "propellerSpin 1s linear infinite" }}>
+            <ellipse cx="15" cy="6" rx="2" ry="9" fill={accentColor} opacity="0.8" />
+            <ellipse cx="24" cy="15" rx="9" ry="2" fill={accentColor} opacity="0.8" />
+            <ellipse cx="15" cy="24" rx="2" ry="9" fill={accentColor} opacity="0.6" />
+            <ellipse cx="6" cy="15" rx="9" ry="2" fill={accentColor} opacity="0.6" />
+          </g>
+          <circle cx="15" cy="15" r="3" fill="#1a0a2e" stroke={accentColor} strokeWidth="1" />
         </svg>
 
         {/* Gondola/Cabin underneath */}
