@@ -25,7 +25,7 @@ const accentPalette = [
 ];
 
 const formatDate = (value?: string) => {
-  if (!value) return "TBA";
+  if (!value) return null;
   const parsed = new Date(value);
   if (Number.isNaN(parsed.getTime())) return value;
   return parsed.toLocaleDateString("en-US", {
@@ -36,7 +36,7 @@ const formatDate = (value?: string) => {
 };
 
 const formatTime = (value?: string) => {
-  if (!value) return "TBA";
+  if (!value) return null;
   const parsed = new Date(`1970-01-01T${value}`);
   if (Number.isNaN(parsed.getTime())) return value;
   return parsed.toLocaleTimeString("en-US", {
@@ -75,11 +75,14 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
   const gameName =
     event.esports?.gameName || event.name.split(" ")[0] || "Esports";
   const tournamentName = event.esports?.tournamentName || event.name;
-  const prizePool = event.esports?.prizePool || "TBA";
-  const teamSize = event.esports?.teamSize || "TBA";
-  const date = CONFIG.SHOW_EVENT_DATES ? formatDate(event.date) : "TBA";
-  const time = CONFIG.SHOW_EVENT_DATES ? formatTime(event.time) : "TBA";
-  const venue = event.location || "TBA";
+  const prizePool = event.esports?.prizePool || "Prize pool to be announced";
+  const teamSize =
+    event.esports?.teamSize ||
+    (event.solo === false
+      ? "Team"
+      : event.solo === true
+        ? "Solo"
+        : "To be announced");
   const description = event.description?.[0] || event.tagline || "";
   const rules =
     event.esports?.rules && event.esports.rules.length > 0
@@ -88,7 +91,7 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
   const schedule =
     event.esports?.schedule && event.esports.schedule.length > 0
       ? event.esports.schedule
-      : [{ time: "TBA", event: "Schedule to be announced" }];
+      : [];
   const prizes =
     event.esports?.prizes && event.esports.prizes.length > 0
       ? event.esports.prizes
@@ -258,8 +261,34 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
                 {[
                   { icon: Trophy, label: "Prize Pool", value: prizePool },
                   { icon: Users, label: "Team Size", value: teamSize },
-                  { icon: Calendar, label: "Date", value: date },
-                  { icon: Clock, label: "Time", value: time },
+                  {
+                    icon: Calendar,
+                    label: "Date",
+                    value:
+                      event.schedules && event.schedules.length > 0
+                        ? event.schedules.length > 1
+                          ? `${new Date(event.schedules[0].date).toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${new Date(event.schedules[event.schedules.length - 1].date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}`
+                          : new Date(
+                              event.schedules[0].date,
+                            ).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                            })
+                        : "Date to be announced",
+                  },
+                  {
+                    icon: Clock,
+                    label: "Time",
+                    value:
+                      event.schedules && event.schedules[0]?.start_time
+                        ? new Date(
+                            `1970-01-01T${event.schedules[0].start_time}`,
+                          ).toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })
+                        : "Time to be announced",
+                  },
                 ].map((stat, index) => (
                   <div
                     key={index}
@@ -330,52 +359,145 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
               </div>
 
               {/* Schedule */}
-              <div
-                className="p-3 xs:p-4 sm:p-6"
-                style={{
-                  backgroundColor: "#111111",
-                  border: `1px solid ${accentColor}30`,
-                }}
-              >
-                <h2
-                  className="font-black uppercase tracking-tight mb-3 xs:mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3"
+              {schedule.length > 0 && (
+                <div
+                  className="p-3 xs:p-4 sm:p-6"
                   style={{
-                    color: accentColor,
-                    fontSize: "clamp(0.875rem, 3vw, 1.5rem)",
+                    backgroundColor: "#111111",
+                    border: `1px solid ${accentColor}30`,
                   }}
                 >
-                  <Clock className="w-4 h-4 xs:w-5 xs:h-5 md:w-6 md:h-6 flex-shrink-0" />
-                  <span>Event Schedule</span>
-                </h2>
-                <div className="space-y-1.5 xs:space-y-2 sm:space-y-4">
-                  {schedule.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col xs:flex-row xs:items-center gap-1 xs:gap-2 sm:gap-4 p-2 xs:p-2.5 sm:p-3 transition-all duration-300 hover:translate-x-1 sm:hover:translate-x-2"
-                      style={{
-                        backgroundColor: "#0a0a0a",
-                        borderLeft: `3px solid ${accentColor}`,
-                      }}
-                    >
-                      <span
-                        className="font-mono font-bold whitespace-nowrap"
+                  <h2
+                    className="font-black uppercase tracking-tight mb-3 xs:mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3"
+                    style={{
+                      color: accentColor,
+                      fontSize: "clamp(0.875rem, 3vw, 1.5rem)",
+                    }}
+                  >
+                    <Clock className="w-4 h-4 xs:w-5 xs:h-5 md:w-6 md:h-6 flex-shrink-0" />
+                    <span>Event Schedule</span>
+                  </h2>
+                  <div className="space-y-1.5 xs:space-y-2 sm:space-y-4">
+                    {schedule.map((item, index) => {
+                      const scheduleItem =
+                        typeof item === "string"
+                          ? { time: "TBD", event: item }
+                          : item;
+                      return (
+                        <div
+                          key={index}
+                          className="flex flex-col xs:flex-row xs:items-center gap-1 xs:gap-2 sm:gap-4 p-2 xs:p-2.5 sm:p-3 transition-all duration-300 hover:translate-x-1 sm:hover:translate-x-2"
+                          style={{
+                            backgroundColor: "#0a0a0a",
+                            borderLeft: `3px solid ${accentColor}`,
+                          }}
+                        >
+                          <span
+                            className="font-mono font-bold whitespace-nowrap"
+                            style={{
+                              color: accentColor,
+                              fontSize: "clamp(0.65rem, 2vw, 0.875rem)",
+                            }}
+                          >
+                            {scheduleItem.time}
+                          </span>
+                          <span
+                            className="text-gray-300"
+                            style={{ fontSize: "clamp(0.7rem, 2vw, 1rem)" }}
+                          >
+                            {scheduleItem.event}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Multi-Day Event Schedule */}
+              {event.schedules && event.schedules.length > 0 && (
+                <div
+                  className="p-3 xs:p-4 sm:p-6"
+                  style={{
+                    backgroundColor: "#111111",
+                    border: `1px solid ${accentColor}30`,
+                  }}
+                >
+                  <h2
+                    className="font-black uppercase tracking-tight mb-3 xs:mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3"
+                    style={{
+                      color: accentColor,
+                      fontSize: "clamp(0.875rem, 3vw, 1.5rem)",
+                    }}
+                  >
+                    <Calendar className="w-4 h-4 xs:w-5 xs:h-5 md:w-6 md:h-6 flex-shrink-0" />
+                    <span>Days & Timings</span>
+                  </h2>
+                  <div className="space-y-1.5 xs:space-y-2 sm:space-y-4">
+                    {event.schedules.map((schedule, index) => (
+                      <div
+                        key={index}
+                        className="p-2 xs:p-2.5 sm:p-3"
                         style={{
-                          color: accentColor,
-                          fontSize: "clamp(0.65rem, 2vw, 0.875rem)",
+                          backgroundColor: "#0a0a0a",
+                          borderLeft: `3px solid ${accentColor}`,
                         }}
                       >
-                        {item.time}
-                      </span>
-                      <span
-                        className="text-gray-300"
-                        style={{ fontSize: "clamp(0.7rem, 2vw, 1rem)" }}
-                      >
-                        {item.event}
-                      </span>
-                    </div>
-                  ))}
+                        <div
+                          className="font-bold mb-1"
+                          style={{
+                            color: accentColor,
+                            fontSize: "clamp(0.65rem, 2vw, 0.875rem)",
+                          }}
+                        >
+                          DAY {schedule.day}
+                        </div>
+                        <div className="space-y-0.5 text-gray-300">
+                          <div
+                            style={{ fontSize: "clamp(0.7rem, 2vw, 0.875rem)" }}
+                          >
+                            {new Date(schedule.date).toLocaleDateString(
+                              "en-US",
+                              {
+                                weekday: "short",
+                                month: "short",
+                                day: "numeric",
+                              },
+                            )}
+                          </div>
+                          {schedule.start_time && (
+                            <div
+                              style={{
+                                fontSize: "clamp(0.65rem, 1.8vw, 0.75rem)",
+                              }}
+                            >
+                              {new Date(
+                                `1970-01-01T${schedule.start_time}`,
+                              ).toLocaleTimeString("en-US", {
+                                hour: "numeric",
+                                minute: "2-digit",
+                              })}
+                              {schedule.end_time &&
+                                ` - ${new Date(`1970-01-01T${schedule.end_time}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`}
+                            </div>
+                          )}
+                          {schedule.location && (
+                            <div
+                              className="flex items-center gap-1"
+                              style={{
+                                fontSize: "clamp(0.65rem, 1.8vw, 0.75rem)",
+                              }}
+                            >
+                              <MapPin className="w-3 h-3 flex-shrink-0" />
+                              {schedule.location}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Right Column - Sidebar */}
@@ -478,7 +600,9 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
                   className="text-gray-400"
                   style={{ fontSize: "clamp(0.65rem, 2vw, 1rem)" }}
                 >
-                  {venue}
+                  {event.schedules && event.schedules[0]?.location
+                    ? event.schedules[0].location
+                    : "Venue to be announced"}
                 </p>
               </div>
 

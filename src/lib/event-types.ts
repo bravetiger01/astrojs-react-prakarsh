@@ -1,11 +1,19 @@
 // Event type definitions
 
+export interface DaySchedule {
+  day: number;
+  date: string;
+  location: string;
+  start_time: string;
+  end_time: string;
+}
+
 export interface Event {
   id: string;
   name: string;
   tagline: string;
   description: string[];
-  category: "tech" | "non-tech" | "esports" | "workshop";
+  category: "tech" | "non-tech" | "esports" | "workshops";
   eventHighlights?: string[];
   keywords?: string[];
   colors?: string;
@@ -15,6 +23,7 @@ export interface Event {
   date?: string;
   time?: string;
   location?: string;
+  schedules?: DaySchedule[]; // Multi-day scheduling
   registration_pitch?: string;
   esports?: EsportsDetails;
   console?: ConsoleDetails;
@@ -25,12 +34,12 @@ export interface EsportsDetails {
   tournamentName?: string;
   prizePool?: string;
   teamSize?: string;
-  schedule?: string[];
+  schedule?: string[] | { time: string; event: string }[];
   rules?: string[];
   prizes?: string[];
   requirements?: string[];
   accentColor?: string;
-  posterImage?: string;
+  posterImage?: string | any;
 }
 
 export interface ConsoleDetails {
@@ -51,14 +60,24 @@ export interface EventDbRow {
   tagline: string | null;
   description: string | null;
   category: string;
+  organizer: string | null;
+  prize_pool: number | null;
+  keywords: string[] | null;
   solo: boolean | null;
-  date: string | null;
-  time: string | null;
-  location: string | null;
   registration_pitch: string | null;
-  misc: string | null;
+  rules: string | null;
+  highlights: string | null;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface DayScheduleDbRow {
+  id: number;
+  event_id: number;
+  location: string | null;
+  date: string | null;
+  start_time: string | null;
+  end_time: string | null;
 }
 
 export interface EventMiscData {

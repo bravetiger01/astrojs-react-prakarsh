@@ -12,6 +12,14 @@ export interface RuleCategory {
   sections: RuleSection[];
 }
 
+export interface DaySchedule {
+  day: number;
+  date: string;
+  location: string;
+  start_time: string;
+  end_time: string;
+}
+
 export interface Event {
   id: string;
   name: string;
@@ -30,6 +38,7 @@ export interface Event {
   date?: string;
   time?: string;
   location?: string;
+  schedules?: DaySchedule[]; // Multi-day scheduling
   registration_pitch?: string;
   esports?: {
     gameName?: string;

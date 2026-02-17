@@ -379,10 +379,56 @@ const EventPage = ({ eventId }: EventPageProps) => {
                       className="font-display font-bold text-sm md:text-base"
                       style={{ color: COLORS.accent }}
                     >
-                      TBA
+                      {event.schedules && event.schedules.length > 0
+                        ? event.schedules.length > 1
+                          ? `${new Date(event.schedules[0].date).toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${new Date(event.schedules[event.schedules.length - 1].date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`
+                          : new Date(
+                              event.schedules[0].date,
+                            ).toLocaleDateString("en-US", {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                            })
+                        : "Date to be announced"}
                     </p>
                   </div>
                 </div>
+
+                {/* Location */}
+                {event.schedules && event.schedules.length > 0 && (
+                  <div
+                    className="flex items-center gap-3 p-3 md:p-4 backdrop-blur-sm"
+                    style={{
+                      backgroundColor: `${COLORS.white}80`,
+                      border: `1.5px solid ${COLORS.peach}40`,
+                    }}
+                  >
+                    <div
+                      className="p-2 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: `${COLORS.peach}30` }}
+                    >
+                      <MapPin
+                        size={16}
+                        className="md:w-[18px] md:h-[18px]"
+                        style={{ color: COLORS.accent }}
+                      />
+                    </div>
+                    <div>
+                      <p
+                        className="text-xs font-display tracking-wide opacity-70"
+                        style={{ color: COLORS.accent }}
+                      >
+                        VENUE
+                      </p>
+                      <p
+                        className="font-display font-bold text-sm md:text-base"
+                        style={{ color: COLORS.accent }}
+                      >
+                        {event.schedules[0].location || "Venue to be announced"}
+                      </p>
+                    </div>
+                  </div>
+                )}
               </motion.div>
 
               {/* Keywords with hover effect */}
@@ -392,7 +438,7 @@ const EventPage = ({ eventId }: EventPageProps) => {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="flex flex-wrap gap-3"
               >
-                {event.keywords.map((keyword, index) => (
+                {(event.keywords || []).map((keyword, index) => (
                   <motion.span
                     key={keyword}
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -507,6 +553,158 @@ const EventPage = ({ eventId }: EventPageProps) => {
               </motion.div>
             </div>
           </div>
+
+          {/* Multi-Day Schedule Section */}
+          {event.schedules && event.schedules.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-12 md:mt-16"
+            >
+              <h2
+                className="font-display text-2xl sm:text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center"
+                style={{ color: COLORS.accent }}
+              >
+                Event Schedule
+              </h2>
+
+              <div className="grid gap-4 md:gap-6 lg:grid-cols-2">
+                {event.schedules.map((schedule, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
+                    className="relative p-6 md:p-8 backdrop-blur-sm"
+                    style={{
+                      backgroundColor: COLORS.accent,
+                      border: `2px solid ${COLORS.peach}`,
+                      boxShadow: `0 0 40px -15px ${COLORS.peach}50, 0 0 0 1px ${COLORS.peach}`,
+                    }}
+                  >
+                    {/* Corner notches */}
+                    <div
+                      className="absolute top-0 left-0 w-3 h-3"
+                      style={{
+                        background: `linear-gradient(135deg, ${COLORS.accent} 50%, transparent 50%)`,
+                        boxShadow: `inset -1px -1px 0 ${COLORS.peach}`,
+                      }}
+                    />
+                    <div
+                      className="absolute bottom-0 right-0 w-3 h-3"
+                      style={{
+                        background: `linear-gradient(-45deg, ${COLORS.accent} 50%, transparent 50%)`,
+                        boxShadow: `inset 1px 1px 0 ${COLORS.peach}`,
+                      }}
+                    />
+
+                    {/* Day Badge */}
+                    <div
+                      className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 px-4 py-1 font-display text-xs tracking-widest"
+                      style={{
+                        backgroundColor: COLORS.peach,
+                        color: COLORS.accent,
+                      }}
+                    >
+                      DAY {schedule.day}
+                    </div>
+
+                    <div className="space-y-4 mt-2">
+                      {/* Date */}
+                      <div className="flex items-center gap-3">
+                        <Calendar
+                          size={20}
+                          style={{ color: COLORS.peach }}
+                          className="flex-shrink-0"
+                        />
+                        <div>
+                          <p
+                            className="text-xs tracking-wide opacity-70"
+                            style={{ color: COLORS.white }}
+                          >
+                            DATE
+                          </p>
+                          <p
+                            className="font-display font-bold text-base"
+                            style={{ color: COLORS.white }}
+                          >
+                            {new Date(schedule.date).toLocaleDateString(
+                              "en-US",
+                              {
+                                weekday: "long",
+                                month: "long",
+                                day: "numeric",
+                                year: "numeric",
+                              },
+                            )}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Time */}
+                      {schedule.start_time && (
+                        <div className="flex items-center gap-3">
+                          <div
+                            className="w-5 h-5 flex items-center justify-center"
+                            style={{ color: COLORS.peach }}
+                          >
+                            🕐
+                          </div>
+                          <div>
+                            <p
+                              className="text-xs tracking-wide opacity-70"
+                              style={{ color: COLORS.white }}
+                            >
+                              TIME
+                            </p>
+                            <p
+                              className="font-display font-bold text-base"
+                              style={{ color: COLORS.white }}
+                            >
+                              {new Date(
+                                `1970-01-01T${schedule.start_time}`,
+                              ).toLocaleTimeString("en-US", {
+                                hour: "numeric",
+                                minute: "2-digit",
+                              })}
+                              {schedule.end_time &&
+                                ` - ${new Date(`1970-01-01T${schedule.end_time}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Location */}
+                      {schedule.location && (
+                        <div className="flex items-center gap-3">
+                          <MapPin
+                            size={20}
+                            style={{ color: COLORS.peach }}
+                            className="flex-shrink-0"
+                          />
+                          <div>
+                            <p
+                              className="text-xs tracking-wide opacity-70"
+                              style={{ color: COLORS.white }}
+                            >
+                              VENUE
+                            </p>
+                            <p
+                              className="font-display font-bold text-base"
+                              style={{ color: COLORS.white }}
+                            >
+                              {schedule.location}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
 
           {/* Rules Section - Only show if event has rules */}
           {event.rules && (

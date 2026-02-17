@@ -1,5 +1,13 @@
 import { supabase } from "./supabase";
-import type { Event, EventDbRow, EventMiscData } from "./event-types";
+import type {
+  Event,
+  EventDbRow,
+  EventMiscData,
+  DaySchedule,
+  DayScheduleDbRow,
+  EsportsDetails,
+  ConsoleDetails,
+} from "./event-types";
 import freeFirePoster from "@/assets/freefire-poster.png";
 import valorantPoster from "@/assets/valorant-poster.png";
 import bgmiPoster from "@/assets/bgmi-poster.png";
@@ -28,58 +36,111 @@ const getPosterImageForEvent = (
 };
 
 // Transform database row to client Event
-const transformDbRowToEvent = (row: EventDbRow): Event => {
-  let miscData: EventMiscData = {};
-
-  // Parse misc JSON field
-  if (row.misc) {
-    try {
-      miscData = JSON.parse(row.misc);
-    } catch (e) {
-      console.error("Error parsing misc data:", e);
-    }
-  }
-
-  // Parse description - if it's a JSON array string, parse it, otherwise split by newlines
+const transformDbRowToEvent = (
+  row: EventDbRow,
+  schedules: DayScheduleDbRow[] = [],
+): Event => {
+  // Parse description - handle both text and arrays
   let descriptionArray: string[] = [];
-  if (miscData.description && Array.isArray(miscData.description)) {
-    descriptionArray = miscData.description;
-  } else if (row.description) {
+  if (row.description) {
     try {
       const parsed = JSON.parse(row.description);
       descriptionArray = Array.isArray(parsed) ? parsed : [row.description];
     } catch {
-      descriptionArray = [row.description];
+      // If description is plain text, split by newlines or use as single paragraph
+      descriptionArray = row.description.split("\n").filter((p) => p.trim());
+      if (descriptionArray.length === 0) {
+        descriptionArray = [row.description];
+      }
     }
   }
 
-  const esportsDetails = {
-    ...(miscData.esports || {}),
-    gameName: miscData.esports?.gameName || miscData.gameName,
-    tournamentName: miscData.esports?.tournamentName || miscData.tournamentName,
-    prizePool: miscData.esports?.prizePool || miscData.prizePool,
-    teamSize: miscData.esports?.teamSize || miscData.teamSize,
-    schedule: miscData.esports?.schedule || miscData.schedule,
-    rules: miscData.esports?.rules,
-    prizes: miscData.esports?.prizes || miscData.prizes,
-    requirements: miscData.esports?.requirements || miscData.requirements,
-    accentColor: miscData.esports?.accentColor || miscData.accentColor,
-    posterImage: miscData.esports?.posterImage || miscData.posterImage,
+  // Parse keywords if it's a string
+  let keywordsArray: string[] = [];
+  if (row.keywords) {
+    if (Array.isArray(row.keywords)) {
+      keywordsArray = row.keywords;
+    } else if (typeof row.keywords === "string") {
+      try {
+        const parsed = JSON.parse(row.keywords);
+        keywordsArray = Array.isArray(parsed) ? parsed : [row.keywords];
+      } catch {
+        keywordsArray = [row.keywords];
+      }
+    }
+  }
+
+  // Parse rules
+  let rulesArray: string[] = [];
+  if (row.rules) {
+    try {
+      const parsed = JSON.parse(row.rules);
+      rulesArray = Array.isArray(parsed) ? parsed : [row.rules];
+    } catch {
+      rulesArray = row.rules.split("\n").filter((r) => r.trim());
+      if (rulesArray.length === 0) {
+        rulesArray = [row.rules];
+      }
+    }
+  }
+
+  // Parse highlights
+  let highlightsArray: string[] = [];
+  if (row.highlights) {
+    try {
+      const parsed = JSON.parse(row.highlights);
+      highlightsArray = Array.isArray(parsed) ? parsed : [row.highlights];
+    } catch {
+      highlightsArray = row.highlights.split("\n").filter((h) => h.trim());
+      if (highlightsArray.length === 0) {
+        highlightsArray = [row.highlights];
+      }
+    }
+  }
+
+  // Transform schedules
+  const eventSchedules: DaySchedule[] = schedules.map((s, index) => ({
+    day: index + 1,
+    date: s.date || "",
+    location: s.location || "",
+    start_time: s.start_time || "",
+    end_time: s.end_time || "",
+  }));
+
+  // Set date, time, location from first schedule if available
+  const firstSchedule = eventSchedules[0];
+  const date = firstSchedule?.date;
+  const time = firstSchedule?.start_time;
+  const location = firstSchedule?.location;
+
+  // For esports/console, try to parse from keywords or create defaults
+  const esportsDetails: EsportsDetails = {
+    gameName: row.category === "esports" ? row.name.split(" ")[0] : undefined,
+    tournamentName: row.category === "esports" ? row.name : undefined,
+    prizePool:
+      row.prize_pool && row.prize_pool > 0
+        ? `₹${row.prize_pool.toLocaleString()}`
+        : "TBA",
+    teamSize: row.solo === false ? "Team" : row.solo === true ? "Solo" : "TBA",
+    rules: rulesArray.length > 0 ? rulesArray : undefined,
+    requirements: undefined,
+    prizes: undefined,
+    schedule: undefined,
+    accentColor: undefined,
+    posterImage: getPosterImageForEvent(row.id.toString(), row.name),
   };
 
-  const consoleDetails = {
-    ...(miscData.console || {}),
-    title: miscData.console?.title,
-    edition: miscData.console?.edition || miscData.edition,
+  const consoleDetails: ConsoleDetails = {
+    title: row.name,
+    edition: undefined,
     displayCategory:
-      miscData.console?.displayCategory || miscData.displayCategory,
-    description: miscData.console?.description,
-    fullDescription:
-      miscData.console?.fullDescription || miscData.fullDescription,
-    features: miscData.console?.features || miscData.features,
-    techStack: miscData.console?.techStack || miscData.techStack,
-    prerequisites: miscData.console?.prerequisites || miscData.prerequisites,
-    capacity: miscData.console?.capacity || miscData.capacity,
+      row.category === "workshops" ? "WORKSHOP" : row.category.toUpperCase(),
+    description: row.tagline || undefined,
+    fullDescription: descriptionArray.join(" "),
+    features: highlightsArray.length > 0 ? highlightsArray : undefined,
+    techStack: keywordsArray.length > 0 ? keywordsArray : undefined,
+    prerequisites: undefined,
+    capacity: "Open",
   };
 
   return {
@@ -88,33 +149,70 @@ const transformDbRowToEvent = (row: EventDbRow): Event => {
     tagline: row.tagline || "",
     description: descriptionArray,
     category: (row.category as Event["category"]) || "non-tech",
-    eventHighlights: miscData.eventHighlights || [],
-    keywords: miscData.keywords || [],
-    colors: miscData.colors || "",
+    eventHighlights: highlightsArray,
+    keywords: keywordsArray,
+    colors: "",
     solo: row.solo ?? undefined,
-    rules: miscData.rules,
+    rules: rulesArray,
     posterImage: getPosterImageForEvent(row.id.toString(), row.name),
-    date: row.date || undefined,
-    time: row.time || undefined,
-    location: row.location || undefined,
+    date: date,
+    time: time,
+    location: location,
+    schedules: eventSchedules.length > 0 ? eventSchedules : undefined,
     registration_pitch: row.registration_pitch || undefined,
-    esports: esportsDetails,
-    console: consoleDetails,
+    esports: row.category === "esports" ? esportsDetails : undefined,
+    console:
+      row.category === "non-tech" || row.category === "workshops"
+        ? consoleDetails
+        : undefined,
   };
 };
 
 export const fetchAllEvents = async (): Promise<Event[]> => {
-  const { data, error } = await supabase
+  const { data: eventsData, error: eventsError } = await supabase
     .from("events")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("id", { ascending: true });
 
-  if (error) {
-    console.error("Error fetching events:", error);
-    throw new Error(error.message);
+  if (eventsError) {
+    console.error("Error fetching events:", eventsError);
+    throw new Error(eventsError.message);
   }
 
-  return (data || []).map(transformDbRowToEvent);
+  if (!eventsData || eventsData.length === 0) {
+    return [];
+  }
+
+  // Fetch all day1 and day2 schedules
+  const eventIds = eventsData.map((e) => e.id);
+
+  const { data: day1Data, error: day1Error } = await supabase
+    .from("day1")
+    .select("*")
+    .in("event_id", eventIds);
+
+  const { data: day2Data, error: day2Error } = await supabase
+    .from("day2")
+    .select("*")
+    .in("event_id", eventIds);
+
+  if (day1Error) console.warn("Error fetching day1:", day1Error);
+  if (day2Error) console.warn("Error fetching day2:", day2Error);
+
+  // Group schedules by event_id
+  const schedulesByEventId: Record<number, DayScheduleDbRow[]> = {};
+
+  [...(day1Data || []), ...(day2Data || [])].forEach((schedule) => {
+    if (!schedulesByEventId[schedule.event_id]) {
+      schedulesByEventId[schedule.event_id] = [];
+    }
+    schedulesByEventId[schedule.event_id].push(schedule);
+  });
+
+  // Transform events with their schedules
+  return eventsData.map((event) =>
+    transformDbRowToEvent(event, schedulesByEventId[event.id] || []),
+  );
 };
 
 export const fetchEventById = async (id: number): Promise<Event | null> => {
@@ -133,24 +231,68 @@ export const fetchEventById = async (id: number): Promise<Event | null> => {
     throw new Error(error.message);
   }
 
-  return data ? transformDbRowToEvent(data) : null;
+  if (!data) return null;
+
+  // Fetch day1 and day2 schedules for this event
+  const { data: day1Data } = await supabase
+    .from("day1")
+    .select("*")
+    .eq("event_id", id);
+
+  const { data: day2Data } = await supabase
+    .from("day2")
+    .select("*")
+    .eq("event_id", id);
+
+  const schedules = [...(day1Data || []), ...(day2Data || [])];
+
+  return transformDbRowToEvent(data, schedules);
 };
 
 export const fetchEventsByCategory = async (
   category: string,
 ): Promise<Event[]> => {
-  const { data, error } = await supabase
+  const { data: eventsData, error: eventsError } = await supabase
     .from("events")
     .select("*")
     .eq("category", category)
-    .order("created_at", { ascending: false });
+    .order("id", { ascending: true });
 
-  if (error) {
-    console.error("Error fetching events by category:", error);
-    throw new Error(error.message);
+  if (eventsError) {
+    console.error("Error fetching events by category:", eventsError);
+    throw new Error(eventsError.message);
   }
 
-  return (data || []).map(transformDbRowToEvent);
+  if (!eventsData || eventsData.length === 0) {
+    return [];
+  }
+
+  // Fetch all day1 and day2 schedules
+  const eventIds = eventsData.map((e) => e.id);
+
+  const { data: day1Data } = await supabase
+    .from("day1")
+    .select("*")
+    .in("event_id", eventIds);
+
+  const { data: day2Data } = await supabase
+    .from("day2")
+    .select("*")
+    .in("event_id", eventIds);
+
+  // Group schedules by event_id
+  const schedulesByEventId: Record<number, DayScheduleDbRow[]> = {};
+
+  [...(day1Data || []), ...(day2Data || [])].forEach((schedule) => {
+    if (!schedulesByEventId[schedule.event_id]) {
+      schedulesByEventId[schedule.event_id] = [];
+    }
+    schedulesByEventId[schedule.event_id].push(schedule);
+  });
+
+  return eventsData.map((event) =>
+    transformDbRowToEvent(event, schedulesByEventId[event.id] || []),
+  );
 };
 
 export const fetchEventsByNeonColor = async (
