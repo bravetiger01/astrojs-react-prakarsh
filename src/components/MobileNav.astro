@@ -50,10 +50,19 @@ const navLinks = [
 </div>
 
 <script is:inline>
-  document.addEventListener("DOMContentLoaded", () => {
+  function initMobileNav() {
     const hamburgerBtn = document.getElementById("hamburger-btn");
     const navOverlay = document.getElementById("nav-overlay");
     const navPopup = document.getElementById("nav-popup");
+
+    if (!hamburgerBtn || !navOverlay || !navPopup) return;
+
+    // Prevent duplicate initialization
+    if (hamburgerBtn.dataset.initialized === "true") {
+      console.log("📱 Mobile nav already initialized, skipping");
+      return;
+    }
+    hamburgerBtn.dataset.initialized = "true";
 
     function toggleMenu() {
       const isOpen = hamburgerBtn?.classList.contains("active");
@@ -79,24 +88,29 @@ const navLinks = [
       document.body.style.overflow = "";
     }
 
-    if (hamburgerBtn) {
-      hamburgerBtn.addEventListener("click", toggleMenu);
-    }
-
-    if (navOverlay) {
-      navOverlay.addEventListener("click", closeMenu);
-    }
+    hamburgerBtn.addEventListener("click", toggleMenu);
+    navOverlay.addEventListener("click", closeMenu);
 
     // Close menu when clicking on nav links
     const navLinks = document.querySelectorAll(".nav-item");
     navLinks.forEach((link) => {
       link.addEventListener("click", closeMenu);
     });
-  });
+  }
+
+  // Run on every page load (including transitions)
+  document.addEventListener("astro:page-load", initMobileNav);
+
+  // Also run immediately if directly loaded
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initMobileNav);
+  } else {
+    initMobileNav();
+  }
 </script>
 
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap");
   /* Hamburger Button */
   .mobile-hamburger {
     position: fixed;
@@ -116,10 +130,10 @@ const navLinks = [
     cursor: pointer;
     padding: 12px;
     transition: all 0.3s ease;
-    font-family: 'Bruno Ace SC', sans-serif;
+    font-family: "Bruno Ace SC", sans-serif;
   }
-  @media(min-width:1111px){
-    .mobile-hamburger{
+  @media (min-width: 1111px) {
+    .mobile-hamburger {
       opacity: 0;
       pointer-events: none;
     }
@@ -191,7 +205,7 @@ const navLinks = [
     z-index: 9060;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
-    font-family: 'Bruno Ace SC', sans-serif;
+    font-family: "Bruno Ace SC", sans-serif;
   }
 
   .mobile-nav-popup.active {
@@ -232,7 +246,7 @@ const navLinks = [
     color: white;
     display: block;
     transition: all 0.3s ease;
-    font-family: 'Bruno Ace SC', sans-serif;
+    font-family: "Bruno Ace SC", sans-serif;
   }
 
   .nav-item {
@@ -294,7 +308,7 @@ const navLinks = [
     text-transform: uppercase;
     letter-spacing: 1px;
     box-shadow: 0 4px 15px rgba(241, 181, 162, 0.3);
-    font-family: 'Bruno Ace SC', sans-serif;
+    font-family: "Bruno Ace SC", sans-serif;
   }
 
   .mobile-tickets-button:hover {

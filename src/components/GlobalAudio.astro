@@ -92,94 +92,118 @@
   (function () {
     const MUSIC_PREF_KEY = "musicEnabled";
     const MUSIC_POS_KEY = "musicPosition";
-    const audio = document.getElementById("background-music");
-    const audioToggle = document.getElementById("audio-toggle");
-    const iconPlaying = document.getElementById("audio-icon-playing");
-    const iconPaused = document.getElementById("audio-icon-paused");
 
-    if (!audio || !audioToggle) return;
+    function initAudio() {
+      const audio = document.getElementById("background-music");
+      const audioToggle = document.getElementById("audio-toggle");
+      const iconPlaying = document.getElementById("audio-icon-playing");
+      const iconPaused = document.getElementById("audio-icon-paused");
 
-    // Set volume
-    audio.volume = 0.3;
+      if (!audio || !audioToggle) return;
 
-    // Check localStorage for music preference and position
-    // Default to true (enabled) if no preference is set
-    const musicEnabledStored = localStorage.getItem(MUSIC_PREF_KEY);
-    const musicEnabled =
-      musicEnabledStored === null ? true : musicEnabledStored === "true";
-    const savedPosition = parseFloat(localStorage.getItem(MUSIC_POS_KEY)) || 0;
-
-    // Initial UI state based on preference
-    updateUI(musicEnabled);
-
-    function updateUI(playing) {
-      if (playing) {
-        iconPlaying.style.display = "block";
-        iconPaused.style.display = "none";
-        audioToggle.classList.remove("paused");
-      } else {
-        iconPlaying.style.display = "none";
-        iconPaused.style.display = "block";
-        audioToggle.classList.add("paused");
+      // Prevent duplicate initialization
+      if (audio.dataset.initialized === "true") {
+        console.log("🎵 Audio already initialized, skipping");
+        return;
       }
-    }
+      audio.dataset.initialized = "true";
 
-    // Save position periodically while playing
-    setInterval(() => {
-      if (!audio.paused && audio.currentTime > 0) {
-        localStorage.setItem(MUSIC_POS_KEY, audio.currentTime.toString());
+      // Set volume
+      audio.volume = 0.3;
+
+      // Check localStorage for music preference and position
+      // Default to true (enabled) if no preference is set
+      const musicEnabledStored = localStorage.getItem(MUSIC_PREF_KEY);
+      const musicEnabled =
+        musicEnabledStored === null ? true : musicEnabledStored === "true";
+      const savedPosition =
+        parseFloat(localStorage.getItem(MUSIC_POS_KEY)) || 0;
+
+      // Initial UI state based on preference
+      updateUI(musicEnabled);
+
+      function updateUI(playing) {
+        if (playing) {
+          iconPlaying.style.display = "block";
+          iconPaused.style.display = "none";
+          audioToggle.classList.remove("paused");
+        } else {
+          iconPlaying.style.display = "none";
+          iconPaused.style.display = "block";
+          audioToggle.classList.add("paused");
+        }
       }
-    }, 1000);
 
-    // Save position before page unload
-    window.addEventListener("beforeunload", () => {
-      if (!audio.paused) {
-        localStorage.setItem(MUSIC_POS_KEY, audio.currentTime.toString());
-      }
-    });
+      // Save position periodically while playing
+      setInterval(() => {
+        if (!audio.paused && audio.currentTime > 0) {
+          localStorage.setItem(MUSIC_POS_KEY, audio.currentTime.toString());
+        }
+      }, 1000);
 
-    // Try to autoplay music (enabled by default)
-    if (musicEnabled) {
-      audio.currentTime = savedPosition;
-      audio
-        .play()
-        .then(() => {
-          updateUI(true);
-          localStorage.setItem(MUSIC_PREF_KEY, "true");
-          console.log(
-            "🎵 Music " +
-              (savedPosition > 0
-                ? "resumed from position: " + savedPosition.toFixed(1) + "s"
-                : "started"),
-          );
-        })
-        .catch(() => {
-          // Autoplay blocked - need user interaction
-          updateUI(false);
-          console.log("⏸️ Autoplay blocked, waiting for user interaction");
-        });
-    } else {
-      // Music explicitly disabled by user
-      updateUI(false);
-    }
+      // Save position before page unload
+      window.addEventListener("beforeunload", () => {
+        if (!audio.paused) {
+          localStorage.setItem(MUSIC_POS_KEY, audio.currentTime.toString());
+        }
+      });
 
-    // Toggle audio on button click
-    audioToggle.addEventListener("click", () => {
-      if (audio.paused) {
+      // Try to autoplay music (enabled by default)
+      if (musicEnabled) {
+        audio.currentTime = savedPosition;
         audio
           .play()
           .then(() => {
-            localStorage.setItem(MUSIC_PREF_KEY, "true");
             updateUI(true);
+            localStorage.setItem(MUSIC_PREF_KEY, "true");
+            console.log(
+              "🎵 Music " +
+                (savedPosition > 0
+                  ? "resumed from position: " + savedPosition.toFixed(1) + "s"
+                  : "started"),
+            );
           })
-          .catch((err) => {
-            console.log("Play failed:", err);
+          .catch(() => {
+            // Autoplay blocked - need user interaction
+            updateUI(false);
+            console.log("⏸️ Autoplay blocked, waiting for user interaction");
           });
       } else {
-        audio.pause();
-        localStorage.setItem(MUSIC_PREF_KEY, "false");
+        // Music explicitly disabled by user
         updateUI(false);
       }
-    });
+
+      // Toggle audio on button click (only add listener once)
+      if (!audioToggle.dataset.listenerAdded) {
+        audioToggle.addEventListener("click", () => {
+          if (audio.paused) {
+            audio
+              .play()
+              .then(() => {
+                localStorage.setItem(MUSIC_PREF_KEY, "true");
+                updateUI(true);
+              })
+              .catch((err) => {
+                console.log("Play failed:", err);
+              });
+          } else {
+            audio.pause();
+            localStorage.setItem(MUSIC_PREF_KEY, "false");
+            updateUI(false);
+          }
+        });
+        audioToggle.dataset.listenerAdded = "true";
+      }
+    }
+
+    // Run on initial load and every page transition
+    document.addEventListener("astro:page-load", initAudio);
+
+    // Also run immediately if not using transitions (direct load)
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initAudio);
+    } else {
+      initAudio();
+    }
   })();
 </script>
