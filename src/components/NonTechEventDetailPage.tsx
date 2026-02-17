@@ -16,27 +16,6 @@ interface ConsoleEventPageDetails {
   eventId: string;
 }
 
-const formatDate = (value?: string) => {
-  if (!value) return "TBA";
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) return value;
-  return parsed.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-};
-
-const formatTime = (value?: string) => {
-  if (!value) return "TBA";
-  const parsed = new Date(`1970-01-01T${value}`);
-  if (Number.isNaN(parsed.getTime())) return value;
-  return parsed.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-};
-
 const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails) => {
   const { event, loading, error } = useEventById(eventId);
 
@@ -102,9 +81,6 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails) => {
       ? event.console.prerequisites
       : ["No prerequisites announced yet"];
   const capacity = event.console?.capacity || "Open";
-  const date = CONFIG.SHOW_EVENT_DATES ? formatDate(event.date) : "TBA";
-  const time = CONFIG.SHOW_EVENT_DATES ? formatTime(event.time) : "TBA";
-  const venue = event.location || "TBA";
 
   const backLink =
     event.category === "workshops"
@@ -250,9 +226,43 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails) => {
               {/* Quick Info */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {[
-                  { icon: Calendar, label: "Date", value: date },
-                  { icon: Clock, label: "Time", value: time },
-                  { icon: MapPin, label: "Venue", value: venue },
+                  {
+                    icon: Calendar,
+                    label: "Date",
+                    value:
+                      event.schedules && event.schedules.length > 0
+                        ? event.schedules.length > 1
+                          ? `${new Date(event.schedules[0].date).toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${new Date(event.schedules[event.schedules.length - 1].date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}`
+                          : new Date(
+                              event.schedules[0].date,
+                            ).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })
+                        : "Date to be announced",
+                  },
+                  {
+                    icon: Clock,
+                    label: "Time",
+                    value:
+                      event.schedules && event.schedules[0]?.start_time
+                        ? new Date(
+                            `1970-01-01T${event.schedules[0].start_time}`,
+                          ).toLocaleTimeString("en-US", {
+                            hour: "numeric",
+                            minute: "2-digit",
+                          })
+                        : "Time to be announced",
+                  },
+                  {
+                    icon: MapPin,
+                    label: "Venue",
+                    value:
+                      event.schedules && event.schedules[0]?.location
+                        ? event.schedules[0].location
+                        : "Venue to be announced",
+                  },
                   { icon: Users, label: "Capacity", value: capacity },
                 ].map((stat, index) => (
                   <div
@@ -338,6 +348,73 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails) => {
                   ))}
                 </div>
               </div>
+
+              {/* Multi-Day Schedule */}
+              {event.schedules && event.schedules.length > 0 && (
+                <div
+                  className="p-6 rounded-lg"
+                  style={{ backgroundColor: "#2a1e3d" }}
+                >
+                  <h2
+                    className="text-2xl font-black uppercase tracking-tight mb-6 flex items-center gap-3"
+                    style={{ color: accentColor }}
+                  >
+                    <Calendar className="w-6 h-6" />
+                    Event Schedule
+                  </h2>
+                  <div className="space-y-4">
+                    {event.schedules.map((schedule, index) => (
+                      <div
+                        key={index}
+                        className="p-4"
+                        style={{
+                          backgroundColor: primaryColor,
+                          borderLeft: `3px solid ${accentColor}`,
+                        }}
+                      >
+                        <div
+                          className="font-bold text-sm mb-2"
+                          style={{ color: accentColor }}
+                        >
+                          DAY {schedule.day}
+                        </div>
+                        <div className="space-y-2 text-sm">
+                          <div style={{ color: lightColor, opacity: 0.9 }}>
+                            <strong>Date:</strong>{" "}
+                            {new Date(schedule.date).toLocaleDateString(
+                              "en-US",
+                              {
+                                weekday: "short",
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              },
+                            )}
+                          </div>
+                          {schedule.start_time && (
+                            <div style={{ color: lightColor, opacity: 0.9 }}>
+                              <strong>Time:</strong>{" "}
+                              {new Date(
+                                `1970-01-01T${schedule.start_time}`,
+                              ).toLocaleTimeString("en-US", {
+                                hour: "numeric",
+                                minute: "2-digit",
+                              })}
+                              {schedule.end_time &&
+                                ` - ${new Date(`1970-01-01T${schedule.end_time}`).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`}
+                            </div>
+                          )}
+                          {schedule.location && (
+                            <div style={{ color: lightColor, opacity: 0.9 }}>
+                              <strong>Location:</strong> {schedule.location}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Right Column - Sidebar */}
