@@ -2,65 +2,11 @@
 import PageLayout from "../layouts/PageLayout.astro";
 import TeamRing from "../components/TeamRing";
 import type { TeamMember } from "../components/TeamRing";
+import membersData from "../data/members.json";
 
-const teamMembers: TeamMember[] = [
-  {
-    id: "001",
-    name: "Parth Bhatti",
-    role: "Head - Website and Graphics Team",
-    nickname: "Web & Graphics Mukhya Mantri",
-    image: "/team/parth.jpeg",
-  },
-  {
-    id: "002",
-    name: "Dhaval Patel",
-    role: "Frontend Developer and Graphic Designer",
-    nickname: "Picasso Patel",
-    image: "/team/dhaval.jpeg",
-  },
-  {
-    id: "003",
-    name: "Siddharth Panchal",
-    role: "Fullstack Developer",
-    nickname: "Work from home baba",
-    image: "/team/siddharth.jpeg",
-  },
-  {
-    id: "004",
-    name: "Yash Mehta",
-    role: "Fullstack Developer",
-    nickname: "Free Attendance & Praxis employee",
-    image: "/team/yash.jpeg",
-  },
-  {
-    id: "005",
-    name: "Jwalin Patel",
-    role: "Fullstack Developer",
-    nickname: "Protein Paglu",
-    image: "/team/jwalin.jpeg",
-  },
-  {
-    id: "006",
-    name: "Nakul Desai",
-    role: "Fullstack Developer",
-    nickname: "Coffee Paglu",
-    image: "/team/nakul.png",
-  },
-  {
-    id: "007",
-    name: "Param Patel",
-    role: "Devops Engineer",
-    nickname: "Server Paglu",
-    image: "/team/param.jpeg",
-  },
-  {
-    id: "008",
-    name: "Krupa Parmar",
-    role: "Frontend Developer",
-    nickname: "Full-CSS-Stack",
-    image: "/team/krupa.jpeg",
-  },
-];
+const coreTeamMembers: TeamMember[] = membersData.coreTeam;
+const websiteTeamMembers: TeamMember[] = membersData.websiteTeam;
+const graphicsTeamMembers: TeamMember[] = membersData.graphicsTeam;
 ---
 
 <PageLayout title="Team - Prakarsh '26">
@@ -71,51 +17,154 @@ const teamMembers: TeamMember[] = [
       class="container mx-auto px-4"
       style="min-height: calc(100vh - 12rem);"
     >
-      <!-- Header -->
-      <div class="text-center mb-8 md:mb-8 mb-4" style="margin-top: 2rem;">
-        <div
-          class="text-[10px] md:text-xs font-semibold tracking-[0.3em] md:tracking-[0.4em] mb-2 md:mb-3"
-          style="color: #D4A574;"
-        >
-          PRAKARSH '26
+      <!-- Section 1: Core Team -->
+      <section class="mb-16 md:mb-24">
+        <!-- Header -->
+        <div class="text-center mb-8 md:mb-8 mb-4" style="margin-top: 2rem;">
+          <div
+            class="text-[10px] md:text-xs font-semibold tracking-[0.3em] md:tracking-[0.4em] mb-2 md:mb-3"
+            style="color: #D4A574;"
+          >
+            PRAKARSH '26
+          </div>
+          <h1
+            class="text-3xl md:text-4xl lg:text-6xl font-extrabold tracking-[0.05em] uppercase px-4"
+            style="background: linear-gradient(135deg, #FFFFFF 0%, #F1B5A2 50%, #E84FAA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
+          >
+            CORE TEAM
+          </h1>
+
+          <p
+            class="max-w-md mx-auto text-xs md:text-sm mt-2 md:mt-3 px-4"
+            style="color: rgba(255,255,255,0.5);"
+          >
+            Drag to rotate the ring. Meet the visionaries behind Prakarsh'26.
+          </p>
+
+          <div
+            class="flex items-center justify-center gap-3 md:gap-4 mt-3 md:mt-4"
+          >
+            <div
+              class="h-px w-12 md:w-20"
+              style="background: linear-gradient(90deg, transparent, #E84FAA60);"
+            >
+            </div>
+            <div
+              class="w-2 h-2 rounded-full"
+              style="background: linear-gradient(135deg, #E84FAA, #6CB4EE); box-shadow: 0 0 8px #E84FAA80;"
+            >
+            </div>
+            <div
+              class="h-px w-12 md:w-20"
+              style="background: linear-gradient(90deg, #6CB4EE60, transparent);"
+            >
+            </div>
+          </div>
         </div>
-        <h1
-          class="text-3xl md:text-4xl lg:text-6xl font-extrabold tracking-[0.05em] uppercase px-4"
-          style="background: linear-gradient(135deg, #FFFFFF 0%, #F1B5A2 50%, #E84FAA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
-        >
-          WEBSITE TEAM
-        </h1>
 
-        <p
-          class="max-w-md mx-auto text-xs md:text-sm mt-2 md:mt-3 px-4"
-          style="color: rgba(255,255,255,0.5);"
-        >
-          Drag to rotate the ring. Meet the visionaries behind Prakarsh'26 website.
-        </p>
+        <!-- Ring -->
+        <TeamRing members={coreTeamMembers} client:load />
+      </section>
 
-        <div
-          class="flex items-center justify-center gap-3 md:gap-4 mt-3 md:mt-4"
-        >
+      <!-- Section 2: Website Team -->
+      <section class="mb-16 md:mb-24">
+        <!-- Header -->
+        <div class="text-center mb-8 md:mb-8 mb-4" style="margin-top: 2rem;">
           <div
-            class="h-px w-12 md:w-20"
-            style="background: linear-gradient(90deg, transparent, #E84FAA60);"
+            class="text-[10px] md:text-xs font-semibold tracking-[0.3em] md:tracking-[0.4em] mb-2 md:mb-3"
+            style="color: #D4A574;"
           >
+            PRAKARSH '26
           </div>
-          <div
-            class="w-2 h-2 rounded-full"
-            style="background: linear-gradient(135deg, #E84FAA, #6CB4EE); box-shadow: 0 0 8px #E84FAA80;"
+          <h1
+            class="text-3xl md:text-4xl lg:text-6xl font-extrabold tracking-[0.05em] uppercase px-4"
+            style="background: linear-gradient(135deg, #FFFFFF 0%, #F1B5A2 50%, #E84FAA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
           >
-          </div>
-          <div
-            class="h-px w-12 md:w-20"
-            style="background: linear-gradient(90deg, #6CB4EE60, transparent);"
+            WEBSITE TEAM
+          </h1>
+
+          <p
+            class="max-w-md mx-auto text-xs md:text-sm mt-2 md:mt-3 px-4"
+            style="color: rgba(255,255,255,0.5);"
           >
+            Drag to rotate the ring. Meet the developers behind Prakarsh'26
+            website.
+          </p>
+
+          <div
+            class="flex items-center justify-center gap-3 md:gap-4 mt-3 md:mt-4"
+          >
+            <div
+              class="h-px w-12 md:w-20"
+              style="background: linear-gradient(90deg, transparent, #E84FAA60);"
+            >
+            </div>
+            <div
+              class="w-2 h-2 rounded-full"
+              style="background: linear-gradient(135deg, #E84FAA, #6CB4EE); box-shadow: 0 0 8px #E84FAA80;"
+            >
+            </div>
+            <div
+              class="h-px w-12 md:w-20"
+              style="background: linear-gradient(90deg, #6CB4EE60, transparent);"
+            >
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Ring -->
-      <TeamRing members={teamMembers} client:load />
+        <!-- Ring -->
+        <TeamRing members={websiteTeamMembers} client:load />
+      </section>
+
+      <!-- Section 3: Graphics Team -->
+      <section class="mb-16 md:mb-24">
+        <!-- Header -->
+        <div class="text-center mb-8 md:mb-8 mb-4" style="margin-top: 2rem;">
+          <div
+            class="text-[10px] md:text-xs font-semibold tracking-[0.3em] md:tracking-[0.4em] mb-2 md:mb-3"
+            style="color: #D4A574;"
+          >
+            PRAKARSH '26
+          </div>
+          <h1
+            class="text-3xl md:text-4xl lg:text-6xl font-extrabold tracking-[0.05em] uppercase px-4"
+            style="background: linear-gradient(135deg, #FFFFFF 0%, #F1B5A2 50%, #E84FAA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"
+          >
+            GRAPHICS TEAM
+          </h1>
+
+          <p
+            class="max-w-md mx-auto text-xs md:text-sm mt-2 md:mt-3 px-4"
+            style="color: rgba(255,255,255,0.5);"
+          >
+            Drag to rotate the ring. Meet the artists behind Prakarsh'26 visual
+            design.
+          </p>
+
+          <div
+            class="flex items-center justify-center gap-3 md:gap-4 mt-3 md:mt-4"
+          >
+            <div
+              class="h-px w-12 md:w-20"
+              style="background: linear-gradient(90deg, transparent, #E84FAA60);"
+            >
+            </div>
+            <div
+              class="w-2 h-2 rounded-full"
+              style="background: linear-gradient(135deg, #E84FAA, #6CB4EE); box-shadow: 0 0 8px #E84FAA80;"
+            >
+            </div>
+            <div
+              class="h-px w-12 md:w-20"
+              style="background: linear-gradient(90deg, #6CB4EE60, transparent);"
+            >
+            </div>
+          </div>
+        </div>
+
+        <!-- Ring -->
+        <TeamRing members={graphicsTeamMembers} client:load />
+      </section>
     </div>
   </main>
 </PageLayout>
