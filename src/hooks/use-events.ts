@@ -6,12 +6,43 @@ import {
   getCachedEventsByCategory,
 } from "@/lib/event-cache";
 
-export const useEvents = () => {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
+const STORAGE_KEY = "prakarsh_events_cache";
+
+// Helper to read from sessionStorage synchronously
+const getInitialEventsFromStorage = (): Event[] => {
+  if (typeof window === "undefined") return [];
+  
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const events = JSON.parse(stored);
+      console.log(`✅ [SYNC] Loaded ${events.length} events from sessionStorage`);
+      return events;
+    }
+  } catch (error) {
+    console.error("❌ Failed to read initial events from sessionStorage:", error);
+  }
+  
+  return [];
+};
+
+export const useEvents = (initialEvents: Event[] = []) => {
+  // Initialize with sessionStorage data or props data (whichever has data)
+  const cachedEvents = getInitialEventsFromStorage();
+  const initialData = cachedEvents.length > 0 ? cachedEvents : initialEvents;
+  
+  const [events, setEvents] = useState<Event[]>(initialData);
+  const [loading, setLoading] = useState(initialData.length === 0);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
+    // If we already have data, don't fetch again
+    if (events.length > 0) {
+      console.log(`✅ Using existing events (${events.length} events), skipping fetch`);
+      setLoading(false);
+      return;
+    }
+
     const loadEvents = async () => {
       try {
         setLoading(true);

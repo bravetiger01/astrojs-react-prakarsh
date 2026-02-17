@@ -1,8 +1,30 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
 import UnifiedEventsPage from "../components/UnifiedEventsPage";
+import { fetchAllEvents } from "../lib/api";
+
+// Fetch events server-side during build/SSR
+let initialEvents = [];
+try {
+  initialEvents = await fetchAllEvents();
+  console.log(`✅ [SERVER] Fetched ${initialEvents.length} events for events page`);
+} catch (error) {
+  console.error("❌ [SERVER] Failed to fetch events:", error);
+}
 ---
 
 <PageLayout title="Events - Prakarsh '26">
-  <UnifiedEventsPage client:load />
+  <UnifiedEventsPage client:load initialEvents={initialEvents} />
 </PageLayout>
+
+<!-- Store server-side events in sessionStorage immediately -->
+<script is:inline define:vars={{ initialEvents }}>
+  if (initialEvents && initialEvents.length > 0) {
+    try {
+      sessionStorage.setItem("prakarsh_events_cache", JSON.stringify(initialEvents));
+      console.log(`💾 [SERVER-HYDRATE] Stored ${initialEvents.length} events in sessionStorage`);
+    } catch (error) {
+      console.error("❌ Failed to store server events:", error);
+    }
+  }
+</script>

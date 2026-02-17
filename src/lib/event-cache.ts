@@ -2,18 +2,48 @@ import type { Event } from "./event-types";
 import { fetchAllEvents, fetchEventById, fetchEventsByCategory } from "./api";
 
 /**
- * Event cache - Caches data in memory to avoid redundant API calls
+ * Event cache - Uses sessionStorage to persist data during browser session
  */
 
-let eventsCache: Event[] | null = null;
-let cacheTimestamp: number = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const STORAGE_KEY = "prakarsh_events_cache";
+const isBrowser = typeof window !== "undefined";
+
+// Helper to get cached events from sessionStorage
+const getStoredEvents = (): Event[] | null => {
+  if (!isBrowser) return null;
+  
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      const events = JSON.parse(stored);
+      console.log(`✅ Using cached events from sessionStorage (${events.length} events)`);
+      return events;
+    }
+  } catch (error) {
+    console.error("❌ Failed to parse cached events:", error);
+    sessionStorage.removeItem(STORAGE_KEY);
+  }
+  
+  return null;
+};
+
+// Helper to store events in sessionStorage
+const storeEvents = (events: Event[]): void => {
+  if (!isBrowser) return;
+  
+  try {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+    console.log(`💾 Stored ${events.length} events in sessionStorage`);
+  } catch (error) {
+    console.error("❌ Failed to store events in sessionStorage:", error);
+  }
+};
 
 export const getCachedEvents = async (): Promise<Event[]> => {
-  // Return cached data if available and fresh
-  if (eventsCache && Date.now() - cacheTimestamp < CACHE_DURATION) {
-    console.log(`✅ Using cached events (${eventsCache.length} events)`);
-    return eventsCache;
+  // Check sessionStorage first
+  const cachedEvents = getStoredEvents();
+  if (cachedEvents && cachedEvents.length > 0) {
+    return cachedEvents;
   }
 
   console.log("🔄 Fetching ALL events from Supabase...");
@@ -21,28 +51,21 @@ export const getCachedEvents = async (): Promise<Event[]> => {
     const events = await fetchAllEvents();
     console.log(`✅ Fetched ${events.length} events from Supabase`);
     
-    // Cache the results
-    eventsCache = events;
-    cacheTimestamp = Date.now();
+    // Store in sessionStorage
+    storeEvents(events);
     
     return events;
   } catch (error) {
     console.error("❌ Failed to fetch events from Supabase:", error);
-    
-    // If we have stale cache, return it as fallback
-    if (eventsCache) {
-      console.warn("⚠️ Using stale cache as fallback");
-      return eventsCache;
-    }
-    
     throw error;
   }
 };
 
 export const getCachedEventById = async (id: string): Promise<Event | null> => {
-  // Try to find in cache first
-  if (eventsCache) {
-    const cached = eventsCache.find(e => e.id === id);
+  // Try to find in sessionStorage first
+  const cachedEvents = getStoredEvents();
+  if (cachedEvents) {
+    const cached = cachedEvents.find(e => e.id === id);
     if (cached) {
       console.log(`✅ Using cached event ${id}`);
       return cached;
@@ -67,9 +90,10 @@ export const getCachedEventById = async (id: string): Promise<Event | null> => {
 export const getCachedEventsByCategory = async (
   category: string,
 ): Promise<Event[]> => {
-  // Try to filter from cache first
-  if (eventsCache) {
-    const filtered = eventsCache.filter(e => e.category === category);
+  // Try to filter from sessionStorage first
+  const cachedEvents = getStoredEvents();
+  if (cachedEvents) {
+    const filtered = cachedEvents.filter(e => e.category === category);
     console.log(`✅ Using cached ${category} events (${filtered.length} events)`);
     return filtered;
   }

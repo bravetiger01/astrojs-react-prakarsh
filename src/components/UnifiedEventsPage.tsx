@@ -8,8 +8,12 @@ import EsportsCard from "./EsportsCard";
 import type { Event } from "@/lib/event-types";
 import { useEvents } from "@/hooks/use-events";
 
-export default function UnifiedEventsPage() {
-  const { events, loading, error } = useEvents();
+interface UnifiedEventsPageProps {
+  initialEvents?: Event[];
+}
+
+export default function UnifiedEventsPage({ initialEvents = [] }: UnifiedEventsPageProps) {
+  const { events, loading, error } = useEvents(initialEvents);
 
   // Read category from URL parameter
   const getInitialTab = () => {
