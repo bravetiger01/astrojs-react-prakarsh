@@ -1,7 +1,7 @@
 import { memo, useRef, useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
-interface TeamMember {
+export interface TeamMember {
   id: string;
   name: string;
   role: string;
@@ -11,6 +11,10 @@ interface TeamMember {
 
 interface TeamRingProps {
   members: TeamMember[];
+  radiusMobile?: number;
+  radiusDesktop?: number;
+  cardWidth?: number;
+  cardHeight?: number;
 }
 
 /* ── Prakarsh poster palette ── */
@@ -201,30 +205,31 @@ const RingCard = memo(function RingCard({
         </div>
 
         {/* ── Info section ── */}
-        <div className="px-3.5 pt-2.5 pb-1.5 flex flex-col gap-0.5 relative z-10">
+        <div className="px-3.5 pt-2.5 pb-2 flex flex-col gap-1 relative z-10">
           {/* Name */}
           <h3
-            className="text-m font-extrabold tracking-[0.06em] uppercase leading-tight"
+            className="text-base md:text-lg font-extrabold tracking-[0.06em] uppercase leading-tight"
             style={{ color: C.white }}
           >
             {member.name}
           </h3>
 
           {/* Role subtitle row */}
-          <div className="flex items-center gap-1.5 mt-0.5">
+          <div className="flex items-center gap-1.5">
             <span
-              className="text-[12px] font-semibold tracking-[0.12em] uppercase"
+              className="text-[11px] md:text-xs font-semibold tracking-[0.1em] uppercase leading-tight"
               style={{ color: `${C.white}80` }}
             >
               {member.role}
             </span>
           </div>
 
+          {/* Nickname */}
           {member.nickname && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 mt-0.5">
               <span
-                className="text-[9px] font-semibold tracking-[0.12em] uppercase"
-                style={{ color: `${C.cyan}90` }}
+                className="text-[10px] md:text-[11px] font-semibold tracking-[0.1em] uppercase"
+                style={{ color: `${C.cyan}CC` }}
               >
                 {member.nickname}
               </span>
@@ -238,7 +243,7 @@ const RingCard = memo(function RingCard({
 RingCard.displayName = "RingCard";
 
 /* ── Main 3D ring carousel ── */
-export default function TeamRing({ members }: TeamRingProps) {
+export default function TeamRing({ members, radiusMobile, radiusDesktop, cardWidth, cardHeight }: TeamRingProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -252,9 +257,8 @@ export default function TeamRing({ members }: TeamRingProps) {
 
   const numItems = members.length;
   const anglePerItem = 360 / numItems;
-  const radius = isMobile
-    ? Math.max(280, numItems * 24)
-    : Math.max(400, numItems * 32);
+
+  const radius = isMobile ? (radiusMobile ?? 280) : (radiusDesktop ?? 400);
 
   const getActiveIndex = useCallback(
     (rot: number) => {
@@ -483,7 +487,7 @@ export default function TeamRing({ members }: TeamRingProps) {
         ref={containerRef}
         className="relative w-full select-none"
         style={{
-          height: isMobile ? "320px" : "440px",
+          height: isMobile ? "400px" : "540px",
           perspective: isMobile ? "800px" : "1200px",
           cursor: "grab",
         }}
@@ -495,8 +499,8 @@ export default function TeamRing({ members }: TeamRingProps) {
         <div
           className="absolute left-1/2 top-1/2"
           style={{
-            width: isMobile ? "180px" : "240px",
-            height: isMobile ? "280px" : "360px",
+            width: isMobile ? "180px" : `${cardWidth ?? 240}px`,
+            height: isMobile ? "280px" : `${cardHeight ?? 360}px`,
             transform: `translate(-50%, -50%) rotateY(${-rotation}deg)`,
             transformStyle: "preserve-3d",
             transition: isDragging.current || reduceMotion ? "none" : undefined,
