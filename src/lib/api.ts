@@ -97,6 +97,7 @@ const transformDbRowToEvent = (row: EventDbRow): Event => {
     date: row.date || undefined,
     time: row.time || undefined,
     location: row.location || undefined,
+    registration_pitch: row.registration_pitch || undefined,
     esports: esportsDetails,
     console: consoleDetails,
   };

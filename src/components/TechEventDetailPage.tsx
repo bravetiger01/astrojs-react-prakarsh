@@ -764,8 +764,8 @@ const EventPage = ({ eventId }: EventPageProps) => {
                 className="text-base md:text-lg mb-6 md:mb-8 max-w-2xl mx-auto px-4"
                 style={{ color: `${COLORS.white}90` }}
               >
-                Don't miss out on this incredible opportunity to showcase your
-                innovation and entrepreneurial skills!
+                {event.registration_pitch ||
+                  "Don't miss out on this incredible opportunity to showcase your innovation and entrepreneurial skills!"}
               </p>
               {/* <motion.a
                 href="#register"
