@@ -127,7 +127,7 @@ export default function TechEventCard({ event, index }: EventIdCardProps) {
                     >
                       NAME
                     </div>
-                    <div className="mt-1 font-display text-3xl font-black tracking-[0.18em] uppercase" style={{ color: "#3C2A56" }}>
+                    <div className="mt-1 font-display text-2xl font-black tracking-[0.18em] uppercase break-words" style={{ color: "#3C2A56" }}>
                       {event.name}
                     </div>
                     <div

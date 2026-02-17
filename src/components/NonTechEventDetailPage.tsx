@@ -171,50 +171,48 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails) => {
             Back to Events
           </a>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-mono uppercase tracking-[0.2em]"
-                style={{
-                  border: `1px solid ${primaryColor}`,
-                  color: primaryColor,
-                }}
-              >
-                <Settings className="w-3 h-3" />
-                {displayCategory}
-              </div>
-
-              <h1
-                className="text-7xl md:text-9xl font-black tracking-tighter mb-2"
-                style={{ color: primaryColor }}
-              >
-                {title}
-              </h1>
-
-              {edition && (
-                <div className="flex items-baseline gap-3 mb-6">
-                  <span
-                    className="text-5xl font-black"
-                    style={{ color: primaryColor }}
-                  >
-                    {edition}
-                  </span>
-                  <span
-                    className="text-xs font-mono tracking-widest uppercase"
-                    style={{ color: primaryColor, opacity: 0.6 }}
-                  >
-                    GENERATION
-                  </span>
-                </div>
-              )}
-
-              <p
-                className="text-sm font-mono leading-relaxed max-w-md"
-                style={{ color: primaryColor, opacity: 0.7 }}
-              >
-                {fullDescription}
-              </p>
+          <div>
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1 mb-4 text-xs font-mono uppercase tracking-[0.2em]"
+              style={{
+                border: `1px solid ${primaryColor}`,
+                color: primaryColor,
+              }}
+            >
+              <Settings className="w-3 h-3" />
+              {displayCategory}
             </div>
+
+            <h1
+              className="text-5xl md:text-7xl font-black tracking-tighter mb-2 break-words"
+              style={{ color: primaryColor }}
+            >
+              {title}
+            </h1>
+
+            {edition && (
+              <div className="flex items-baseline gap-3 mb-6">
+                <span
+                  className="text-5xl font-black"
+                  style={{ color: primaryColor }}
+                >
+                  {edition}
+                </span>
+                <span
+                  className="text-xs font-mono tracking-widest uppercase"
+                  style={{ color: primaryColor, opacity: 0.6 }}
+                >
+                  GENERATION
+                </span>
+              </div>
+            )}
+
+            <p
+              className="text-sm font-mono leading-relaxed mb-6"
+              style={{ color: primaryColor, opacity: 0.7 }}
+            >
+              {fullDescription}
+            </p>
 
             <div className="flex flex-wrap gap-3">
               {techStack.map((tech, index) => (

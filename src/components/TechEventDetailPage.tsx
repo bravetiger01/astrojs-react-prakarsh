@@ -271,7 +271,7 @@ const EventPage = ({ eventId }: EventPageProps) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 md:mb-6 leading-tight relative break-words hyphens-auto"
+                className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 md:mb-6 leading-tight relative break-words hyphens-auto"
                 style={{ color: COLORS.accent }}
               >
                 {event.name}
