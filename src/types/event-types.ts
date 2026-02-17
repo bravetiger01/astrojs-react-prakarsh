@@ -30,6 +30,7 @@ export interface Event {
   date?: string;
   time?: string;
   location?: string;
+  registration_pitch?: string;
   esports?: {
     gameName?: string;
     tournamentName?: string;
@@ -118,6 +119,7 @@ export interface EventDbRow {
   category: string | null;
   misc: string | null; // JSON string
   location: string | null;
+  registration_pitch: string | null;
   solo: boolean | null;
   created_at: string;
   updated_at: string;

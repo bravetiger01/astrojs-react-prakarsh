@@ -15,6 +15,7 @@ export interface Event {
   date?: string;
   time?: string;
   location?: string;
+  registration_pitch?: string;
   esports?: EsportsDetails;
   console?: ConsoleDetails;
 }
@@ -54,6 +55,7 @@ export interface EventDbRow {
   date: string | null;
   time: string | null;
   location: string | null;
+  registration_pitch: string | null;
   misc: string | null;
   created_at?: string;
   updated_at?: string;

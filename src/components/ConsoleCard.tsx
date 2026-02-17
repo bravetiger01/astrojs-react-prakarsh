@@ -113,7 +113,7 @@ const ConsoleCard = ({
         {/* Main title */}
         <div className="absolute top-6 left-6 right-28 pr-4">
           <h2
-            className="text-3xl font-black tracking-tight leading-tight line-clamp-3"
+            className="text-2xl font-black tracking-tight leading-tight line-clamp-3 break-words"
             style={{ color: colorScheme.text }}
           >
             {title}

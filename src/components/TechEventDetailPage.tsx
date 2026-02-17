@@ -271,7 +271,7 @@ const EventPage = ({ eventId }: EventPageProps) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 md:mb-6 leading-tight relative break-words hyphens-auto"
+                className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 md:mb-6 leading-tight relative break-words hyphens-auto"
                 style={{ color: COLORS.accent }}
               >
                 {event.name}
@@ -764,8 +764,8 @@ const EventPage = ({ eventId }: EventPageProps) => {
                 className="text-base md:text-lg mb-6 md:mb-8 max-w-2xl mx-auto px-4"
                 style={{ color: `${COLORS.white}90` }}
               >
-                Don't miss out on this incredible opportunity to showcase your
-                innovation and entrepreneurial skills!
+                {event.registration_pitch ||
+                  "Don't miss out on this incredible opportunity to showcase your innovation and entrepreneurial skills!"}
               </p>
               {/* <motion.a
                 href="#register"
