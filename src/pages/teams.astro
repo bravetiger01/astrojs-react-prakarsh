@@ -2,7 +2,7 @@
 import PageLayout from "../layouts/PageLayout.astro";
 import TeamRing from "../components/TeamRing";
 import type { TeamMember } from "../components/TeamRing";
-import CoreTeamCarousel from "../components/CoreTeamCarousel";
+import CoreTeamRing from "../components/CoreTeamRing";
 import membersData from "../data/members.json";
 
 const coreTeamMembers: TeamMember[] = membersData.coreTeam;
@@ -35,7 +35,7 @@ const graphicsTeamMembers: TeamMember[] = membersData.graphicsTeam;
           class="max-w-md mx-auto text-xs md:text-sm mt-2 md:mt-3 px-4"
           style="color: rgba(255,255,255,0.5);"
         >
-          Browse through the leaders of ISTE SVIT.
+          Scroll through the leaders of ISTE SVIT.
         </p>
 
         <div
@@ -59,8 +59,8 @@ const graphicsTeamMembers: TeamMember[] = membersData.graphicsTeam;
         </div>
       </div>
 
-      <!-- Carousel -->
-      <CoreTeamCarousel members={coreTeamMembers} client:load />
+      <!-- Ring -->
+      <CoreTeamRing members={coreTeamMembers} client:load />
     </section>
 
     <!-- Website Team Section (container-constrained for ring) -->
@@ -163,10 +163,10 @@ const graphicsTeamMembers: TeamMember[] = membersData.graphicsTeam;
         <!-- Ring -->
         <TeamRing
           members={graphicsTeamMembers}
-          radiusMobile={200}
-          radiusDesktop={220}
-          cardWidth={290}
-          cardHeight={400}
+          radiusMobile={220}
+          radiusDesktop={300}
+          cardWidth={260}
+          cardHeight={380}
           client:load
         />
       </section>

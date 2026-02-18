@@ -230,31 +230,31 @@
     },
     {
       "id": "002",
-      "name": "Krupa Parmar",
+      "name": "Chaitanya Giri",
       "role": "Graphic Designer",
-      "nickname": "Design Diva",
-      "image": "/team/krupa.jpeg"
+      "nickname": "Pixel Prodigy",
+      "image": "/team/chaitanya.jpg"
     },
     {
       "id": "003",
-      "name": "Dhaval",
+      "name": "Shreya Deshmukh",
       "role": "Graphic Designer",
-      "nickname": "Visual Virtuoso",
-      "image": "/team/dhaval.jpeg"
+      "nickname": "Design Diva",
+      "image": "/team/shreya.jpeg"
     },
     {
       "id": "004",
-      "name": "Siddharth",
+      "name": "Aastha Chokshi",
       "role": "Graphic Designer",
-      "nickname": "Pixel Prodigy",
-      "image": "/team/siddharth.jpeg"
+      "nickname": "Color Queen",
+      "image": "/team/aastha.jpeg"
     },
     {
       "id": "005",
-      "name": "Yash",
+      "name": "Agneloze Williams",
       "role": "Graphic Designer",
-      "nickname": "Color Queen",
-      "image": "/team/yash.jpeg"
+      "nickname": "Choco",
+      "image": "/team/agneloze.png"
     }
   ]
 }
