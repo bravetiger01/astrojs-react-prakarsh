@@ -26,6 +26,48 @@ console.log("📱 [SERVER] MobileLayout.astro is rendering");
             fetchpriority="high"
         />
 
+        <!-- Enhanced Mobile Page Transitions -->
+        <style is:global>
+            /* Mobile-optimized transitions - smooth slide */
+            ::view-transition-old(root) {
+                animation: mobileSlideOut 0.3s cubic-bezier(0.4, 0, 1, 1);
+            }
+            
+            ::view-transition-new(root) {
+                animation: mobileSlideIn 0.35s cubic-bezier(0, 0, 0.2, 1);
+            }
+
+            @keyframes mobileSlideOut {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(-30px);
+                }
+            }
+
+            @keyframes mobileSlideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            /* Respect reduced motion preferences */
+            @media (prefers-reduced-motion: reduce) {
+                ::view-transition-old(root),
+                ::view-transition-new(root) {
+                    animation: none !important;
+                }
+            }
+        </style>
+
         <style>
             .loader-wrapper {
                 position: fixed;
