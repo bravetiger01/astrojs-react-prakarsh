@@ -161,14 +161,7 @@ const graphicsTeamMembers: TeamMember[] = membersData.graphicsTeam;
         </div>
 
         <!-- Ring -->
-        <TeamRing
-          members={graphicsTeamMembers}
-          radiusMobile={220}
-          radiusDesktop={300}
-          cardWidth={260}
-          cardHeight={380}
-          client:load
-        />
+        <TeamRing members={graphicsTeamMembers} client:load />
       </section>
     </div>
   </main>

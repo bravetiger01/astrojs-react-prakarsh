@@ -1,30 +1,37 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
-import UnifiedEventsPage from "../components/UnifiedEventsPage";
-import { fetchAllEvents } from "../lib/api";
+import TeamSection from "../components/TeamSection";
+import type { TeamMember } from "../components/TeamCard";
+import membersData from "../data/members.json";
 
-// Fetch events server-side during build/SSR
-let initialEvents = [];
-try {
-  initialEvents = await fetchAllEvents();
-  console.log(`✅ [SERVER] Fetched ${initialEvents.length} events for events page`);
-} catch (error) {
-  console.error("❌ [SERVER] Failed to fetch events:", error);
-}
+const coreTeamMembers: TeamMember[] = membersData.coreTeam;
+const websiteTeamMembers: TeamMember[] = membersData.websiteTeam;
+const graphicsTeamMembers: TeamMember[] = membersData.graphicsTeam;
 ---
 
 <PageLayout title="Events - Prakarsh '26">
-  <UnifiedEventsPage client:load initialEvents={initialEvents} />
+  <main
+    style="background: linear-gradient(to bottom, #2a1a3d 0%, #1a0f2e 50%, #0a0515 100%); min-height: 100vh; padding-top: 8rem; padding-bottom: 4rem;"
+  >
+    <TeamSection
+      title="Core Team"
+      tagline="Scroll through the leaders of ISTE SVIT."
+      members={coreTeamMembers}
+      enableNavigation
+      client:load
+    />
+    <TeamSection
+      title="Website Team"
+      tagline="Meet the visionaries behind Prakarsh'26."
+      members={websiteTeamMembers}
+      client:load
+    />
+    <TeamSection
+      title="Graphics Team"
+      tagline="Meet the creative minds behind Prakarsh'26."
+      members={graphicsTeamMembers}
+      enableNavigation
+      client:load
+    />
+  </main>
 </PageLayout>
-
-<!-- Store server-side events in sessionStorage immediately -->
-<script is:inline define:vars={{ initialEvents }}>
-  if (initialEvents && initialEvents.length > 0) {
-    try {
-      sessionStorage.setItem("prakarsh_events_cache", JSON.stringify(initialEvents));
-      console.log(`💾 [SERVER-HYDRATE] Stored ${initialEvents.length} events in sessionStorage`);
-    } catch (error) {
-      console.error("❌ Failed to store server events:", error);
-    }
-  }
-</script>

@@ -150,13 +150,6 @@ const RingCard = memo(function RingCard({
         </div>
 
         <div className="px-3.5 pt-2.5 pb-2 flex flex-col gap-1 relative z-10">
-          <h3
-            className="text-base md:text-lg font-extrabold tracking-[0.06em] uppercase leading-tight"
-            style={{ color: C.white }}
-          >
-            {member.name}
-          </h3>
-
           <div className="flex items-center gap-1.5">
             <span
               className="text-[11px] md:text-xs font-semibold tracking-[0.1em] uppercase leading-tight"
@@ -197,23 +190,47 @@ export default function CoreTeamRing({ members }: CoreTeamRingProps) {
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [grabbing, setGrabbing] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const reduceMotion = useReducedMotion();
 
   // Create infinite loop by tripling the array
   const infiniteMembers = [...members, ...members, ...members];
 
+  const updateActiveIndex = useCallback(() => {
+    const el = trackRef.current;
+    if (!el) return;
+
+    const center = el.scrollLeft + el.clientWidth / 2;
+    const children = Array.from(
+      el.querySelectorAll<HTMLElement>("[data-core-card]"),
+    );
+    let closestIndex = 0;
+    let closestDist = Number.POSITIVE_INFINITY;
+
+    children.forEach((child, index) => {
+      const childCenter = child.offsetLeft + child.offsetWidth / 2;
+      const dist = Math.abs(childCenter - center);
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestIndex = index;
+      }
+    });
+
+    setActiveIndex(closestIndex);
+  }, []);
+
   const updateScrollState = useCallback(() => {
     const el = trackRef.current;
     if (!el) return;
-    
+
     // For infinite scroll, always show arrows
     setCanScrollLeft(true);
     setCanScrollRight(true);
-    
+
     // Handle infinite loop - reset position when reaching boundaries
     const cardWidth = 280 + 12; // card width + gap
     const singleSetWidth = members.length * cardWidth;
-    
+
     // If scrolled past second set, jump back to first set
     if (el.scrollLeft >= singleSetWidth * 2) {
       el.scrollLeft = singleSetWidth;
@@ -222,17 +239,18 @@ export default function CoreTeamRing({ members }: CoreTeamRingProps) {
     else if (el.scrollLeft <= 0) {
       el.scrollLeft = singleSetWidth;
     }
-  }, [members.length]);
+    updateActiveIndex();
+  }, [members.length, updateActiveIndex]);
 
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
-    
+
     // Initialize scroll position to middle set
     const cardWidth = 280 + 12;
     const singleSetWidth = members.length * cardWidth;
     el.scrollLeft = singleSetWidth;
-    
+
     updateScrollState();
     el.addEventListener("scroll", updateScrollState, { passive: true });
     window.addEventListener("resize", updateScrollState);
@@ -366,8 +384,24 @@ export default function CoreTeamRing({ members }: CoreTeamRingProps) {
     };
   }, [stopMomentum, stopAutoScroll]);
 
+  const activeMember =
+    members.length > 0 ? members[activeIndex % members.length] : undefined;
+
   return (
     <div className="relative w-full">
+      {activeMember && (
+        <div className="text-center mb-6">
+          <h3
+            className="text-xl md:text-2xl lg:text-3xl font-extrabold tracking-[0.08em] uppercase"
+            style={{
+              color: C.white,
+              textShadow: `0 6px 24px ${C.pink}40`,
+            }}
+          >
+            {activeMember.name}
+          </h3>
+        </div>
+      )}
       {canScrollLeft && (
         <div
           className="absolute left-0 top-0 bottom-0 z-10 flex items-center"
@@ -454,6 +488,7 @@ export default function CoreTeamRing({ members }: CoreTeamRingProps) {
           <div
             key={`${member.id}-${i}`}
             className="flex-shrink-0"
+            data-core-card
             style={{
               width: "280px",
               height: "420px",
@@ -461,7 +496,7 @@ export default function CoreTeamRing({ members }: CoreTeamRingProps) {
               scrollSnapStop: "always",
             }}
           >
-            <RingCard member={member} index={i} isActive={false} />
+            <RingCard member={member} index={i} isActive={i === activeIndex} />
           </div>
         ))}
       </div>

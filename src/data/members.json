@@ -46,12 +46,12 @@
       "id": "007",
       "name": "Divy Chauhan",
       "role": "Joint ISTE Social Media Marketing Coordinator",
-      "nickname": "Content Creator",
+      "nickname": "Content King",
       "image": "/team/divy_chauhan.png"
     },
     {
       "id": "008",
-      "name": "Diana Kaku",
+      "name": "Diyana Kaku",
       "role": "Joint ISTE Social Media Marketing Coordinator",
       "nickname": "Brand Builder",
       "image": "/team/diyana_kaku.png"
@@ -223,38 +223,66 @@
   "graphicsTeam": [
     {
       "id": "001",
+      "name": "Aryan Sharma",
+      "role": "Joint ISTE Web & Graphics Design Coordinator",
+      "nickname": "Frontend Force",
+      "image": "/team/aryan_sharma_2.jpeg"
+    },
+    {
+      "id": "002",
       "name": "Rudra Joshi",
       "role": "Graphic Designer",
       "nickname": "Creative Commander",
       "image": "/team/rudra.jpeg"
     },
     {
-      "id": "002",
+      "id": "003",
       "name": "Chaitanya Giri",
       "role": "Graphic Designer",
       "nickname": "Pixel Prodigy",
       "image": "/team/chaitanya.jpg"
     },
     {
-      "id": "003",
+      "id": "004",
       "name": "Shreya Deshmukh",
       "role": "Graphic Designer",
       "nickname": "Design Diva",
       "image": "/team/shreya.jpeg"
     },
     {
-      "id": "004",
+      "id": "005",
       "name": "Aastha Chokshi",
       "role": "Graphic Designer",
       "nickname": "Color Queen",
       "image": "/team/aastha.jpeg"
     },
     {
-      "id": "005",
+      "id": "006",
       "name": "Agneloze Williams",
       "role": "Graphic Designer",
-      "nickname": "Choco",
+      "nickname": "Pinterest Paglu",
       "image": "/team/agneloze.png"
+    },
+    {
+      "id": "007",
+      "name": "Rudra Joshi",
+      "role": "Graphic Designer",
+      "nickname": "Creative Commander",
+      "image": "/team/rudra.jpeg"
+    },
+    {
+      "id": "008",
+      "name": "Shreya Deshmukh",
+      "role": "Graphic Designer",
+      "nickname": "Design Diva",
+      "image": "/team/shreya.jpeg"
+    },
+    {
+      "id": "009",
+      "name": "Chaitanya Giri",
+      "role": "Graphic Designer",
+      "nickname": "Pixel Prodigy",
+      "image": "/team/chaitanya.jpg"
     }
   ]
 }
