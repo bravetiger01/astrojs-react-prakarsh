@@ -18,13 +18,6 @@ const COLORS = {
 const EventPage = ({ eventId }: EventPageProps) => {
   const { event, loading, error } = useEventById(eventId);
 
-  const teamSizeLabel =
-    event?.solo === true
-      ? "Solo"
-      : event?.solo === false
-        ? "Multiple"
-        : "Individual";
-
   // Determine the back link based on event category
   const getBackLink = () => {
     if (!event) return "/events";
@@ -316,40 +309,6 @@ const EventPage = ({ eventId }: EventPageProps) => {
                 transition={{ duration: 0.6, delay: 0.3 }}
                 className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-10"
               >
-                {/* Participants */}
-                <div
-                  className="flex items-center gap-3 p-3 md:p-4 backdrop-blur-sm"
-                  style={{
-                    backgroundColor: `${COLORS.white}80`,
-                    border: `1.5px solid ${COLORS.peach}40`,
-                  }}
-                >
-                  <div
-                    className="p-2 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: `${COLORS.peach}30` }}
-                  >
-                    <Users
-                      size={16}
-                      className="md:w-[18px] md:h-[18px]"
-                      style={{ color: COLORS.accent }}
-                    />
-                  </div>
-                  <div>
-                    <p
-                      className="text-xs font-display tracking-wide opacity-70"
-                      style={{ color: COLORS.accent }}
-                    >
-                      TEAM SIZE
-                    </p>
-                    <p
-                      className="font-display font-bold text-sm md:text-base"
-                      style={{ color: COLORS.accent }}
-                    >
-                      {teamSizeLabel}
-                    </p>
-                  </div>
-                </div>
-
                 {/* Date */}
                 <div
                   className="flex items-center gap-3 p-3 md:p-4 backdrop-blur-sm"

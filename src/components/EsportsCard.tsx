@@ -6,7 +6,6 @@ interface EsportsCardProps {
   gameName: string;
   tournamentName: string;
   prizePool: string;
-  teamSize: string;
   date: string;
   posterImage: string | { src: string }; // Accept both string and ImageMetadata
   accentColor: string;
@@ -17,7 +16,6 @@ const EsportsCard = ({
   gameName,
   tournamentName,
   prizePool,
-  teamSize,
   date,
   posterImage,
   accentColor,

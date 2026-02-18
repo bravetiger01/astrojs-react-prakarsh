@@ -76,13 +76,6 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
     event.esports?.gameName || event.name.split(" ")[0] || "Esports";
   const tournamentName = event.esports?.tournamentName || event.name;
   const prizePool = event.esports?.prizePool || "Prize pool to be announced";
-  const teamSize =
-    event.esports?.teamSize ||
-    (event.solo === false
-      ? "Team"
-      : event.solo === true
-        ? "Solo"
-        : "To be announced");
   const description = event.description?.[0] || event.tagline || "";
   const rules =
     event.esports?.rules && event.esports.rules.length > 0
@@ -95,11 +88,11 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
   const prizes =
     event.esports?.prizes && event.esports.prizes.length > 0
       ? event.esports.prizes
-      : ["Prize details to be announced"];
+      : [prizePool];
   const requirements =
     event.esports?.requirements && event.esports.requirements.length > 0
       ? event.esports.requirements
-      : ["Requirements to be announced"];
+      : ["Bring Your Own Device."];
   const posterImageRaw = event.esports?.posterImage || event.posterImage;
 
   // Extract src from ImageMetadata if needed
@@ -257,10 +250,8 @@ const EsportsEventDetailPage = ({ eventId }: EsportsEventDetailPageProps) => {
             {/* Left Column - Main Info */}
             <div className="lg:col-span-2 space-y-4 xs:space-y-6 sm:space-y-8 md:space-y-12">
               {/* Quick Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 xs:gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 xs:gap-3 sm:gap-4">
                 {[
-                  { icon: Trophy, label: "Prize Pool", value: prizePool },
-                  { icon: Users, label: "Team Size", value: teamSize },
                   {
                     icon: Calendar,
                     label: "Date",

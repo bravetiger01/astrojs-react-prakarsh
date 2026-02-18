@@ -329,7 +329,6 @@ export default function UnifiedEventsPage({ initialEvents = [] }: UnifiedEventsP
                             gameName={event.name.split(" ")[0]}
                             tournamentName={event.name}
                             prizePool="TBA"
-                            teamSize="Squad"
                             date="Prakarsh '26"
                             posterImage={event.posterImage || ""}
                             accentColor={
