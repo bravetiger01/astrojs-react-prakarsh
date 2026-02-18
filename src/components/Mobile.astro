@@ -6,6 +6,7 @@ import FlyingShipBanner from "./FlyingShipBanner";
 import FlyingShipBannerAlt from "./FlyingShipBannerAlt";
 import SponsorBanner from "./SponsorBanner";
 import TeamCTA from "./TeamCTA";
+import ScrollingBanner from "./ScrollingBanner";
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -39,8 +40,24 @@ import TeamCTA from "./TeamCTA";
     cursor: pointer;
   }
 
+  /* Scrolling banner positioning */
+  .scrolling-banner-wrapper {
+    position: absolute;
+    bottom: 13%;
+    left: 0;
+    right: 0;
+    z-index: 1200;
+    pointer-events: none;
+  }
+
   /* Mobile adjustments */
   @media (max-width: 768px) {
+    .scrolling-banner-wrapper {
+      bottom: 8%;
+      z-index: 3000;
+      transform: scale(1.2);
+    }
+
     .tech-billboard {
       bottom: 28%;
       left: 15%;
@@ -59,6 +76,11 @@ import TeamCTA from "./TeamCTA";
 
   /* Small phones - S20 Ultra and similar (412px - 480px) */
   @media (max-width: 480px) {
+    .scrolling-banner-wrapper {
+      bottom: 6%;
+      transform: scale(1);
+    }
+
     .tech-billboard {
       bottom: 15%;
       left: 36.5%;
@@ -73,6 +95,7 @@ import TeamCTA from "./TeamCTA";
       left: auto;
       transform: scale(0.54) perspective(600px) rotateY(-12deg);
       transform-origin: right center;
+      z-index: 3000;
     }
   }
 
@@ -110,6 +133,7 @@ import TeamCTA from "./TeamCTA";
       left: auto;
       transform: scale(0.52) perspective(600px) rotateY(-12deg);
       transform-origin: right center;
+      z-index: 3000;
     }
   }
 
@@ -186,6 +210,7 @@ import TeamCTA from "./TeamCTA";
       left: auto;
       transform: scale(0.49) perspective(600px) rotateY(-12deg);
       transform-origin: right center;
+      z-index: 3000;
     }
   }
 
@@ -205,6 +230,7 @@ import TeamCTA from "./TeamCTA";
       left: auto;
       transform: scale(0.48) perspective(600px) rotateY(-12deg);
       transform-origin: right center;
+      z-index: 3000;
     }
   }
 
@@ -224,6 +250,7 @@ import TeamCTA from "./TeamCTA";
       left: auto;
       transform: scale(0.48) perspective(600px) rotateY(-12deg);
       transform-origin: right center;
+      z-index: 3000;
     }
   }
 
@@ -242,6 +269,7 @@ import TeamCTA from "./TeamCTA";
       left: auto;
       transform: scale(0.42) perspective(550px) rotateY(-15deg);
       transform-origin: right center;
+      z-index: 3000;
     }
   }
 
@@ -268,6 +296,16 @@ import TeamCTA from "./TeamCTA";
 <MobileNav />
 <div class="HomePage">
   <div class="designHomePage">
+    <!-- Scrolling Banner -->
+    <div class="scrolling-banner-wrapper">
+      <ScrollingBanner
+        message="⚡ SEATS ALMOST FULL ⚡"
+        accentColor="#ff00ff"
+        secondaryColor="#4af0f0"
+        client:load
+      />
+    </div>
+
     <!-- Holographic Card Buttons - Billboard Style in City Area -->
     <!-- Left billboard on left building -->
     <div class="tech-billboard">
