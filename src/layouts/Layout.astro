@@ -2,6 +2,7 @@
 import "../styles/index.css";
 import Navbar from "../pages/navbar.astro";
 import GlobalAudio from "../components/GlobalAudio.astro";
+import { ClientRouter } from "astro:transitions";
 const {
   title = "Prakarsh 2026",
   description = "Prakarsh - The Annual Technical Festival of SVIT College. Join us for exciting tech events, workshops, competitions, and esports tournaments.",
@@ -36,6 +37,7 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
     <meta property="twitter:description" content={description} />
 
     <title>Prakarsh 2026</title>
+    <ClientRouter />
 
     <link
       rel="preload"
@@ -736,6 +738,45 @@ const ENABLE_ZOOM_POPUP = false; // Set to true to enable zoom/scaling notificat
           }, ANIMATION_DURATION);
         });
       }
+
+      // Handle client-side navigation TO home page
+      // Use astro:after-swap to run IMMEDIATELY when page HTML is swapped (before astro:page-load)
+      // This ensures content appears instantly without the 6.3s loader delay
+      document.addEventListener("astro:after-swap", () => {
+        // Only run if we're on the home page
+        if (window.location.pathname !== "/") return;
+
+        console.log("🏠 Arrived at home page via navigation");
+
+        // Immediately hide all popups
+        const musicPopup = document.getElementById("music-enable-popup");
+        const musicOverlay = document.getElementById("music-enable-overlay");
+        const zoomOverlay = document.getElementById(
+          "zoom-notification-overlay",
+        );
+        const zoomNotification = document.getElementById("zoom-notification");
+
+        if (musicPopup) musicPopup.style.display = "none";
+        if (musicOverlay) musicOverlay.style.display = "none";
+        if (zoomOverlay) zoomOverlay.classList.add("hidden");
+        if (zoomNotification) zoomNotification.classList.add("hidden");
+
+        // Immediately hide loader and show content (no delay when navigating here)
+        const loader = document.getElementById("loader-wrapper");
+        if (loader) loader.style.display = "none";
+
+        // Remove loading class immediately
+        document.documentElement.classList.remove("loading");
+
+        // Show main content immediately
+        const mainContent = document.getElementById("main-content");
+        if (mainContent) {
+          mainContent.classList.add("visible");
+          console.log(
+            "✅ Home page content visible immediately (no loader delay)",
+          );
+        }
+      });
     </script>
 
     <!-- PIXI LOADER (LOCKS ON LAST FRAME) -->

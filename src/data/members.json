@@ -1,0 +1,260 @@
+{
+  "coreTeam": [
+    {
+      "id": "001",
+      "name": "Rudra Kurup",
+      "role": "ISTE Chief Coordinator",
+      "nickname": "The Commander-in-Chief",
+      "image": "/team/rudra_kurup.png"
+    },
+    {
+      "id": "002",
+      "name": "Nisarg Patel",
+      "role": "Joint ISTE Chief Coordinator",
+      "nickname": "Deputy Commander",
+      "image": "/team/nisarg_patel.png"
+    },
+    {
+      "id": "003",
+      "name": "Malav Shah",
+      "role": "ISTE Finance & Sponsorship Coordinator",
+      "nickname": "The Money Maestro",
+      "image": "/team/malav_shah.png"
+    },
+    {
+      "id": "004",
+      "name": "Mukund Prajapati",
+      "role": "Joint ISTE Finance & Sponsorship Coordinator",
+      "nickname": "Budget Boss",
+      "image": "/team/mukund_prajapati.png"
+    },
+    {
+      "id": "005",
+      "name": "Moulik Patel",
+      "role": "Joint ISTE Finance & Sponsorship Coordinator",
+      "nickname": "Sponsorship Strategist",
+      "image": "/team/maulik_patel.png"
+    },
+    {
+      "id": "006",
+      "name": "Tanmay Desai",
+      "role": "ISTE Social Media Marketing Coordinator",
+      "nickname": "Marketing Maverick",
+      "image": "/team/tanmay_desai.png"
+    },
+    {
+      "id": "007",
+      "name": "Divy Chauhan",
+      "role": "Joint ISTE Social Media Marketing Coordinator",
+      "nickname": "Content Creator",
+      "image": "/team/divy_chauhan.png"
+    },
+    {
+      "id": "008",
+      "name": "Diana Kaku",
+      "role": "Joint ISTE Social Media Marketing Coordinator",
+      "nickname": "Brand Builder",
+      "image": "/team/diyana_kaku.png"
+    },
+    {
+      "id": "009",
+      "name": "Masoom Patel",
+      "role": "ISTE Administrative Coordinator",
+      "nickname": "Operations Oracle",
+      "image": "/team/masoom_patel.png"
+    },
+    {
+      "id": "010",
+      "name": "Vedant Shah",
+      "role": "Joint ISTE Administrative Coordinator",
+      "nickname": "System Supervisor",
+      "image": "/team/vedant_shah.png"
+    },
+    {
+      "id": "011",
+      "name": "Parth Bhatti",
+      "role": "ISTE Web & Graphics Design Coordinator",
+      "nickname": "Web & Graphics Mukhya Mantri",
+      "image": "/team/parth_bhatti.png"
+    },
+    {
+      "id": "012",
+      "name": "Aryan Sharma",
+      "role": "Joint ISTE Web & Graphics Design Coordinator",
+      "nickname": "Frontend Force",
+      "image": "/team/aryan_sharma.png"
+    },
+    {
+      "id": "013",
+      "name": "Yug Patel",
+      "role": "Joint ISTE Web & Graphics Design Coordinator",
+      "nickname": "Design Dynamo",
+      "image": "/team/yug_patel.png"
+    },
+    {
+      "id": "014",
+      "name": "Tisha Kharwa",
+      "role": "ISTE Decoration Coordinator",
+      "nickname": "Decor Dynamo",
+      "image": "/team/tisha_kharwa.png"
+    },
+    {
+      "id": "015",
+      "name": "Rushita Patel",
+      "role": "Joint ISTE Decoration Coordinator",
+      "nickname": "Creative Stylist",
+      "image": "/team/rushita_patel.png"
+    },
+    {
+      "id": "016",
+      "name": "Kunj Patel",
+      "role": "Joint ISTE Decoration Coordinator",
+      "nickname": "Stage Stylist",
+      "image": "/team/kunj_patel.png"
+    },
+    {
+      "id": "017",
+      "name": "Meet Prajapati",
+      "role": "ISTE Non-Technical Coordinator",
+      "nickname": "Event Strategist",
+      "image": "/team/meet_prajapati.png"
+    },
+    {
+      "id": "018",
+      "name": "Jiya Tank",
+      "role": "Joint ISTE Non-Technical Coordinator",
+      "nickname": "Planning Pro",
+      "image": "/team/jiya_tank.png"
+    },
+    {
+      "id": "019",
+      "name": "Vidhi Shah",
+      "role": "Joint ISTE Non-Technical Coordinator",
+      "nickname": "Coordination Queen",
+      "image": "/team/vidhi_shah.png"
+    },
+    {
+      "id": "020",
+      "name": "Akshat Tiwari",
+      "role": "ISTE Promotion Coordinator",
+      "nickname": "Hype Generator",
+      "image": "/team/akshat_tiwari.png"
+    },
+    {
+      "id": "021",
+      "name": "Aastha Parmar",
+      "role": "Joint ISTE Promotion Coordinator",
+      "nickname": "Campaign Creator",
+      "image": "/team/aastha_parmar.png"
+    },
+    {
+      "id": "022",
+      "name": "Aashutosh Bhagat",
+      "role": "ISTE Technical Coordinator",
+      "nickname": "Tech Titan",
+      "image": "/team/ashutosh_bhagat.png"
+    },
+    {
+      "id": "023",
+      "name": "Dhyani Upadhyay",
+      "role": "Joint ISTE Technical Coordinator",
+      "nickname": "Code Commander",
+      "image": "/team/dhyani_upadhyay.png"
+    }
+  ],
+  "websiteTeam": [
+    {
+      "id": "001",
+      "name": "Parth Bhatti",
+      "role": "Head - Website and Graphics Team",
+      "nickname": "Web & Graphics Mukhya Mantri",
+      "image": "/team/parth.jpeg"
+    },
+    {
+      "id": "002",
+      "name": "Dhaval Patel",
+      "role": "Frontend Developer and Graphic Designer",
+      "nickname": "Picasso Patel",
+      "image": "/team/dhaval.jpeg"
+    },
+    {
+      "id": "003",
+      "name": "Siddharth Panchal",
+      "role": "Fullstack Developer",
+      "nickname": "Work from home baba",
+      "image": "/team/siddharth.jpeg"
+    },
+    {
+      "id": "004",
+      "name": "Yash Mehta",
+      "role": "Fullstack Developer",
+      "nickname": "Free Attendance & Praxis employee",
+      "image": "/team/yash.jpeg"
+    },
+    {
+      "id": "005",
+      "name": "Jwalin Patel",
+      "role": "Fullstack Developer",
+      "nickname": "Protein Paglu",
+      "image": "/team/jwalin.jpeg"
+    },
+    {
+      "id": "006",
+      "name": "Nakul Desai",
+      "role": "Fullstack Developer",
+      "nickname": "Coffee Paglu",
+      "image": "/team/nakul.png"
+    },
+    {
+      "id": "007",
+      "name": "Param Patel",
+      "role": "Devops Engineer",
+      "nickname": "Server Paglu",
+      "image": "/team/param.jpeg"
+    },
+    {
+      "id": "008",
+      "name": "Krupa Parmar",
+      "role": "Frontend Developer",
+      "nickname": "Full-CSS-Stack",
+      "image": "/team/krupa.jpeg"
+    }
+  ],
+  "graphicsTeam": [
+    {
+      "id": "001",
+      "name": "Rudra Joshi",
+      "role": "Graphic Designer",
+      "nickname": "Creative Commander",
+      "image": "/team/rudra.jpeg"
+    },
+    {
+      "id": "002",
+      "name": "Chaitanya Giri",
+      "role": "Graphic Designer",
+      "nickname": "Pixel Prodigy",
+      "image": "/team/chaitanya.jpg"
+    },
+    {
+      "id": "003",
+      "name": "Shreya Deshmukh",
+      "role": "Graphic Designer",
+      "nickname": "Design Diva",
+      "image": "/team/shreya.jpeg"
+    },
+    {
+      "id": "004",
+      "name": "Aastha Chokshi",
+      "role": "Graphic Designer",
+      "nickname": "Color Queen",
+      "image": "/team/aastha.jpeg"
+    },
+    {
+      "id": "005",
+      "name": "Agneloze Williams",
+      "role": "Graphic Designer",
+      "nickname": "Choco",
+      "image": "/team/agneloze.png"
+    }
+  ]
+}

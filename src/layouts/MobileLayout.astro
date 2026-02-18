@@ -1,6 +1,7 @@
 ---
 import "../styles/index.css";
 import GlobalAudio from "../components/GlobalAudio.astro";
+import { ClientRouter } from "astro:transitions";
 const { title = "Prakarsh 2026" } = Astro.props;
 
 // Server-side log
@@ -16,6 +17,7 @@ console.log("📱 [SERVER] MobileLayout.astro is rendering");
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" href="/favicon.svg" />
         <title>{title}</title>
+        <ClientRouter />
 
         <link
             rel="preload"
@@ -140,6 +142,22 @@ console.log("📱 [SERVER] MobileLayout.astro is rendering");
                     }, 6500);
                 });
             }
+
+            // Handle client-side navigation TO home page on mobile
+            // Use astro:after-swap for immediate display (no delay)
+            document.addEventListener("astro:after-swap", () => {
+                // Only run if we're on the home page
+                if (window.location.pathname !== "/") return;
+
+                console.log("📱 Arrived at mobile home page via navigation");
+
+                // Immediately hide loader (no delay)
+                const loader = document.getElementById("loader-wrapper");
+                if (loader) {
+                    loader.style.display = "none";
+                    console.log("📱 Mobile loader hidden immediately");
+                }
+            });
         </script>
 
         <!-- PREFETCH DATA -->

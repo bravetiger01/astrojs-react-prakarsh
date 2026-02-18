@@ -35,14 +35,19 @@ const navLinks = [
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   gsap.registerPlugin(ScrollTrigger);
 
-  const logo = document.getElementById("logo");
-  const navbar = document.getElementById("navbar");
-  const loaderWrapper = document.getElementById("loader-wrapper");
-  const canvas = document.getElementById("sprite-canvas");
+  let scrollTriggerInstance: ScrollTrigger | null = null;
 
-  if (!logo || !navbar) {
-    console.error("Logo or navbar not found");
-  } else {
+  function initNavbar() {
+    const logo = document.getElementById("logo");
+    const navbar = document.getElementById("navbar");
+    const loaderWrapper = document.getElementById("loader-wrapper");
+    const canvas = document.getElementById("sprite-canvas");
+
+    if (!logo || !navbar) {
+      console.error("Logo or navbar not found");
+      return;
+    }
+
     function run() {
       const t = (window as any).__loaderTransition;
       if (!t) {
@@ -52,6 +57,7 @@ const navLinks = [
         // Show main content when no loader
         const mainContent = document.getElementById("main-content");
         if (mainContent) mainContent.classList.add("visible");
+        setupScroll();
         return;
       }
 
@@ -128,23 +134,16 @@ const navLinks = [
       });
     }
 
-    // Listen for loader complete event
-    window.addEventListener("loader:complete", run);
-
-    // If loader already completed (or skipped), run immediately
-    if ((window as any).__loaderTransition !== undefined) {
-      run();
-    } else if (
-      !loaderWrapper ||
-      window.getComputedStyle(loaderWrapper).display === "none"
-    ) {
-      // No loader at all, show navbar
-      gsap.set(navbar, { opacity: 1 });
-    }
-
     function setupScroll() {
       if (!logo) return;
-      ScrollTrigger.create({
+
+      // Clean up existing ScrollTrigger if any
+      if (scrollTriggerInstance) {
+        scrollTriggerInstance.kill();
+        scrollTriggerInstance = null;
+      }
+
+      scrollTriggerInstance = ScrollTrigger.create({
         start: "top top",
         end: "+=300",
         scrub: true,
@@ -157,7 +156,41 @@ const navLinks = [
       });
       console.log("📜 Scroll animation setup");
     }
+
+    // Only listen for loader on home page
+    if (window.location.pathname === "/") {
+      window.addEventListener("loader:complete", run);
+
+      if ((window as any).__loaderTransition !== undefined) {
+        run();
+      } else if (
+        !loaderWrapper ||
+        window.getComputedStyle(loaderWrapper).display === "none"
+      ) {
+        gsap.set(navbar, { opacity: 1 });
+        setupScroll();
+      }
+    } else {
+      // On other pages, just show navbar and setup scroll
+      gsap.set(navbar, { opacity: 1 });
+      setupScroll();
+    }
   }
+
+  // Clean up on page navigation
+  document.addEventListener("astro:before-swap", () => {
+    if (scrollTriggerInstance) {
+      console.log("🧹 Cleaning up ScrollTrigger");
+      scrollTriggerInstance.kill();
+      scrollTriggerInstance = null;
+    }
+  });
+
+  // Initialize on every page load (including client-side navigations)
+  document.addEventListener("astro:page-load", initNavbar);
+
+  // Also run on initial load
+  initNavbar();
 </script>
 
 <style>
