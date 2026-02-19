@@ -12,57 +12,61 @@ const { title = "Prakarsh 2026", showDesktopNav = true } = Astro.props;
 
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width" />
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="apple-touch-icon" href="/favicon.svg" />
-        <title>{title}</title>
-        <ClientRouter />
-        <style>
-            body {
-                background: #0a0515;
-                min-height: 100vh;
-            }
-        </style>
-    </head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <title>{title}</title>
+    <ClientRouter />
+    <style>
+      body {
+        background: #0a0515;
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+      html {
+        overflow-x: hidden;
+      }
+    </style>
+  </head>
 
-    <body>
-        <ResponsiveNav showDesktopNav={showDesktopNav} />
-        <GlobalAudio />
+  <body>
+    <ResponsiveNav showDesktopNav={showDesktopNav} />
+    <GlobalAudio />
 
-        <!-- PREFETCH EVENT DATA ON PAGE LOAD -->
-        <script>
-            import { prefetchAllEvents } from "../lib/event-cache";
+    <!-- PREFETCH EVENT DATA ON PAGE LOAD -->
+    <script>
+      import { prefetchAllEvents } from "../lib/event-cache";
 
-            // Only prefetch once per session
-            const PREFETCH_KEY = "eventDataPrefetched";
+      // Only prefetch once per session
+      const PREFETCH_KEY = "eventDataPrefetched";
 
-            if (!sessionStorage.getItem(PREFETCH_KEY)) {
-                console.log("🚀 PageLayout: Starting data prefetch...");
+      if (!sessionStorage.getItem(PREFETCH_KEY)) {
+        console.log("🚀 PageLayout: Starting data prefetch...");
 
-                const prefetchStart = performance.now();
+        const prefetchStart = performance.now();
 
-                prefetchAllEvents()
-                    .then(() => {
-                        const prefetchTime = performance.now() - prefetchStart;
-                        console.log(
-                            `✅ PageLayout: Data prefetch completed in ${Math.round(prefetchTime)}ms`,
-                        );
-                        sessionStorage.setItem(PREFETCH_KEY, "true");
-                    })
-                    .catch((error) => {
-                        console.warn(
-                            "⚠️ PageLayout: Prefetch failed, will use local data:",
-                            error,
-                        );
-                    });
-            } else {
-                console.log("ℹ️ PageLayout: Using cached event data");
-            }
-        </script>
+        prefetchAllEvents()
+          .then(() => {
+            const prefetchTime = performance.now() - prefetchStart;
+            console.log(
+              `✅ PageLayout: Data prefetch completed in ${Math.round(prefetchTime)}ms`,
+            );
+            sessionStorage.setItem(PREFETCH_KEY, "true");
+          })
+          .catch((error) => {
+            console.warn(
+              "⚠️ PageLayout: Prefetch failed, will use local data:",
+              error,
+            );
+          });
+      } else {
+        console.log("ℹ️ PageLayout: Using cached event data");
+      }
+    </script>
 
-        <slot />
-    </body>
+    <slot />
+  </body>
 </html>
