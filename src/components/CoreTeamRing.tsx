@@ -149,11 +149,20 @@ const RingCard = memo(function RingCard({
           </div>
         </div>
 
-        <div className="px-3.5 pt-2.5 pb-2 flex flex-col gap-1 relative z-10">
+        <div className="px-3.5 pt-2.5 pb-3 flex flex-col gap-1 relative z-10">
+          <div className="flex items-center gap-1.5 mb-1">
+            <span
+              className="text-sm md:text-base font-bold tracking-[0.05em] uppercase leading-tight"
+              style={{ color: C.white }}
+            >
+              {member.name}
+            </span>
+          </div>
+          
           <div className="flex items-center gap-1.5">
             <span
-              className="text-[11px] md:text-xs font-semibold tracking-[0.1em] uppercase leading-tight"
-              style={{ color: `${C.white}80` }}
+              className="text-[10px] md:text-[11px] font-semibold tracking-[0.1em] uppercase leading-tight"
+              style={{ color: `${C.peach}CC` }}
             >
               {member.role}
             </span>
@@ -162,8 +171,8 @@ const RingCard = memo(function RingCard({
           {member.nickname && (
             <div className="flex items-center gap-1.5 mt-0.5">
               <span
-                className="text-[10px] md:text-[11px] font-semibold tracking-[0.1em] uppercase"
-                style={{ color: `${C.cyan}CC` }}
+                className="text-[9px] md:text-[10px] font-semibold tracking-[0.1em] uppercase"
+                style={{ color: `${C.cyan}AA` }}
               >
                 {member.nickname}
               </span>
@@ -395,16 +404,26 @@ export default function CoreTeamRing({ members }: CoreTeamRingProps) {
   return (
     <div className="relative w-full">
       {activeMember && (
-        <div className="text-center mb-6">
+        <div className="text-center mb-8 px-4">
           <h3
-            className="text-xl md:text-2xl lg:text-3xl font-extrabold tracking-[0.08em] uppercase"
+            className="text-2xl md:text-3xl lg:text-4xl font-extrabold tracking-[0.08em] uppercase"
             style={{
               color: C.white,
-              textShadow: `0 6px 24px ${C.pink}40`,
+              textShadow: `0 6px 24px ${C.pink}40, 0 0 40px ${C.pink}20`,
+              marginBottom: '0.5rem',
             }}
           >
             {activeMember.name}
           </h3>
+          <p
+            className="text-sm md:text-base"
+            style={{
+              color: `${C.peach}CC`,
+              fontWeight: 500,
+            }}
+          >
+            {activeMember.role}
+          </p>
         </div>
       )}
       {canScrollLeft && (
