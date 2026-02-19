@@ -1,37 +1,11 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
-import TeamSection from "../components/TeamSection";
-import type { TeamMember } from "../components/TeamCard";
-import membersData from "../data/members.json";
+import UnifiedEventsPage from "../components/UnifiedEventsPage";
+import { fetchAllEvents } from "../lib/api";
 
-const coreTeamMembers: TeamMember[] = membersData.coreTeam;
-const websiteTeamMembers: TeamMember[] = membersData.websiteTeam;
-const graphicsTeamMembers: TeamMember[] = membersData.graphicsTeam;
+const initialEvents = await fetchAllEvents();
 ---
 
 <PageLayout title="Events - Prakarsh '26">
-  <main
-    style="background: linear-gradient(to bottom, #2a1a3d 0%, #1a0f2e 50%, #0a0515 100%); min-height: 100vh; padding-top: 8rem; padding-bottom: 4rem;"
-  >
-    <TeamSection
-      title="Core Team"
-      tagline="Scroll through the leaders of ISTE SVIT."
-      members={coreTeamMembers}
-      enableNavigation
-      client:load
-    />
-    <TeamSection
-      title="Website Team"
-      tagline="Meet the visionaries behind Prakarsh'26."
-      members={websiteTeamMembers}
-      client:load
-    />
-    <TeamSection
-      title="Graphics Team"
-      tagline="Meet the creative minds behind Prakarsh'26."
-      members={graphicsTeamMembers}
-      enableNavigation
-      client:load
-    />
-  </main>
+  <UnifiedEventsPage initialEvents={initialEvents} client:load />
 </PageLayout>
