@@ -86,7 +86,7 @@ const ConsoleCard = ({
   return (
     <div
       className={cn(
-        "relative w-[380px] cursor-pointer transition-all duration-500",
+        "nontech-card relative w-[315px] mx-4 cursor-pointer transition-all duration-500",
         isHovered ? "scale-[1.02]" : "scale-100",
         className,
       )}

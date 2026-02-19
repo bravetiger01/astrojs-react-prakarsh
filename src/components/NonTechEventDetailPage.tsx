@@ -88,12 +88,23 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails) => {
       : "/events?category=non-tech";
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: lightColor }}>
+    <div 
+      className="min-h-screen" 
+      style={{ 
+        backgroundColor: lightColor,
+        paddingLeft: 'max(16px, env(safe-area-inset-left))',
+        paddingRight: 'max(16px, env(safe-area-inset-right))',
+      }}
+    >
       {/* Hero Section */}
       <div
-        className="relative py-8 overflow-hidden p-5 flex"
+        className="relative py-6 sm:py-8 overflow-hidden flex mt-3 sm:mt-4 mb-4 sm:mb-6 rounded-lg"
         style={{
           background: `linear-gradient(145deg, #e8e8e8 0%, ${lightColor} 20%, #c0c0c0 40%, #d8d8d8 60%, ${lightColor} 80%, #b8b8b8 100%)`,
+          marginLeft: '0',
+          marginRight: '0',
+          paddingLeft: '16px',
+          paddingRight: '16px',
         }}
       >
         {/* Metallic shine overlay */}
@@ -134,10 +145,10 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails) => {
         </div> */}
 
         {/* Back button */}
-        <div className="container relative z-10">
+        <div className="relative z-10 max-w-7xl mx-auto">
           <a
             href={backLink}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:gap-3 mb-8"
+            className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:gap-3 mb-6 sm:mb-8"
             style={{
               backgroundColor: primaryColor,
               color: lightColor,
@@ -218,8 +229,21 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails) => {
       </div>
 
       {/* Main Content - Dark Section */}
-      <div style={{ backgroundColor: primaryColor }}>
-        <div className="container py-16">
+      <div 
+        className="rounded-lg mb-4 sm:mb-6" 
+        style={{ 
+          backgroundColor: primaryColor,
+          marginLeft: '0',
+          marginRight: '0',
+        }}
+      >
+        <div 
+          className="py-6 sm:py-8 md:py-16 max-w-7xl mx-auto"
+          style={{
+            paddingLeft: '16px',
+            paddingRight: '16px',
+          }}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Left Column */}
             <div className="lg:col-span-2 space-y-12">
@@ -547,9 +571,11 @@ const ConsoleEventDetailPage = ({ eventId }: ConsoleEventPageDetails) => {
 
       {/* Bottom decorative border */}
       <div
-        className="h-2"
+        className="h-2 mb-3 sm:mb-4 rounded-full"
         style={{
           background: `linear-gradient(90deg, ${primaryColor}, ${accentColor}, ${primaryColor})`,
+          marginLeft: '0',
+          marginRight: '0',
         }}
       />
     </div>
