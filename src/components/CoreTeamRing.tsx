@@ -278,7 +278,12 @@ export default function CoreTeamRing({ members }: CoreTeamRingProps) {
     const el = trackRef.current;
     if (!el || reduceMotion) return;
 
-    if (isHovering && !isDragging.current) {
+    // Disable auto-scroll on mobile devices
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    ) || window.innerWidth < 768;
+
+    if (isHovering && !isDragging.current && !isMobile) {
       const autoScroll = () => {
         if (!isDragging.current && isHovering) {
           el.scrollLeft += 0.5;
