@@ -112,10 +112,10 @@
       audio.volume = 0.3;
 
       // Check localStorage for music preference and position
-      // Default to true (enabled) if no preference is set
+      // Default to false (disabled) if no preference is set
       const musicEnabledStored = localStorage.getItem(MUSIC_PREF_KEY);
       const musicEnabled =
-        musicEnabledStored === null ? true : musicEnabledStored === "true";
+        musicEnabledStored === null ? false : musicEnabledStored === "true";
       const savedPosition =
         parseFloat(localStorage.getItem(MUSIC_POS_KEY)) || 0;
 
