@@ -138,18 +138,18 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
         </div>
       </div>
 
-      {/* Zoom controls */}
-      <div className="absolute bottom-4 right-4 flex flex-col gap-2 bg-card/80 backdrop-blur-md border border-border rounded-lg p-1 shadow-lg">
+      {/* Zoom controls - moved to left side */}
+      <div className="absolute bottom-4 left-4 flex flex-col gap-2 bg-card/80 backdrop-blur-md border border-border rounded-lg p-1 shadow-lg">
         <button
           onClick={() => setScale(Math.min(scale + 0.2, 3))}
-          className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-secondary rounded transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-secondary rounded transition-colors font-bold text-lg"
           aria-label="Zoom in"
         >
           +
         </button>
         <button
           onClick={() => setScale(Math.max(scale - 0.2, 0.5))}
-          className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-secondary rounded transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-secondary rounded transition-colors font-bold text-lg"
           aria-label="Zoom out"
         >
           −

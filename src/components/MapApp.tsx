@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { Toaster } from "@/components/map/ui/toaster";
 import { Toaster as Sonner } from "@/components/map/ui/sonner";
 import { TooltipProvider } from "@/components/map/ui/tooltip";
@@ -9,6 +10,7 @@ import EventSidebar from "@/components/map/EventSidebar";
 import SearchBar from "@/components/map/SearchBar";
 import { motion } from "framer-motion";
 import "@/styles/map.css";
+import { createPortal } from "react-dom";
 
 const queryClient = new QueryClient();
 
@@ -27,8 +29,37 @@ const MapContent = () => {
     allMarkers,
   } = useMapData();
 
+  const [desktopContainer, setDesktopContainer] = useState<HTMLElement | null>(null);
+  const [mobileContainer, setMobileContainer] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setDesktopContainer(document.getElementById('desktop-search-container'));
+    setMobileContainer(document.getElementById('mobile-search-container'));
+  }, []);
+
   return (
     <div className="flex flex-col h-full bg-background overflow-hidden">
+      {/* Portal search bars into header containers */}
+      {desktopContainer && createPortal(
+        <SearchBar
+          query={searchQuery}
+          onQueryChange={setSearchQuery}
+          results={searchResults}
+          onResultClick={navigateToEvent}
+        />,
+        desktopContainer
+      )}
+      
+      {mobileContainer && createPortal(
+        <SearchBar
+          query={searchQuery}
+          onQueryChange={setSearchQuery}
+          results={searchResults}
+          onResultClick={navigateToEvent}
+        />,
+        mobileContainer
+      )}
+
       {/* Main */}
       <div className="flex flex-1 overflow-hidden relative">
         {/* Floor navigator - horizontal on mobile, vertical on desktop */}
@@ -43,7 +74,7 @@ const MapContent = () => {
           />
         </div>
 
-        {/* Floor label and search bar */}
+        {/* Floor label */}
         <div className="absolute top-2 md:top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
           <motion.div
             key={activeFloorId}
@@ -53,16 +84,6 @@ const MapContent = () => {
           >
             <span className="font-display text-xs md:text-sm font-bold text-foreground">{activeFloor.name}</span>
           </motion.div>
-        </div>
-
-        {/* Search bar - top right */}
-        <div className="absolute top-2 md:top-3 right-2 md:right-3 z-20">
-          <SearchBar
-            query={searchQuery}
-            onQueryChange={setSearchQuery}
-            results={searchResults}
-            onResultClick={navigateToEvent}
-          />
         </div>
 
         {/* Map */}

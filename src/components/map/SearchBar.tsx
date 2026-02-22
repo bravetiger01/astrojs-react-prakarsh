@@ -58,21 +58,31 @@ export default function SearchBar({ query, onQueryChange, results, onResultClick
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
-            className="absolute top-full mt-1 left-0 right-0 md:left-auto md:right-0 md:w-80 bg-card border border-border rounded-lg shadow-xl overflow-hidden z-50 max-h-[60vh] overflow-y-auto"
+            className="absolute top-full mt-2 left-0 right-0 md:left-auto md:right-0 md:min-w-[400px] bg-card/95 backdrop-blur-md border border-border rounded-xl shadow-2xl overflow-hidden z-[10000] max-h-[70vh] overflow-y-auto"
           >
             {results.length > 0 ? (
-              results.map((r) => (
-                <button
-                  key={r.id}
-                  onMouseDown={() => onResultClick(r.id)}
-                  className="w-full flex items-center gap-2 px-2 md:px-3 py-2 md:py-2.5 text-xs md:text-sm font-body text-foreground hover:bg-muted transition-colors border-b border-border last:border-0"
-                >
-                  <span className="flex-1 text-left truncate">{r.eventName}</span>
-                  <span className="text-[9px] md:text-[10px] text-muted-foreground bg-muted px-1.5 py-0.5 rounded flex-shrink-0">{r.floorName}</span>
-                </button>
-              ))
+              <div className="py-1">
+                {results.map((r, index) => (
+                  <button
+                    key={r.id}
+                    onMouseDown={() => onResultClick(r.id)}
+                    className="w-full flex items-center justify-between gap-3 px-4 py-3 text-sm font-body text-foreground hover:bg-primary/10 transition-colors group"
+                  >
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0"></div>
+                      <span className="text-left truncate font-medium group-hover:text-primary transition-colors">
+                        {r.eventName}
+                      </span>
+                    </div>
+                    <span className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-md flex-shrink-0 font-medium">
+                      {r.floorName}
+                    </span>
+                  </button>
+                ))}
+              </div>
             ) : (
-              <div className="px-3 py-4 text-xs md:text-sm text-muted-foreground text-center font-body">
+              <div className="px-4 py-6 text-sm text-muted-foreground text-center font-body">
+                <div className="text-2xl mb-2">🔍</div>
                 No events found
               </div>
             )}
