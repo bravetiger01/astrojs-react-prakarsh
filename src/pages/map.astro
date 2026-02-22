@@ -1,0 +1,10 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import MapApp from '../components/MapApp';
+---
+
+<PageLayout title="Prakarsh Map - Interactive Event Map">
+  <div class="w-full h-screen pt-20 md:pt-24">
+    <MapApp client:only="react" />
+  </div>
+</PageLayout>

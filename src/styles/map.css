@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 20 25% 12%;
+    --foreground: 30 40% 90%;
+
+    --card: 20 20% 18%;
+    --card-foreground: 30 40% 90%;
+
+    --popover: 20 20% 16%;
+    --popover-foreground: 30 40% 90%;
+
+    --primary: 25 65% 55%;
+    --primary-foreground: 20 25% 10%;
+
+    --secondary: 350 20% 35%;
+    --secondary-foreground: 30 40% 90%;
+
+    --muted: 20 15% 22%;
+    --muted-foreground: 25 20% 55%;
+
+    --accent: 30 50% 70%;
+    --accent-foreground: 20 25% 10%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 25 20% 28%;
+    --input: 25 15% 25%;
+    --ring: 25 65% 55%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 20 22% 14%;
+    --sidebar-foreground: 30 40% 90%;
+    --sidebar-primary: 25 65% 55%;
+    --sidebar-primary-foreground: 20 25% 10%;
+    --sidebar-accent: 350 20% 30%;
+    --sidebar-accent-foreground: 30 40% 90%;
+    --sidebar-border: 25 20% 25%;
+    --sidebar-ring: 25 65% 55%;
+
+    /* Custom tokens */
+    --copper: 25 65% 55%;
+    --copper-glow: 25 80% 65%;
+    --mauve: 350 20% 35%;
+    --mauve-deep: 350 25% 25%;
+    --peach: 30 50% 80%;
+    --cream: 35 40% 90%;
+    --dark-brown: 20 30% 10%;
+
+    --gradient-sky: linear-gradient(180deg, hsl(350 25% 40%) 0%, hsl(25 30% 45%) 50%, hsl(30 50% 70%) 100%);
+    --gradient-copper: linear-gradient(135deg, hsl(25 65% 55%), hsl(25 80% 65%));
+    --gradient-card: linear-gradient(145deg, hsl(20 20% 18%), hsl(350 20% 22%));
+
+    --shadow-glow: 0 0 20px hsl(25 65% 55% / 0.3);
+    --shadow-marker: 0 0 12px hsl(25 80% 65% / 0.5);
+
+    --font-display: 'Orbitron', sans-serif;
+    --font-pixel: 'Press Start 2P', cursive;
+    --font-body: 'Rajdhani', sans-serif;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--muted));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--primary));
+  border-radius: 3px;
+}
+
+/* Marker pulse animation */
+@keyframes marker-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 hsl(25 80% 65% / 0.5); }
+  50% { transform: scale(1.15); box-shadow: 0 0 15px 5px hsl(25 80% 65% / 0.2); }
+}
+
+.marker-pulse {
+  animation: marker-pulse 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
