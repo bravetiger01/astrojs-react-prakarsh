@@ -2,6 +2,7 @@
 import MapApp from '../components/MapApp';
 import MobileNav from '../components/MobileNav.astro';
 import GlassSurface from '../components/GlassSurface/GlassSurface';
+import GlobalAudio from '../components/GlobalAudio.astro';
 
 const navLinks = [
   { name: "HOME", href: "/" },
@@ -26,6 +27,9 @@ const navLinks = [
   <body class="m-0 p-0 overflow-hidden bg-[#1a1625]">
     <!-- Mobile Navigation -->
     <MobileNav />
+    
+    <!-- Global Audio Button -->
+    <GlobalAudio />
     
     <!-- Desktop Glass Navbar -->
     <nav id="navbar" class="navbar desktop-nav-wrapper">
