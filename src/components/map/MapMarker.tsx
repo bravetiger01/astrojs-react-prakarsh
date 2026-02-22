@@ -12,9 +12,32 @@ interface MapMarkerProps {
   marker: Marker;
   isSelected: boolean;
   onClick: () => void;
+  scale: number;
 }
 
-export default function MapMarker({ marker, isSelected, onClick }: MapMarkerProps) {
+// Array of available marker images
+const markerImages = [
+  '/markers/bg-removed-marker-one.png',
+  '/markers/bg-removed-marker-two.png',
+  '/markers/bg-removed-marker-three.png',
+  '/markers/bg-removed-marker-four.png',
+  '/markers/bg-removed-marker-five.png',
+  '/markers/bg-removed-marker-six.png',
+];
+
+// Function to consistently assign a marker to an event based on its ID
+const getMarkerImage = (markerId: string): string => {
+  const hash = markerId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return markerImages[hash % markerImages.length];
+};
+
+export default function MapMarker({ marker, isSelected, onClick, scale }: MapMarkerProps) {
+  const markerImage = getMarkerImage(marker.id);
+  
+  // Keep marker at constant size - the parent's scale transform will handle zoom
+  // But we can adjust slightly for better visibility at extreme zooms
+  const baseSize = 40; // Base size in pixels
+
   return (
     <motion.button
       initial={{ scale: 0, opacity: 0 }}
@@ -24,28 +47,63 @@ export default function MapMarker({ marker, isSelected, onClick }: MapMarkerProp
         e.stopPropagation();
         onClick();
       }}
-      className="absolute z-10 -translate-x-1/2 -translate-y-1/2 group"
-      style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
+      className="absolute z-10 group marker-button"
+      style={{ 
+        left: `${marker.x}%`, 
+        top: `${marker.y}%`,
+        width: `${baseSize}px`,
+        height: `${baseSize}px`,
+        transform: 'translate(-50%, -100%)',
+      }}
       title={marker.eventName}
     >
-      {/* Outer pulse ring - smaller on mobile */}
-      <span className={`absolute inset-0 w-6 h-6 md:w-10 md:h-10 -translate-x-1 -translate-y-1 rounded-full ${isSelected ? "bg-primary/30" : "bg-copper-glow/20"} marker-pulse`} />
-      
-      {/* Marker pin - smaller on mobile, no emoji */}
-      <span
-        className={`relative flex items-center justify-center w-5 h-5 md:w-8 md:h-8 rounded-full border-2 transition-all ${
-          isSelected
-            ? "bg-primary border-copper-glow text-primary-foreground shadow-[var(--shadow-marker)] scale-110 md:scale-125"
-            : "bg-card border-primary text-primary hover:bg-primary hover:text-primary-foreground hover:shadow-[var(--shadow-marker)]"
-        }`}
+      {/* Marker Image */}
+      <div 
+        className="relative w-full h-full transition-transform duration-200"
+        style={{
+          transform: isSelected ? 'scale(1.25)' : 'scale(1)',
+          transformOrigin: 'center bottom'
+        }}
       >
-        {/* Pin dot instead of emoji */}
-        <span className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-current"></span>
-      </span>
+        <img
+          src={markerImage}
+          alt={marker.eventName}
+          className="w-full h-full object-contain drop-shadow-lg transition-transform duration-200 hover:scale-110"
+          style={{
+            filter: isSelected 
+              ? 'drop-shadow(0 0 8px rgba(241, 181, 162, 0.8)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4))' 
+              : 'drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3))',
+            transformOrigin: 'center bottom'
+          }}
+        />
+        
+        {/* Pulse effect when selected */}
+        {isSelected && (
+          <motion.div
+            className="absolute inset-0 rounded-full"
+            animate={{
+              scale: [1, 1.5, 1],
+              opacity: [0.5, 0, 0.5],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            style={{
+              background: 'radial-gradient(circle, rgba(241, 181, 162, 0.6) 0%, transparent 70%)',
+              transformOrigin: 'center bottom'
+            }}
+          />
+        )}
+      </div>
 
       {/* Tooltip on hover (desktop only) */}
-      <span className="hidden md:group-hover:flex absolute left-1/2 -translate-x-1/2 -top-10 bg-card border border-border text-foreground text-[10px] font-body font-semibold px-2 py-1 rounded whitespace-nowrap shadow-lg z-20">
+      <span 
+        className="hidden md:group-hover:flex absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full bg-card/95 backdrop-blur-sm border border-border text-foreground font-body font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap shadow-xl z-20 text-xs"
+      >
         {marker.eventName}
+        <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-border"></div>
       </span>
     </motion.button>
   );

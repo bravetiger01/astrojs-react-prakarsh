@@ -3,7 +3,7 @@ export const mapData = {
     {
       "id": "ground",
       "name": "Ground Floor",
-      "svgPath": "/ground_floor.svg",
+      "svgPath": "/groundFloorUpdated.svg",
       "markers": [
         {"id": "rw1670da", "x": 73.66704627808261, "y": 36.20457604306864, "eventName": "Human Foosball", "locationName": "EC Lawn"},
         {"id": "2mpyuskq", "x": 26.192078446452605, "y": 90.1749663526245, "eventName": "Free Fire Max Prakarsh Cup 2026", "locationName": "Diploma Lab, Ground Floor"},
@@ -22,7 +22,7 @@ export const mapData = {
     {
       "id": "first",
       "name": "First Floor",
-      "svgPath": "/first_floor.svg",
+      "svgPath": "/gemini_first_floor_testing.svg",
       "markers": [
         {"id": "xrbntayc", "x": 9.436639237098392, "y": 49.79811574697174, "eventName": "Stranger Things: The Upside-Down Quest", "locationName": "Mech 1st Floor"},
         {"id": "iimvm7tb", "x": 13.239454308620418, "y": 29.34051144010767, "eventName": "IPL Auction", "locationName": "EL 1st Floor"},
