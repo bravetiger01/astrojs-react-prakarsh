@@ -64,12 +64,19 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
       const newX = e.clientX - dragStart.x;
       const newY = e.clientY - dragStart.y;
       
-      // Define boundaries (adjust these values to control how far users can pan)
-      // Smaller values = tighter boundaries
-      const maxPanX = 400; // Maximum pixels to pan horizontally
-      const maxPanY = 400; // Maximum pixels to pan vertically
+      // Fixed base boundaries (at minimum zoom 0.6)
+      const baseMaxPanX = 400;
+      const baseMaxPanY = 400;
       
-      // Clamp the position within boundaries
+      // When zooming in, allow MORE panning to reach all parts of the map
+      // The boundary expands proportionally with zoom
+      const minZoom = 0.6;
+      const zoomFactor = Math.max(scale / minZoom, 1); // Always >= 1
+      
+      const maxPanX = baseMaxPanX * zoomFactor;
+      const maxPanY = baseMaxPanY * zoomFactor;
+      
+      // Clamp the position within scaled boundaries
       const clampedX = Math.max(-maxPanX, Math.min(maxPanX, newX));
       const clampedY = Math.max(-maxPanY, Math.min(maxPanY, newY));
       

@@ -3,7 +3,7 @@ export const mapData = {
     {
       "id": "ground",
       "name": "Ground Floor",
-      "svgPath": "/map/ground-floor-chaitanya.svg",
+      "svgPath": "/map/final-ground-floor.svg",
       "markers": [
         {"id": "rw1670da", "x": 73.66704627808261, "y": 36.20457604306864, "eventName": "Human Foosball", "locationName": "EC Lawn"},
         {"id": "2mpyuskq", "x": 26.192078446452605, "y": 90.1749663526245, "eventName": "Free Fire Max Prakarsh Cup 2026", "locationName": "Diploma Lab, Ground Floor"},
@@ -16,7 +16,7 @@ export const mapData = {
         {"id": "t3z9bj0i", "x": 86.76844689630691, "y": 23.418573351278603, "eventName": "Ghost Busters", "locationName": "EC Ground Floor 3 Lab"},
         {"id": "jzxr4hm1", "x": 46.05549228698623, "y": 2.1534320323014806, "eventName": "Case Closed?", "locationName": "CE Ground Floor 3 Lab"},
         {"id": "dbtgqi1w", "x": 61.12914676171742, "y": 24.09152086137281, "eventName": "Human Ludo", "locationName": "IT Lawn"},
-        {"id": "w10edgop", "x": 84.09181666247615, "y": 24.89905787348587, "eventName": "Game of Prompts", "locationName": "IT 4 Labs Ground Floor"}
+        {"id": "w10edgop", "x": 64.09181666247615, "y": 14.89905787348587, "eventName": "Game of Prompts", "locationName": "IT 4 Labs Ground Floor"}
       ]
     },
     {

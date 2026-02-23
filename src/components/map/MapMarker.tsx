@@ -23,6 +23,10 @@ const markerImages = [
   '/markers/bg-removed-marker-four.png',
   '/markers/bg-removed-marker-five.png',
   '/markers/bg-removed-marker-six.png',
+  '/markers/bg-removed-marker-seven.png',
+  '/markers/bg-removed-marker-eight.png',
+  '/markers/bg-removed-marker-nine.png',
+  '/markers/bg-removed-marker-ten.png',
 ];
 
 // Function to consistently assign a marker to an event based on its ID
