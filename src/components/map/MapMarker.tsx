@@ -102,9 +102,15 @@ export default function MapMarker({ marker, isSelected, onClick, scale }: MapMar
         )}
       </div>
 
-      {/* Tooltip on hover (desktop only) */}
+      {/* Always visible label above marker */}
       <span 
-        className="hidden md:group-hover:flex absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full bg-card/95 backdrop-blur-sm border border-border text-foreground font-body font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap shadow-xl z-20 text-xs"
+        className="absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full bg-card/95 backdrop-blur-sm border border-border text-foreground font-body font-semibold px-2 py-1 rounded-lg whitespace-nowrap shadow-xl z-20 pointer-events-none"
+        style={{
+          fontSize: '10px',
+          maxWidth: '120px',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+        }}
       >
         {marker.eventName}
         <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-border"></div>
