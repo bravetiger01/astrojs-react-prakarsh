@@ -3,11 +3,11 @@ export const mapData = {
     {
       "id": "ground",
       "name": "Ground Floor",
-      "svgPath": "/groundFloorUpdated.svg",
+      "svgPath": "/map/ground-floor-chaitanya.svg",
       "markers": [
         {"id": "rw1670da", "x": 73.66704627808261, "y": 36.20457604306864, "eventName": "Human Foosball", "locationName": "EC Lawn"},
         {"id": "2mpyuskq", "x": 26.192078446452605, "y": 90.1749663526245, "eventName": "Free Fire Max Prakarsh Cup 2026", "locationName": "Diploma Lab, Ground Floor"},
-        {"id": "e563roro", "x": 23.938074039016165, "y": 93.53970390309556, "eventName": "Valorant Championship Prakarsh 2026", "locationName": "Diploma Lab, Ground Floor"},
+        {"id": "e563roro", "x": 23.938074039016165, "y": 85.53970390309556, "eventName": "Valorant Championship Prakarsh 2026", "locationName": "Diploma Lab, Ground Floor"},
         {"id": "7juinl78", "x": 26.755579548311715, "y": 46.16419919246299, "eventName": "RC Rush", "locationName": "Mech Lawn"},
         {"id": "lkhm5gwy", "x": 30.27746143493115, "y": 83.04172274562585, "eventName": "Box Cricket", "locationName": "Diploma"},
         {"id": "f87swj1k", "x": 29.854835608536824, "y": 63.25706594885598, "eventName": "Unbound: The Creative Arts", "locationName": "Aero Lawn"},
@@ -22,7 +22,7 @@ export const mapData = {
     {
       "id": "first",
       "name": "First Floor",
-      "svgPath": "/gemini_first_floor_testing.svg",
+      "svgPath": "/map/first_floor.svg",
       "markers": [
         {"id": "xrbntayc", "x": 9.436639237098392, "y": 49.79811574697174, "eventName": "Stranger Things: The Upside-Down Quest", "locationName": "Mech 1st Floor"},
         {"id": "iimvm7tb", "x": 13.239454308620418, "y": 29.34051144010767, "eventName": "IPL Auction", "locationName": "EL 1st Floor"},
@@ -35,7 +35,7 @@ export const mapData = {
     {
       "id": "second",
       "name": "Second Floor",
-      "svgPath": "/second_floor.svg",
+      "svgPath": "/map/second_floor.svg",
       "markers": [
         {"id": "wu75cned", "x": 71.54928540529147, "y": 12.6514131897712, "eventName": "BGMI Tournament - Prakarsh 2026", "locationName": "IT 2nd Floor"},
         {"id": "k0ehl7pm", "x": 11.690159279481815, "y": 28.398384925975773, "eventName": "Stranger Things: The Upside-Down Quest", "locationName": "Electrical 2nd Floor"},
@@ -50,7 +50,7 @@ export const mapData = {
     {
       "id": "third",
       "name": "Third Floor",
-      "svgPath": "/third_floor.svg",
+      "svgPath": "/map/third_floor.svg",
       "markers": [
         {"id": "mvvmfe99", "x": 15.384949114370222, "y": 72.54374158815612, "eventName": "VR Arena", "locationName": "Physics Lab: Aero 3rd floor"},
         {"id": "kc9mat15", "x": 53.939924491047286, "y": 2.4226110363391657, "eventName": "Feud.exe", "locationName": "CE Seminar Hall"},

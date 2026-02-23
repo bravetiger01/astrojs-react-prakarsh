@@ -203,11 +203,14 @@ export default function MapEditor() {
 
             <div className="bg-[#2a1e3d] p-4 rounded-lg inline-block">
               <div
-                className="relative bg-[#e8d4b8] rounded-lg border-2 border-[#8b6f47] cursor-crosshair"
+                className="relative bg-[#e8d4b8] rounded-lg border-2 border-[#8b6f47] cursor-crosshair overflow-hidden"
                 onClick={handleMapClick}
                 style={{
                   width: '800px',
                   maxWidth: '100%',
+                  backgroundImage: 'url(/background/Gemini_Generated_Image_kpf6u6kpf6u6kpf6.png)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
                 }}
               >
                 <div
