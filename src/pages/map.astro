@@ -1,0 +1,243 @@
+---
+import MapApp from '../components/MapApp';
+import MobileNav from '../components/MobileNav.astro';
+import GlassSurface from '../components/GlassSurface/GlassSurface';
+import GlobalAudio from '../components/GlobalAudio.astro';
+
+const navLinks = [
+  { name: "HOME", href: "/" },
+  { name: "ABOUT", href: "/about" },
+  { name: "EVENTS", href: "/events" },
+  { name: "MAP", href: "/map" },
+  { name: "TEAMS", href: "/teams" },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prakarsh Map - Interactive Event Map</title>
+    <meta name="description" content="Interactive map showing all Prakarsh 2026 event locations across different floors" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap" rel="stylesheet">
+  </head>
+  <body class="m-0 p-0 overflow-hidden bg-[#1a1625]">
+    <!-- Mobile Navigation -->
+    <MobileNav />
+    
+    <!-- Global Audio Button -->
+    <GlobalAudio />
+    
+    <!-- Desktop Glass Navbar -->
+    <nav id="navbar" class="navbar desktop-nav-wrapper">
+      <GlassSurface client:load width="100%" borderRadius={50}>
+        <div class="nav-content">
+          <div class="nav-left">
+            <a href="/">
+              <img id="logo" src="/assets/logo.svg" alt="Logo" />
+            </a>
+          </div>
+          
+          <div class="nav-right">
+            <div class="links">
+              {navLinks.map((l) => <a href={l.href}>{l.name}</a>)}
+            </div>
+            <a href="https://konfhub.com/svit" target="_blank" class="register-btn">
+              REGISTER NOW
+            </a>
+          </div>
+        </div>
+      </GlassSurface>
+    </nav>
+
+    <!-- Desktop Search Bar - Below Navbar -->
+    <div class="desktop-search-wrapper">
+      <div id="desktop-search-container" class="desktop-search-container"></div>
+    </div>
+
+    <!-- Mobile Header with Search -->
+    <div class="mobile-header-wrapper">
+      <div class="mobile-header">
+        <div class="mobile-header-content">
+          <a href="/" class="mobile-logo">
+            <img src="/assets/logo.svg" alt="Prakarsh Logo" />
+          </a>
+          <div id="mobile-search-container" class="mobile-search"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Content -->
+    <div class="map-container">
+      <MapApp client:only="react" />
+    </div>
+  </body>
+</html>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bruno+Ace+SC&display=swap');
+
+  /* Desktop Navbar */
+  .desktop-nav-wrapper {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .desktop-nav-wrapper {
+      display: block;
+    }
+  }
+
+  .navbar {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1200px;
+    z-index: 9900;
+    font-family: 'Bruno Ace SC', sans-serif;
+  }
+
+  .nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+    width: 100%;
+    gap: 20px;
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  #logo {
+    height: 40px;
+    transform-origin: center;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-shrink: 0;
+  }
+
+  /* Desktop Search Bar - Below Navbar */
+  .desktop-search-wrapper {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .desktop-search-wrapper {
+      display: block;
+      position: fixed;
+      top: 110px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9800;
+      width: 90%;
+      max-width: 500px;
+    }
+  }
+
+  .desktop-search-container {
+    width: 100%;
+  }
+
+  .links {
+    display: flex;
+    gap: 30px;
+  }
+
+  .links a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: color 0.3s;
+    white-space: nowrap;
+  }
+
+  .links a:hover {
+    color: #b7654a;
+  }
+
+  .register-btn {
+    background: linear-gradient(135deg, #f1b5a2 0%, #e89b88 100%);
+    color: #000;
+    text-decoration: none;
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(241, 181, 162, 0.5);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .register-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 25px rgba(241, 181, 162, 0.7);
+  }
+
+  /* Mobile Header */
+  .mobile-header-wrapper {
+    display: block;
+  }
+
+  @media (min-width: 1024px) {
+    .mobile-header-wrapper {
+      display: none;
+    }
+  }
+
+  .mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9000;
+    background: linear-gradient(to right, #3c2a56, #2a1e3d);
+    border-bottom: 1px solid rgba(241, 181, 162, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+  }
+
+  .mobile-logo {
+    flex-shrink: 0;
+  }
+
+  .mobile-logo img {
+    height: 32px;
+  }
+
+  .mobile-search {
+    flex: 1;
+  }
+
+  /* Map Container */
+  .map-container {
+    height: 100vh;
+    padding-top: 52px;
+  }
+
+  @media (min-width: 1024px) {
+    .map-container {
+      padding-top: 0;
+    }
+  }
+</style>
