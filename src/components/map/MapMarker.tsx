@@ -51,16 +51,32 @@ export default function MapMarker({ marker, isSelected, onClick, scale }: MapMar
         e.stopPropagation();
         onClick();
       }}
-      className="absolute z-10 group marker-button"
+      className="absolute marker-button"
       style={{ 
         left: `${marker.x}%`, 
         top: `${marker.y}%`,
         width: `${baseSize}px`,
         height: `${baseSize}px`,
         transform: 'translate(-50%, -100%)',
+        zIndex: isSelected ? 1000 : 100,
       }}
       title={marker.eventName}
     >
+      {/* Always visible label above marker */}
+      <span 
+        className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1 bg-[#2a1e3d]/95 backdrop-blur-sm border border-[#f1b5a2]/30 text-white font-body font-semibold px-2 py-0.5 rounded shadow-lg pointer-events-none"
+        style={{
+          fontSize: '9px',
+          maxWidth: '100px',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          zIndex: isSelected ? 1001 : 101,
+        }}
+      >
+        {marker.eventName}
+      </span>
+
       {/* Marker Image */}
       <div 
         className="relative w-full h-full transition-transform duration-200"
@@ -101,20 +117,6 @@ export default function MapMarker({ marker, isSelected, onClick, scale }: MapMar
           />
         )}
       </div>
-
-      {/* Always visible label above marker */}
-      <span 
-        className="absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full bg-card/95 backdrop-blur-sm border border-border text-foreground font-body font-semibold px-2 py-1 rounded-lg whitespace-nowrap shadow-xl z-20 pointer-events-none"
-        style={{
-          fontSize: '10px',
-          maxWidth: '120px',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}
-      >
-        {marker.eventName}
-        <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-border"></div>
-      </span>
     </motion.button>
   );
 }
