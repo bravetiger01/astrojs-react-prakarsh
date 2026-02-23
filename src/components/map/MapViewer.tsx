@@ -27,6 +27,7 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const [imgError, setImgError] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -34,10 +35,12 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
   const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null);
   const [initialScale, setInitialScale] = useState(1);
 
-  // Reset zoom and position when floor changes
+  // Reset zoom, position, and loading state when floor changes
   useEffect(() => {
     setScale(1);
     setPosition({ x: 0, y: 0 });
+    setImgLoaded(false);
+    setImgError(false);
   }, [floor.id]);
 
   // Calculate distance between two touch points
@@ -245,6 +248,16 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           {!imgError ? (
             <div className="relative">
+              {/* Loading spinner while SVG loads */}
+              {!imgLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-[#e8d4b8]/80 rounded-lg z-10">
+                  <div className="text-center">
+                    <div className="w-12 h-12 border-4 border-[#8b6f47] border-t-transparent rounded-full animate-spin mx-auto mb-2"></div>
+                    <p className="text-sm text-[#8b6f47] font-semibold">Loading {floor.name}...</p>
+                  </div>
+                </div>
+              )}
+              
               <img
                 src={floor.svgPath}
                 alt={floor.name}
@@ -253,25 +266,30 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
                   filter: 'drop-shadow(0 4px 12px rgba(139, 111, 71, 0.3))',
                   mixBlendMode: 'multiply',
                   maxWidth: '1200px',
+                  opacity: imgLoaded ? 1 : 0,
+                  transition: 'opacity 0.3s ease-in',
                 }}
+                onLoad={() => setImgLoaded(true)}
                 onError={() => setImgError(true)}
                 draggable={false}
               />
               
-              {/* Markers overlay */}
-              <div className="absolute inset-0 pointer-events-none">
-                <div className="relative w-full h-full pointer-events-auto">
-                  {floor.markers.map((marker) => (
-                    <MapMarker
-                      key={marker.id}
-                      marker={marker}
-                      isSelected={selectedMarker?.id === marker.id}
-                      onClick={() => onMarkerClick(marker)}
-                      scale={scale}
-                    />
-                  ))}
+              {/* Markers overlay - only show when image is loaded */}
+              {imgLoaded && (
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="relative w-full h-full pointer-events-auto">
+                    {floor.markers.map((marker) => (
+                      <MapMarker
+                        key={marker.id}
+                        marker={marker}
+                        isSelected={selectedMarker?.id === marker.id}
+                        onClick={() => onMarkerClick(marker)}
+                        scale={scale}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           ) : (
             <div className="w-[800px] aspect-video bg-gradient-to-br from-secondary to-mauve-deep flex items-center justify-center rounded-lg">
