@@ -22,7 +22,7 @@ export const mapData = {
     {
       "id": "first",
       "name": "First Floor",
-      "svgPath": "/map/first_floor.svg",
+      "svgPath": "/map/final-first-floor.svg",
       "markers": [
         {"id": "xrbntayc", "x": 9.436639237098392, "y": 49.79811574697174, "eventName": "Stranger Things: The Upside-Down Quest", "locationName": "Mech 1st Floor"},
         {"id": "iimvm7tb", "x": 13.239454308620418, "y": 29.34051144010767, "eventName": "IPL Auction", "locationName": "EL 1st Floor"},
@@ -35,7 +35,7 @@ export const mapData = {
     {
       "id": "second",
       "name": "Second Floor",
-      "svgPath": "/map/second_floor.svg",
+      "svgPath": "/map/final-second-floor.svg",
       "markers": [
         {"id": "wu75cned", "x": 71.54928540529147, "y": 12.6514131897712, "eventName": "BGMI Tournament - Prakarsh 2026", "locationName": "IT 2nd Floor"},
         {"id": "k0ehl7pm", "x": 11.690159279481815, "y": 28.398384925975773, "eventName": "Stranger Things: The Upside-Down Quest", "locationName": "Electrical 2nd Floor"},
@@ -50,7 +50,7 @@ export const mapData = {
     {
       "id": "third",
       "name": "Third Floor",
-      "svgPath": "/map/third_floor.svg",
+      "svgPath": "/map/final-third-floor.svg",
       "markers": [
         {"id": "mvvmfe99", "x": 15.384949114370222, "y": 72.54374158815612, "eventName": "VR Arena", "locationName": "Physics Lab: Aero 3rd floor"},
         {"id": "kc9mat15", "x": 53.939924491047286, "y": 2.4226110363391657, "eventName": "Feud.exe", "locationName": "CE Seminar Hall"},
