@@ -25,7 +25,7 @@ export const mapData = {
       "svgPath": "/map/final-first-floor.svg",
       "markers": [
         {"id": "xrbntayc", "x": 9.436639237098392, "y": 49.79811574697174, "eventName": "Stranger Things: The Upside-Down Quest", "locationName": "Mech 1st Floor"},
-        {"id": "iimvm7tb", "x": 13.239454308620418, "y": 29.34051144010767, "eventName": "IPL Auction", "locationName": "EL 1st Floor"},
+        {"id": "iimvm7tb", "x": 78.25, "y": 25.08, "eventName": "IPL Auction", "locationName": "EC 1st Floor"},
         {"id": "d0a50b6b", "x": 7.605654202661862, "y": 28.802153432032302, "eventName": "Startup Sharks", "locationName": "Electrical 1st Floor"},
         {"id": "1db8aahr", "x": 32.8169096768264, "y": 10.767160161507402, "eventName": "TradeX 2.0", "locationName": "Civil EDC Hall"},
         {"id": "tkc7husv", "x": 31.549304652985725, "y": 12.920592193808883, "eventName": "Sync or Sink", "locationName": "Civil EDC Hall"},
@@ -64,3 +64,4 @@ export const mapData = {
   ],
   "activeFloorId": "third"
 };
+
