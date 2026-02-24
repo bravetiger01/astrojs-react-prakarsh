@@ -1,4 +1,5 @@
 ---
+import PixiCanvas from "@/components/PixiCanvas.astro";
 import Mobile from "../components/Mobile.astro";
 import Layout from "../layouts/Layout.astro";
 import MobileLayout from "../layouts/MobileLayout.astro";
@@ -22,7 +23,7 @@ console.log("🔍 [SERVER] index.astro - isMobile:", isMobile);
     </MobileLayout>
   ) : (
     <Layout>
-      <Mobile />
+      <PixiCanvas />
     </Layout>
   )
 }
