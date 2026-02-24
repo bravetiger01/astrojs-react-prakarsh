@@ -34,6 +34,28 @@ export class PixiApp {
   }
 
   async _init() {
+    this._mouseX = 0;
+
+window.addEventListener("mousemove", (e) => {
+  // Normalize: -1 (left) to 1 (right)
+  this._mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+});
+this._parallaxObjects = [
+  { obj: () => this.heroBg,         strength: 0 },
+  { obj: () => this.PrakarshTitle,  strength: 2 },
+  { obj: () => this.baseClouds,     strength: 15 },
+  { obj: () => this.peachCloudBack, strength: -20 },
+  { obj: () => this.peachCloudBack2,strength: -12 },
+  { obj: () => this.purpleCloudBack,strength: -25 },
+  { obj: () => this.purpleCloudBack2,strength: -18 },
+  { obj: () => this.purpleCloudBack3,strength: -10 },
+  { obj: () => this.babbageMachine, strength: 5 },
+  { obj: () => this.guyFall,        strength: 20 },
+  { obj: () => this.girlFall,       strength: 25 },
+  { obj: () => this.cyberBuildback, strength: 15 },
+  { obj: () => this.cyberBuildfront,strength: 30 },
+  { obj: () => this.trainAndBridge, strength: 10 },
+];
     const container = document.getElementById(this.containerId);
     if (!container) {
       console.error("Pixi Container not found!");
@@ -58,12 +80,77 @@ export class PixiApp {
 
     await this.loadGame();
   }
+_setupFallAnimation() {
+  const DURATION = 60; // frames (~1 sec at 60fps)
 
+  const animateFall = (sprite) => {
+    if (sprite._hasLanded) return;
+    sprite._hasLanded = true;
+
+    const startY = sprite.y;
+    const endY = sprite.finalY;
+    let elapsed = 0;
+
+    const ticker = this.app.ticker.add(() => {
+      elapsed++;
+      const t = Math.min(elapsed / DURATION, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - t, 3);
+      sprite.y = startY + (endY - startY) * eased;
+
+      if (t >= 1) {
+        sprite.y = endY;
+        this.app.ticker.remove(ticker);
+      }
+    });
+  };
+
+  const onScroll = () => {
+    const scale = window.innerWidth / this.logicalWidth;
+    const screenH = window.innerHeight;
+    const scrollY = window.scrollY;
+
+    // Check if the section where guyFall/girlFall live is in view
+    // guyFall is at heroSectionH*1.3 in world coords → screenH*1.3 in px
+    const guyScreenY = this.guyFall?.finalY * scale;
+    const girlScreenY = this.girlFall?.finalY * scale;
+
+    if (this.guyFall && !this.guyFall._hasLanded) {
+      if (scrollY + screenH > guyScreenY) {
+        animateFall(this.guyFall);
+      }
+    }
+
+    if (this.girlFall && !this.girlFall._hasLanded) {
+      if (scrollY + screenH > girlScreenY) {
+        animateFall(this.girlFall);
+      }
+    }
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll(); // check on load in case already in view
+}
   async loadGame() {
+    this.app.ticker.add((ticker) => {
+  this.windmill.update(ticker.deltaTime);
+  this.watermill.update(ticker.deltaTime);
+  this.trainAndBridge.update(ticker.deltaTime);
+
+  // Cursor parallax (X-axis only)
+  for (const { obj: getObj, strength } of this._parallaxObjects) {
+    const obj = getObj();
+    if (obj && obj.baseX !== undefined) {
+      // Smooth lerp toward target
+      const targetX = obj.baseX + this._mouseX * strength;
+      obj.x += (targetX - obj.x) * 0.05; // 0.05 = smoothing factor
+    }
+  }
+});
     try {
       // Load resources
       await Resources.loadAll();
-
+      this._setupFallAnimation();
       // Create World Objects
       this.baseClouds = new BaseClouds();
       this.world.addChild(this.baseClouds);
@@ -292,24 +379,50 @@ export class PixiApp {
         this.purpleCloudBack3.x = this.purpleCloudBack3.baseX;
     }
 
-        if(this.guyFall){
-      this.guyFall.y = heroSectionH*1.3 ;
-      this.guyFall.baseX = this.logicalWidth / 2.7;
-      this.guyFall.scale.set(.2);
-      this.guyFall.zIndex = 2;
-      if (this.guyFall.x === 0)
-        this.guyFall.x = this.guyFall.baseX;
-    }
+    //     if(this.guyFall){
+    //   this.guyFall.y = heroSectionH*1.3 ;
+    //   this.guyFall.baseX = this.logicalWidth / 2.7;
+    //   this.guyFall.scale.set(.2);
+    //   this.guyFall.zIndex = 2;
+    //   if (this.guyFall.x === 0)
+    //     this.guyFall.x = this.guyFall.baseX;
+    // }
 
-    if(this.girlFall){
-      this.girlFall.y = heroSectionH*1.5 ;
-      this.girlFall.baseX = this.logicalWidth / 1.7;
-      this.girlFall.scale.set(.3);
-      this.girlFall.zIndex = 3;
-      if (this.girlFall.x === 0)
-        this.girlFall.x = this.girlFall.baseX;
-    }
+    // if(this.girlFall){
+    //   this.girlFall.y = heroSectionH*1.5 ;
+    //   this.girlFall.baseX = this.logicalWidth / 1.7;
+    //   this.girlFall.scale.set(.3);
+    //   this.girlFall.zIndex = 3;
+    //   if (this.girlFall.x === 0)
+    //     this.girlFall.x = this.girlFall.baseX;
+    // }
+    if (this.guyFall) {
+  this.guyFall.finalY = heroSectionH * 1.3;
+  this.guyFall.baseX = this.logicalWidth / 2.7;
+  this.guyFall.scale.set(0.2);
+  this.guyFall.zIndex = 2;
+  if (this.guyFall.x === 0)
+    this.guyFall.x = this.guyFall.baseX;
 
+  // Only set initial position if animation hasn't played yet
+  if (!this.guyFall._hasLanded) {
+    this.guyFall.y = heroSectionH; // starts above final pos
+  }
+}
+
+if (this.girlFall) {
+  this.girlFall.finalY = heroSectionH * 1.5;
+  this.girlFall.baseX = this.logicalWidth / 1.7;
+  this.girlFall.scale.set(0.3);
+  this.girlFall.zIndex = 3;
+  if (this.girlFall.x === 0)
+    this.girlFall.x = this.girlFall.baseX;
+
+  if (!this.girlFall._hasLanded) {
+    this.girlFall.y = heroSectionH*1.1;
+  }
+}
+    
     if(this.heroBg){
         // const heroBg = screenH * 3;
       // Stick to the absolute top-left of the world container
