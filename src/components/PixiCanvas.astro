@@ -1,9 +1,57 @@
-<div id="pixi-container"></div>
+---
+import FlyingShipBanner from "./FlyingShipBanner";
 
+---
+<div class="parent">
+ <div class="tech-billboard">
+      <FlyingShipBanner
+        title="TECH EVENTS"
+        href="/events?category=tech"
+        accentColor="#4af0f0"
+        secondaryColor="#ff00ff"
+        client:load
+      />
+    </div>
+    <!-- Right billboard - Flying Ship with NON TECH banner -->
+    <div class="nontech-ship">
+      <FlyingShipBanner
+        title="NON TECH EVENTS"
+        href="/events?category=non-tech"
+        accentColor="#ff00ff"
+        secondaryColor="#4af0f0"
+        client:load
+      />
+
+    </div>
+  <div id="pixi-container">
+    
+  </div>
+  <div id="sponser">
+    <img src="../assets/footer.avif" alt="sponser">
+  </div>
+  
 <style>
   /* Ensure the container takes full screen initially, 
      though Pixi will resize the canvas automatically */
-#pixi-container {
+.parent{
+  position: relative;
+  width: 100vw;
+  min-height: 300vh;
+}
+.tech-billboard{
+  position: absolute;
+  top:40%;
+  left:20%;
+  z-index: 10;
+}
+.nontech-ship{
+  position: absolute;
+  top:50%;
+  left:60%;
+  z-index: 10;
+}
+     #pixi-container {
+  position: relative;
   width: 100vw;
   height: 300vh;
   margin: 0;
@@ -14,6 +62,19 @@ touch-action: pan-y !important;
   /* Ensure the canvas doesn't think it needs to capture the pointer */
   pointer-events: none;
 }
+
+#sponser{
+  position: relative;
+width: 100vw;
+aspect-ratio: 9475/5820;
+background-color: aliceblue;
+}
+
+#sponser img{
+position:absolute;
+bottom:0;
+}
+
 
 canvas {
 

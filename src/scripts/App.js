@@ -12,6 +12,8 @@ import { PeachCloudBack } from "./objects/PeachCloudBack";
 import { PeachCloudBack2 } from "./objects/PeachCloudBack2";
 import { CyberBuildfront } from "./objects/CyberBuildfront";
 import { CyberBuildback } from "./objects/CyberBuildback";
+import { GuyFall } from "./objects/GuyFall";
+import { GirlFall } from "./objects/GirlFall";
 import { HeroBg } from "./objects/HeroBg";
 import { FutureBg } from "./objects/FutureBg";
 import { TrainAndBridge } from "./objects/TrainAndBridge";
@@ -87,13 +89,19 @@ export class PixiApp {
       this.cyberBuildfront = new CyberBuildfront();
       this.world.addChild(this.cyberBuildfront);
 
+      this.guyFall = new GuyFall();
+      this.world.addChild(this.guyFall);
+
+      this.girlFall = new GirlFall();
+      this.world.addChild(this.girlFall);
+
       this.cyberBuildback = new CyberBuildback();
       this.world.addChild(this.cyberBuildback);
 
       this.futureForeGround = new FutureForeGround();
       this.world.addChild(this.futureForeGround);
       
-
+      
       
       this.trainAndBridge = new TrainAndBridge();
       this.world.addChild(this.trainAndBridge);
@@ -192,7 +200,7 @@ export class PixiApp {
       this.peachCloudBack.y = heroSectionH * 1.15;
       this.peachCloudBack.baseX = this.logicalWidth / 2;
       this.peachCloudBack.scale.set(.8);
-      this.peachCloudBack.zIndex = 5;
+      this.peachCloudBack.zIndex = 2;
       if (this.peachCloudBack.x === 0)
         this.peachCloudBack.x = this.peachCloudBack.baseX;
     }
@@ -283,6 +291,25 @@ export class PixiApp {
       if (this.purpleCloudBack3.x === 0)
         this.purpleCloudBack3.x = this.purpleCloudBack3.baseX;
     }
+
+        if(this.guyFall){
+      this.guyFall.y = heroSectionH*1.3 ;
+      this.guyFall.baseX = this.logicalWidth / 2.7;
+      this.guyFall.scale.set(.2);
+      this.guyFall.zIndex = 2;
+      if (this.guyFall.x === 0)
+        this.guyFall.x = this.guyFall.baseX;
+    }
+
+    if(this.girlFall){
+      this.girlFall.y = heroSectionH*1.5 ;
+      this.girlFall.baseX = this.logicalWidth / 1.7;
+      this.girlFall.scale.set(.3);
+      this.girlFall.zIndex = 3;
+      if (this.girlFall.x === 0)
+        this.girlFall.x = this.girlFall.baseX;
+    }
+
     if(this.heroBg){
         // const heroBg = screenH * 3;
       // Stick to the absolute top-left of the world container
