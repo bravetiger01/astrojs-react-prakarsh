@@ -1,0 +1,98 @@
+---
+import FlyingShipBanner from "./FlyingShipBanner";
+
+---
+<div class="parent">
+ <div class="tech-billboard">
+      <FlyingShipBanner
+        title="TECH EVENTS"
+        href="/events?category=tech"
+        accentColor="#4af0f0"
+        secondaryColor="#ff00ff"
+        client:load
+      />
+    </div>
+    <!-- Right billboard - Flying Ship with NON TECH banner -->
+    <div class="nontech-ship">
+      <FlyingShipBanner
+        title="NON TECH EVENTS"
+        href="/events?category=non-tech"
+        accentColor="#ff00ff"
+        secondaryColor="#4af0f0"
+        client:load
+      />
+
+    </div>
+  <div id="pixi-container">
+    
+  </div>
+  <div id="sponser">
+    <img src="../assets/footer.avif" alt="sponser">
+  </div>
+  
+<style>
+  /* Ensure the container takes full screen initially, 
+     though Pixi will resize the canvas automatically */
+.parent{
+  position: relative;
+  width: 100vw;
+  min-height: 300vh;
+}
+.tech-billboard{
+  position: absolute;
+  top:40%;
+  left:20%;
+  z-index: 10;
+  transform: scale(.5);
+}
+.nontech-ship{
+  position: absolute;
+  top:50%;
+  left:60%;
+  z-index: 10;
+    transform: scale(.5); 
+}
+     #pixi-container {
+  position: relative;
+  width: 100vw;
+  height: 300vh;
+  margin: 0;
+  padding: 0;
+  /* Add this to allow the browser to handle scrolls */
+touch-action: pan-y !important;
+  
+  /* Ensure the canvas doesn't think it needs to capture the pointer */
+  pointer-events: none;
+}
+
+#sponser{
+  position: relative;
+width: 100vw;
+aspect-ratio: 9475/5820;
+background-color: aliceblue;
+}
+
+#sponser img{
+position:absolute;
+bottom:0;
+}
+
+
+canvas {
+
+  display: block;
+  /* Crucial: prevents the canvas from intercepting touch for scrolling */
+  touch-action: pan-y; 
+  /* Fixes a common mobile bug where canvas is treated as an image */
+  pointer-events: none; 
+}
+</style>
+
+<script>
+  import { PixiApp } from '../scripts/App.js';
+  
+  // Initialize when DOM is ready
+  window.addEventListener('DOMContentLoaded', () => {
+      new PixiApp('pixi-container');
+  });
+</script>
