@@ -262,27 +262,6 @@
       "role": "Graphic Designer",
       "nickname": "Pinterest Paglu",
       "image": "/team/agneloze.png"
-    },
-    {
-      "id": "007",
-      "name": "Rudra Joshi",
-      "role": "Graphic Designer",
-      "nickname": "Creative Commander",
-      "image": "/team/rudra.jpeg"
-    },
-    {
-      "id": "008",
-      "name": "Shreya Deshmukh",
-      "role": "Graphic Designer",
-      "nickname": "Design Diva",
-      "image": "/team/shreya.jpeg"
-    },
-    {
-      "id": "009",
-      "name": "Chaitanya Giri",
-      "role": "Graphic Designer",
-      "nickname": "Pixel Prodigy",
-      "image": "/team/chaitanya.jpg"
     }
   ]
 }
