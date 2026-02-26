@@ -63,7 +63,7 @@ const MapContent = () => {
       {/* Main */}
       <div className="flex flex-1 overflow-hidden relative">
         {/* Floor navigator - horizontal on mobile, vertical on desktop */}
-        <div className="absolute top-2 md:top-3 left-2 md:left-3 z-20">
+        <div className="absolute top-2 md:top-[120px] left-2 md:left-3 z-20">
           <FloorNavigator
             floors={mapData.floors}
             activeFloorId={activeFloorId}
@@ -74,8 +74,8 @@ const MapContent = () => {
           />
         </div>
 
-        {/* Floor label */}
-        <div className="absolute top-2 md:top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2">
+        {/* Floor label - positioned below navbar on desktop - HIDDEN, shown in floor navigator instead */}
+        <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 md:hidden">
           <motion.div
             key={activeFloorId}
             initial={{ opacity: 0, y: -10 }}

@@ -78,7 +78,7 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
       e.preventDefault();
       const currentDistance = getTouchDistance(e.touches);
       const scaleChange = currentDistance / initialPinchDistance;
-      const newScale = Math.min(Math.max(0.6, initialScale * scaleChange), 5);
+      const newScale = Math.min(Math.max(0.9, initialScale * scaleChange), 5); // Min zoom 0.9
       setScale(newScale);
     } else if (e.touches.length === 1 && isDragging && initialPinchDistance === null) {
       // Single finger - drag
@@ -87,16 +87,30 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
       const newX = touch.clientX - dragStart.x;
       const newY = touch.clientY - dragStart.y;
       
-      // Apply boundaries
-      const baseMaxPanX = 400;
-      const baseMaxPanY = 400;
-      const minZoom = 0.6;
+      // Apply asymmetric boundaries on desktop
+      const isDesktop = window.innerWidth >= 1024;
+      
+      console.log('Touch drag - isDesktop:', isDesktop, 'window width:', window.innerWidth);
+      
+      // Horizontal boundaries
+      const baseMaxPanX = isDesktop ? 200 : 350;
+      
+      // Vertical boundaries - ASYMMETRIC - FIXED (not scaled with zoom on desktop)
+      const baseMaxPanUp = isDesktop ? 450 : 450;   // Pan UP limit - increased for desktop
+      const baseMaxPanDown = isDesktop ? 550 : 350; // Pan DOWN limit
+      
+      console.log('Touch boundaries - maxPanUp:', baseMaxPanUp, 'maxPanDown:', baseMaxPanDown);
+      
+      const minZoom = 0.9;
       const zoomFactor = Math.max(scale / minZoom, 1);
-      const maxPanX = baseMaxPanX * zoomFactor;
-      const maxPanY = baseMaxPanY * zoomFactor;
+      
+      // Desktop: fixed boundaries, Mobile: scale with zoom
+      const maxPanX = isDesktop ? baseMaxPanX : baseMaxPanX * zoomFactor;
+      const maxPanUp = isDesktop ? baseMaxPanUp : baseMaxPanUp * zoomFactor;
+      const maxPanDown = isDesktop ? baseMaxPanDown : baseMaxPanDown * zoomFactor;
       
       const clampedX = Math.max(-maxPanX, Math.min(maxPanX, newX));
-      const clampedY = Math.max(-maxPanY, Math.min(maxPanY, newY));
+      const clampedY = Math.max(-maxPanUp, Math.min(maxPanDown, newY));
       
       setPosition({ x: clampedX, y: clampedY });
     }
@@ -116,7 +130,7 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
   const handleWheel = (e: React.WheelEvent) => {
     e.preventDefault();
     const delta = e.deltaY * -0.001;
-    const newScale = Math.min(Math.max(0.6, scale + delta), 5); // Min zoom 0.6 (was 0.8)
+    const newScale = Math.min(Math.max(0.9, scale + delta), 5); // Min zoom 0.9 (was 0.6) to prevent seeing edges
     setScale(newScale);
   };
 
@@ -138,21 +152,33 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
       const newX = e.clientX - dragStart.x;
       const newY = e.clientY - dragStart.y;
       
-      // Fixed base boundaries (at minimum zoom 0.6)
-      const baseMaxPanX = 400;
-      const baseMaxPanY = 400;
+      // Asymmetric boundaries to prevent seeing edges/watermark
+      // Desktop: stricter limits, Mobile: more lenient
+      const isDesktop = window.innerWidth >= 1024;
+      
+      console.log('Pointer drag - isDesktop:', isDesktop, 'window width:', window.innerWidth);
+      
+      // Horizontal boundaries (left/right)
+      const baseMaxPanX = isDesktop ? 200 : 350;
+      
+      // Vertical boundaries (up/down) - ASYMMETRIC
+      const baseMaxPanUp = isDesktop ? 450 : 450;   // How far you can pan UP (negative Y) - increased for desktop
+      const baseMaxPanDown = isDesktop ? 550 : 350; // How far you can pan DOWN (positive Y)
+      
+      console.log('Pointer boundaries - maxPanUp:', baseMaxPanUp, 'maxPanDown:', baseMaxPanDown, 'newY:', newY);
       
       // When zooming in, allow MORE panning to reach all parts of the map
-      // The boundary expands proportionally with zoom
-      const minZoom = 0.6;
-      const zoomFactor = Math.max(scale / minZoom, 1); // Always >= 1
+      const minZoom = 0.9;
+      const zoomFactor = Math.max(scale / minZoom, 1);
       
-      const maxPanX = baseMaxPanX * zoomFactor;
-      const maxPanY = baseMaxPanY * zoomFactor;
+      // Desktop: fixed boundaries, Mobile: scale with zoom
+      const maxPanX = isDesktop ? baseMaxPanX : baseMaxPanX * zoomFactor;
+      const maxPanUp = isDesktop ? baseMaxPanUp : baseMaxPanUp * zoomFactor;
+      const maxPanDown = isDesktop ? baseMaxPanDown : baseMaxPanDown * zoomFactor;
       
-      // Clamp the position within scaled boundaries
+      // Clamp the position with asymmetric vertical boundaries
       const clampedX = Math.max(-maxPanX, Math.min(maxPanX, newX));
-      const clampedY = Math.max(-maxPanY, Math.min(maxPanY, newY));
+      const clampedY = Math.max(-maxPanUp, Math.min(maxPanDown, newY));
       
       setPosition({
         x: clampedX,
@@ -200,19 +226,36 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
           }
         }}
       >
-        {/* Background Image - Using actual dimensions */}
+        {/* Desktop Background - landscape, zoomed in to hide watermark */}
         <div 
-          className="absolute pointer-events-none"
+          className="hidden md:block absolute pointer-events-none"
           style={{
-            backgroundImage: 'url(/background/Gemini_Generated_Image_kpf6u6kpf6u6kpf6.png)',
-            backgroundSize: 'contain',
-            backgroundRepeat: 'repeat',
+            backgroundImage: 'url(/background/map-bg-desktop.avif)',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
-            width: '3000px',
-            height: '5000px',
+            width: '180vw',
+            height: '180vh',
             left: '50%',
             top: '50%',
-            transform: 'translate(-50%, -50%)',
+            transform: 'translate(-50%, -50%) scale(1.5)',
+            filter: 'blur(0.5px)',
+          }}
+        />
+        
+        {/* Mobile background - portrait */}
+        <div 
+          className="md:hidden absolute pointer-events-none"
+          style={{
+            backgroundImage: 'url(/background/map-bg-mobile.avif)',
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+            width: '140vw',
+            height: '140vh',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%) scale(1.3)',
           }}
         />
         
@@ -314,7 +357,7 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
           +
         </button>
         <button
-          onClick={() => setScale(Math.max(scale - 0.2, 0.6))}
+          onClick={() => setScale(Math.max(scale - 0.2, 0.9))}
           className="w-8 h-8 flex items-center justify-center text-foreground hover:bg-secondary rounded transition-colors font-bold text-lg"
           aria-label="Zoom out"
         >

@@ -37,7 +37,7 @@ export default function EventSidebar({
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-card border-t border-border rounded-t-2xl shadow-2xl max-h-[70vh] overflow-y-auto"
+            className="fixed bottom-0 left-0 right-0 z-[10000] md:hidden bg-card border-t border-border rounded-t-2xl shadow-2xl max-h-[70vh] overflow-y-auto"
           >
             <div className="flex justify-center pt-2 pb-1">
               <div className="w-10 h-1 bg-muted-foreground/30 rounded-full" />
@@ -52,7 +52,7 @@ export default function EventSidebar({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="hidden md:flex fixed top-0 right-0 h-full w-96 z-50 bg-card/95 backdrop-blur-xl border-l border-border shadow-2xl flex-col"
+            className="hidden md:flex fixed top-0 right-0 h-full w-96 z-[10000] bg-card/95 backdrop-blur-xl border-l border-border shadow-2xl flex-col"
           >
             <EventContent marker={marker} floorName={floorName} onClose={onClose} allMarkers={allMarkers} onNavigateTo={onNavigateTo} />
           </motion.div>
