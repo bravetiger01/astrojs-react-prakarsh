@@ -95,19 +95,19 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
       // Horizontal boundaries
       const baseMaxPanX = isDesktop ? 200 : 350;
       
-      // Vertical boundaries - ASYMMETRIC - FIXED (not scaled with zoom on desktop)
-      const baseMaxPanUp = isDesktop ? 450 : 450;   // Pan UP limit - increased for desktop
-      const baseMaxPanDown = isDesktop ? 550 : 350; // Pan DOWN limit
+      // Vertical boundaries - ASYMMETRIC
+      // Base boundaries represent what's visible at minimum zoom (0.9x)
+      const baseMaxPanUp = isDesktop ? 850 : 450;   // Pan UP limit
+      const baseMaxPanDown = isDesktop ? 250 : 350; // Pan DOWN limit
       
-      console.log('Touch boundaries - maxPanUp:', baseMaxPanUp, 'maxPanDown:', baseMaxPanDown);
-      
+      // Scale boundaries WITH zoom to maintain the same visible area
+      // When zoomed in 2x, you need 2x the pan distance to see the same area
       const minZoom = 0.9;
-      const zoomFactor = Math.max(scale / minZoom, 1);
+      const zoomFactor = scale / minZoom;
       
-      // Desktop: fixed boundaries, Mobile: scale with zoom
-      const maxPanX = isDesktop ? baseMaxPanX : baseMaxPanX * zoomFactor;
-      const maxPanUp = isDesktop ? baseMaxPanUp : baseMaxPanUp * zoomFactor;
-      const maxPanDown = isDesktop ? baseMaxPanDown : baseMaxPanDown * zoomFactor;
+      const maxPanX = baseMaxPanX * zoomFactor;
+      const maxPanUp = baseMaxPanUp * zoomFactor;
+      const maxPanDown = baseMaxPanDown * zoomFactor;
       
       const clampedX = Math.max(-maxPanX, Math.min(maxPanX, newX));
       const clampedY = Math.max(-maxPanUp, Math.min(maxPanDown, newY));
@@ -162,19 +162,18 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
       const baseMaxPanX = isDesktop ? 200 : 350;
       
       // Vertical boundaries (up/down) - ASYMMETRIC
-      const baseMaxPanUp = isDesktop ? 450 : 450;   // How far you can pan UP (negative Y) - increased for desktop
-      const baseMaxPanDown = isDesktop ? 550 : 350; // How far you can pan DOWN (positive Y)
+      // Base boundaries represent what's visible at minimum zoom (0.9x)
+      const baseMaxPanUp = isDesktop ? 850 : 450;   // How far you can pan UP (negative Y)
+      const baseMaxPanDown = isDesktop ? 250 : 350; // How far you can pan DOWN (positive Y)
       
-      console.log('Pointer boundaries - maxPanUp:', baseMaxPanUp, 'maxPanDown:', baseMaxPanDown, 'newY:', newY);
-      
-      // When zooming in, allow MORE panning to reach all parts of the map
+      // Scale boundaries WITH zoom to maintain the same visible area
+      // When zoomed in 2x, you need 2x the pan distance to see the same area
       const minZoom = 0.9;
-      const zoomFactor = Math.max(scale / minZoom, 1);
+      const zoomFactor = scale / minZoom;
       
-      // Desktop: fixed boundaries, Mobile: scale with zoom
-      const maxPanX = isDesktop ? baseMaxPanX : baseMaxPanX * zoomFactor;
-      const maxPanUp = isDesktop ? baseMaxPanUp : baseMaxPanUp * zoomFactor;
-      const maxPanDown = isDesktop ? baseMaxPanDown : baseMaxPanDown * zoomFactor;
+      const maxPanX = baseMaxPanX * zoomFactor;
+      const maxPanUp = baseMaxPanUp * zoomFactor;
+      const maxPanDown = baseMaxPanDown * zoomFactor;
       
       // Clamp the position with asymmetric vertical boundaries
       const clampedX = Math.max(-maxPanX, Math.min(maxPanX, newX));
@@ -251,11 +250,12 @@ export default function MapViewer({ floor, selectedMarker, onMarkerClick, onBack
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
-            width: '140vw',
-            height: '140vh',
+            width: '200vw',
+            height: '200vh',
             left: '50%',
             top: '50%',
-            transform: 'translate(-50%, -50%) scale(1.3)',
+            transform: 'translate(-50%, -50%) scale(1.8)',
+            filter: 'blur(0.5px)',
           }}
         />
         
